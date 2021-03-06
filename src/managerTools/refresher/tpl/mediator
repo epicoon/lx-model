@@ -1,0 +1,22 @@
+<?php
+
+namespace <namespace>;
+
+use lx\model\Model;<use>
+
+/**
+ * Class <class>
+ * @package <namespace><fields>
+ */
+class <class> extends Model
+{
+    public static function getServiceName(): string
+    {
+        return '<service>';
+    }
+
+    public static function getSchemaArray(): array
+    {
+        return <schema>;
+    }
+}

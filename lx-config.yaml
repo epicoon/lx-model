@@ -1,0 +1,22 @@
+name: lx/model
+
+autoload:
+  psr-4:
+    lx\model\:
+      - ''
+      - src
+    lx\model\sys\: '.system'
+
+service:
+  class: lx\model\Service
+
+  routes:
+    /: '' #TODO: must be defined
+
+#  modelSchemas: schemas/models
+#  models: models
+
+  plugins: plugins
+
+  components:
+    cli: lx\model\cli\Cli

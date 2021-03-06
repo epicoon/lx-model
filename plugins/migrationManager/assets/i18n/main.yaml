@@ -1,0 +1,27 @@
+en-EN:
+  prjStatus: Project status - ${status}
+  renew: Renew
+  applyMigrations: Apply migrations
+  createMigrations: Create migrations
+  actionReport: Report
+  migrationsApplied: Migrations applied
+  serviceMigrations: Service migrations
+  migrations: Migrations
+  schemas: Schemas
+  modelsNeedUpdate: Models need update
+  modelsNeedTable: Models need table
+  modelsChanged: Models changed
+
+ru-RU:
+  prjStatus: Состояние проекта - ${status}
+  renew: Обновить
+  applyMigrations: Применить миграции
+  createMigrations: Сгенерировать миграции
+  actionReport: Отчет
+  migrationsApplied: Применённые миграции
+  serviceMigrations: Миграции сервиса
+  migrations: Миграции
+  schemas: Схемы
+  modelsNeedUpdate: Модели, требующие обновления
+  modelsNeedTable: Модели, требующие таблиц
+  modelsChanged: Изменённые модели
