@@ -70,15 +70,6 @@ class Cli implements FusionComponentInterface, ServiceCliInterface
                 'description' => 'Run plugin to manage model statuses and migrations',
                 'handler' => MigrationsManage::class,
             ],
-
-            // 	[
-            // 		'type' => CliProcessor::COMMAND_TYPE_WEB_ONLY,
-            // 		'command' => 'model-plugin',
-            //               'description' => 'Run plugin to manage models and migrations',
-            //               'arguments' => [
-            //               ],
-            // 		'handler' => ModelPluginStarter::class,
-            // 	]
-		];
+        ];
 	}
 }

@@ -13,17 +13,10 @@ class MigrationsManage extends ServiceCliExecutor
 {
     public function run()
     {
-        $plugin = lx::$app->getPlugin('lx/model:migrationManager');
-        $pluginData = $plugin->run();
-
-        $processor = $this->processor;
-        $processor->setData([
-            'code' => 'ext',
-            'type' => 'plugin',
-            'message' => 'Migrations manage plugin loaded',
+        $this->sendPlugin([
+            'name' => 'lx/model:migrationManager',
             'header' => 'Migrations manager',
-            'plugin' => $pluginData->getData(),
+            'message' => 'Migrations manage plugin loaded',
         ]);
-        $processor->done();
     }
 }

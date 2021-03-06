@@ -16,7 +16,6 @@ class Context #lx:namespace lx.models {
 
 	renew() {
 		^Respondent.getServicesData().then(data=>{
-			console.log(data);
 			var tree = new lx.Tree();
 			var treeBox = this.widgets.treeBox;
 
