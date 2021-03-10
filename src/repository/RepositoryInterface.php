@@ -38,11 +38,12 @@ interface RepositoryInterface
     /**
      * @param string $modelName
      * @param int|array $condition
+     * @param bool $useUnitMap
      * @return Model|null
      */
-    public function findModel(string $modelName, $condition): ?Model;
-    public function findModelAsArray(string $modelName, int $id): ?array;
-    public function findModels(string $modelName, ?array $condition = null): array;
+    public function findModel(string $modelName, $condition, bool $useUnitMap = true): ?Model;
+    public function findModelAsArray(string $modelName, int $id, bool $useUnitMap = true): ?array;
+    public function findModels(string $modelName, ?array $condition = null, bool $useUnitMap = true): array;
     public function findRelatedModels(Model $model, string $relationName): array;
     /**
      * @param Model[] $models

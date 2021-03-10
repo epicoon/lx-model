@@ -69,7 +69,7 @@ class RelatedLoader
         $modelIdColumn = $nameConverter->getRelationName($model->getModelName());
         $relIdColumn = $nameConverter->getRelationName($relation->getRelatedModelName());
 
-        $ids = $this->repository->getReplicaDb()->select("
+        $ids = $this->repository->getReplicaDb()->query("
             SELECT $relIdColumn
             FROM $vsTableName
             WHERE $modelIdColumn = $modelId

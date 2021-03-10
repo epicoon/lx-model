@@ -8,7 +8,7 @@ use <mediatorClass>;
  * Class <class>
  * @package <namespace>
  *
- * @method static <class> findOne($condition)
+ * @method static <class> findOne($condition, bool $useUnitMap = true)
  */
 class <class> extends <mediator>
 {

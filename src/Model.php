@@ -261,11 +261,12 @@ abstract class Model implements ModelInterface
         return self::getModelRepository()->getCount(self::getStaticModelName());
     }
 
-    public static function findOne($condition): ?Model
+    public static function findOne($condition, bool $useUnitMap = true): ?Model
     {
         return self::getModelRepository()->findModel(
             self::getStaticModelName(),
-            $condition
+            $condition,
+            $useUnitMap
         );
     }
 

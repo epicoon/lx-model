@@ -275,9 +275,10 @@ class Repository implements RepositoryInterface
     /**
      * @param string $modelName
      * @param int|array $condition
+     * @param bool $useUnitMap
      * @return Model|null
      */
-    public function findModel(string $modelName, $condition): ?Model
+    public function findModel(string $modelName, $condition, bool $useUnitMap = true): ?Model
     {
         if (is_integer($condition)) {
             $condition = ['id' => $condition];
@@ -285,22 +286,24 @@ class Repository implements RepositoryInterface
 
         if (isset($condition['id'])) {
             $id = $condition['id'];
-            $model = $this->unitMap->get($modelName, $id);
+            $model = $useUnitMap ? $this->unitMap->get($modelName, $id) : null;
             if (!$model) {
                 $model = $this->crudProcessor->findModel($modelName, $id);
-                $this->unitMap->register($model);
+                if ($useUnitMap) {
+                    $this->unitMap->register($model);
+                }
             }
             return $model;
         }
 
         //TODO LIMIT 1
-        $models = $this->findModels($modelName, $condition);
+        $models = $this->findModels($modelName, $condition, $useUnitMap);
         return $models[0] ?? null;
     }
 
-    public function findModelAsArray(string $modelName, int $id): ?array
+    public function findModelAsArray(string $modelName, int $id, bool $useUnitMap = true): ?array
     {
-        $model = $this->unitMap->get($modelName, $id);
+        $model = $useUnitMap ? $this->unitMap->get($modelName, $id) : null;
         if ($model) {
             return $model->getFields();
         }
@@ -308,22 +311,20 @@ class Repository implements RepositoryInterface
         return $this->crudProcessor->findModelAsArray($modelName, $id);
     }
 
-    /**
-     * @param string $modelName
-     * @param array|null $condition
-     * @return Model[]
-     */
-    public function findModels(string $modelName, ?array $condition = null): array
+    public function findModels(string $modelName, ?array $condition = null, bool $useUnitMap = true): array
     {
-        $nameConverter = $this->context->getNameConverter();
-        $tableName = $nameConverter->getTableName($modelName);
-        $table = $this->getReplicaDb()->table($tableName);
-
         if ($condition) {
             $condition = ModelFieldsConverter::toRepositoryForCondition($this->context, $modelName, $condition);
         }
-        $data = $table->select('id', $condition);
 
+        if (!$useUnitMap) {
+            return $this->crudProcessor->findModels($modelName, $condition);
+        }
+
+        $nameConverter = $this->context->getNameConverter();
+        $tableName = $nameConverter->getTableName($modelName);
+        $table = $this->getReplicaDb()->table($tableName);
+        $data = $table->select('id', $condition);
         $ids = ArrayHelper::getColumn($data, 'id');
         return $this->findModelsByIds($modelName, $ids);
     }
