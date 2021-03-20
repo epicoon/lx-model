@@ -84,6 +84,9 @@ class ModelManager implements ModelManagerInterface, FusionComponentInterface
      * GETTERS FOR COMMON MODEL INFORMATION
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+    /**
+     * @return array<string>
+     */
     public function getModelNames(): array
     {
         return $this->context->getConductor()->getAllModelNames();

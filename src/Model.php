@@ -66,6 +66,7 @@ abstract class Model implements ModelInterface
         $schema = $this->getSchema();
         if ($schema->hasField($name)) {
             $this->setField($name, $value);
+            return;
         }
 
         if ($schema->hasRelation($name)) {
@@ -129,7 +130,7 @@ abstract class Model implements ModelInterface
 
     public function fieldsChanged(): bool
     {
-        if ($this->isNew()|| !empty($this->_oldFields)) {
+        if ($this->isNew() || !empty($this->_oldFields)) {
             return true;
         }
 

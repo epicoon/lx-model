@@ -9,14 +9,6 @@ autoload:
 
 service:
   class: lx\model\Service
-
-  routes:
-    /: '' #TODO: must be defined
-
-#  modelSchemas: schemas/models
-#  models: models
-
   plugins: plugins
-
   components:
     cli: lx\model\cli\Cli
