@@ -12,7 +12,7 @@ use lx\model\schema\field\type\CommonTypesRegistry;
  */
 class Service extends \lx\Service
 {
-    public function getDefaultFusionComponents(): ?array
+    public function getDefaultFusionComponents(): array
     {
         return array_merge(parent::getDefaultFusionComponents(), [
             'typesRegistry' => CommonTypesRegistry::class,
