@@ -5,13 +5,9 @@ namespace lx\model\cli;
 use lx;
 use lx\ServiceCliExecutor;
 
-/**
- * Class MigrationsManage
- * @package lx\model\cli
- */
 class MigrationsManage extends ServiceCliExecutor
 {
-    public function run()
+    public function run(): void
     {
         $this->sendPlugin([
             'name' => 'lx/model:migrationManager',

@@ -8,17 +8,13 @@ use lx\DataFileInterface;
 use lx\Directory;
 use lx\File;
 
-/**
- * Class Conductor
- * @package lx\model\managerTools
- */
 class Conductor
 {
     const MODEL_CLASSES_MAP_FILE = 'map.json';
 
     private ModelsContext $context;
     private array $schemas;
-    /** @var DataFileInterface[] */
+    /** @var array<DataFileInterface> */
     private array $modelSchemaFilesMap;
 
     public function __construct(ModelsContext $context)
@@ -181,9 +177,9 @@ class Conductor
     }
 
 
-    /*******************************************************************************************************************
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      * PRIVATE
-     ******************************************************************************************************************/
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     private function loadSchemas(): void
     {

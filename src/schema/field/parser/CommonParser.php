@@ -4,23 +4,14 @@ namespace lx\model\schema\field\parser;
 
 use lx\FlightRecorderHolderTrait;
 
-/**
- * Class CommonParser
- * @package lx\model\schema\field\parser
- */
 class CommonParser
 {
     use FlightRecorderHolderTrait;
 
     /** @var string|array */
     protected $definitionSource;
+    protected array $definition;
 
-    /** @var array */
-    protected $definition;
-
-    /**
-     * CommonParser constructor.
-     */
     public function __construct()
     {
         $this->definition = [];
@@ -28,9 +19,8 @@ class CommonParser
 
     /**
      * @param string|array $originDefinition
-     * @return array
      */
-    public function parse($originDefinition)
+    public function parse($originDefinition): array
     {
         $this->definitionSource = $originDefinition;
 
@@ -53,10 +43,7 @@ class CommonParser
         return $this->definition;
     }
 
-    /**
-     * @return array
-     */
-    protected function getArrayParseProtocol()
+    protected function getArrayParseProtocol(): array
     {
         return [
             ['type'],
@@ -72,7 +59,7 @@ class CommonParser
 //            $this->scanArraySource('flags');
     }
 
-    protected function parseType()
+    protected function parseType(): void
     {
         preg_match('/^ *\b(.+?)\b/', $this->definitionSource, $matches);
         $type = $matches[1] ?? null;
@@ -82,7 +69,7 @@ class CommonParser
         }
     }
 
-    protected function parseMods()
+    protected function parseMods(): void
     {
         if (preg_match('/\brequired\b/', $this->definitionSource)) {
             $this->definition['required'] = true;
@@ -105,16 +92,15 @@ class CommonParser
         }
     }
 
-    protected function parseString()
+    protected function parseString(): void
     {
         // pass
     }
 
     /**
-     * @param string $str
      * @return bool|float|int|null|string
      */
-    protected function stringToValue($str)
+    protected function stringToValue(string $str)
     {
         if ($str == 'null') {
             return null;
@@ -134,7 +120,7 @@ class CommonParser
         return trim($str, '"');
     }
 
-    private function parseStringProcess()
+    private function parseStringProcess(): void
     {
         $this->parseType();
         $this->parseMods();
@@ -144,11 +130,10 @@ class CommonParser
     }
 
     /**
-     * @param string $key
      * @param mixed $default
      * @param callable $callback
      */
-    private function scanArraySource($key, $default = null, $callback = null)
+    private function scanArraySource(string $key, $default = null, $callback = null)
     {
         if (!array_key_exists($key, $this->definitionSource)) {
             if ($default !== null) {

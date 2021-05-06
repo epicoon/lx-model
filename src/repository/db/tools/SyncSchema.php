@@ -12,10 +12,6 @@ use lx\model\schema\field\ModelField;
 use lx\model\schema\relation\ModelRelation;
 use lx\model\schema\relation\RelationTypeEnum;
 
-/**
- * Class SyncSchema
- * @package lx\model\repository\db\tools
- */
 class SyncSchema
 {
     private static array $anonymousSchemas = [];

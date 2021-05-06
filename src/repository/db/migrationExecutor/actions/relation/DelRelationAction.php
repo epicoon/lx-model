@@ -7,10 +7,6 @@ use lx\DbTableSchema;
 use lx\model\repository\db\migrationExecutor\actions\BaseMigrationAction;
 use lx\model\repository\db\migrationExecutor\actions\MigrationActionTypeEnum;
 
-/**
- * Class DelRelationAction
- * @package lx\model\repository\db\migrationExecutor\actions\relation
- */
 class DelRelationAction extends LifeCycleRelationAction
 {
     public function inverse(): BaseMigrationAction

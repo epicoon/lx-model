@@ -7,10 +7,6 @@ use lx\model\managerTools\ModelsContext;
 use lx\model\schema\relation\RelationTypeEnum;
 use lx\Service;
 
-/**
- * Class SchemaParser
- * @package lx\model\managerTools\refresher\parser
- */
 class SchemaParser
 {
     use FlightRecorderHolderTrait;
@@ -28,16 +24,12 @@ class SchemaParser
         return $this->context->getService();
     }
 
-    /**
-     * @param array $schema
-     * @return array|false
-     */
-    public function parse(array $schema)
+    public function parse(array $schema): ?array
     {
         $this->modelName = $schema['name'] ?? '';
         if ($this->modelName == '') {
             $this->addFlightRecord('Schema doesn\'t have a name');
-            return false;
+            return null;
         }
 
         $result = [
@@ -47,8 +39,8 @@ class SchemaParser
         $result['fields'] = $this->parseFields($schema);
 
         $relations = $this->parseRelations($schema);
-        if ($relations === false) {
-            return false;
+        if ($relations === null) {
+            return null;
         }
 
         $result['relations'] = $relations;
@@ -67,7 +59,7 @@ class SchemaParser
         foreach ($fields as $fieldName => $fieldDefinition) {
             $fieldParser = new FieldParser($this->context, $fieldName);
             $definition = $fieldParser->parse($fieldDefinition);
-            if ($definition === false) {
+            if ($definition === null) {
                 //TODO warning message
                 continue;
             }
@@ -77,19 +69,15 @@ class SchemaParser
         return $result;
     }
 
-    /**
-     * @param array $schema
-     * @return array|false
-     */
-    private function parseRelations(array $schema)
+    private function parseRelations(array $schema): ?array
     {
         $relations = $schema['relations'] ?? [];
 
         $parsedRelations = [];
         foreach ($relations as $relationName => $relationDefinitionString) {
             $relationDefinition = $this->parseRelation($relationName, $relationDefinitionString);
-            if ($relationDefinition === false) {
-                return false;
+            if ($relationDefinition === null) {
+                return null;
             }
 
             $parsedRelations[$relationName] = $relationDefinition;
@@ -99,15 +87,13 @@ class SchemaParser
     }
 
     /**
-     * @param string $relationName
      * @param string|array $relation
-     * @return array|false
      */
-    private function parseRelation(string $relationName, $relation)
+    private function parseRelation(string $relationName, $relation): ?array
     {
         $relationData = $this->parseRelationDefinition($relation);
-        if ($relationData === false) {
-            return false;
+        if ($relationData === null) {
+            return null;
         }
 
         /**
@@ -121,7 +107,7 @@ class SchemaParser
         if (!$relEntityAttribute) {
             if ($type == RelationTypeEnum::ONE_TO_MANY || $type == RelationTypeEnum::MANY_TO_MANY) {
                 $this->addFlightRecord("Relation '{$relationName}' must have relative entity attribute");
-                return false;
+                return null;
             }
 
             $uni = true;
@@ -142,7 +128,7 @@ class SchemaParser
                 $relNeedToBeFkHost
             )
         ) {
-            return false;
+            return null;
         }
 
         $result = [
@@ -239,11 +225,7 @@ class SchemaParser
         return true;
     }
 
-    /**
-     * @param string $definition
-     * @return array|false
-     */
-    private function parseRelationDefinition(string $definition)
+    private function parseRelationDefinition(string $definition): ?array
     {
         $definitionArray = preg_split('/ +/',$definition);
 
@@ -273,7 +255,7 @@ class SchemaParser
 
         if ($type === false) {
             $this->addFlightRecord('Unknown relation type syntax');
-            return false;
+            return null;
         }
 
         $relEntityArray = explode('.', ($definitionArray[1] ?? ''));

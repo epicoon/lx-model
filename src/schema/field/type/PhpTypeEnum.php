@@ -2,10 +2,6 @@
 
 namespace lx\model\schema\field\type;
 
-/**
- * Class PhpTypeEnum
- * @package lx\model\schema\field\type
- */
 class PhpTypeEnum
 {
     const INTEGER = 'integer';

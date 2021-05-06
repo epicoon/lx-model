@@ -10,10 +10,6 @@ use lx\model\managerTools\refresher\parser\SchemaParser;
 use lx\model\schema\ModelSchema;
 use lx\model\schema\field\ModelField;
 
-/**
- * Class ModelRefresher
- * @package lx\model\managerTools\refresher
- */
 class ModelRefresher
 {
     private ModelsContext $context;
@@ -62,7 +58,7 @@ class ModelRefresher
         $schema = $this->context->getConductor()->getSchema($this->fullModelName, true);
         $parser = new SchemaParser($this->context);
         $parseResult = $parser->parse($schema);
-        if ($parseResult === false) {
+        if ($parseResult === null) {
             $this->report->addListToErrors($parser->getFlightRecorder()->getRecords());
             return $this->report;
         }
@@ -77,9 +73,9 @@ class ModelRefresher
     }
 
 
-    /*******************************************************************************************************************
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      * PRIVATE
-     ******************************************************************************************************************/
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     private function inspectMediatorFile(): void
     {

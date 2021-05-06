@@ -9,10 +9,6 @@ use lx\model\repository\db\migrationExecutor\actions\MigrationActionTypeEnum;
 use lx\model\repository\db\migrationExecutor\CustomTypesRecorder;
 use lx\model\repository\db\tools\SyncSchema;
 
-/**
- * Class CreateTableAction
- * @package lx\model\repository\db\migrationExecutor\actions\table
- */
 class CreateTableAction extends BaseMigrationAction
 {
     public function inverse(): BaseMigrationAction

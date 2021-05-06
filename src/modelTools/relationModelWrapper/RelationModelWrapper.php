@@ -4,10 +4,6 @@ namespace lx\model\modelTools\relationModelWrapper;
 
 use lx\model\Model;
 
-/**
- * Class RelationModelWrapper
- * @package lx\model\modelTools\relationModelWrapper
- */
 class RelationModelWrapper extends Model
 {
     private ?Model $model;

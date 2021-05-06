@@ -6,9 +6,6 @@ use lx\File;
 use lx\model\managerTools\Conductor;
 use lx\model\managerTools\ModelsContext;
 
-/**
- * Class ModelsRefresher
- */
 class ModelsRefresher
 {
     const OPTION_PREVIEW = 'preview';

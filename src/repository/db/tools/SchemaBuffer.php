@@ -4,13 +4,9 @@ namespace lx\model\repository\db\tools;
 
 use lx\model\schema\ModelSchema;
 
-/**
- * Class SchemaBuffer
- * @package lx\model\repository\db\tools
- */
 class SchemaBuffer
 {
-    /** @var ModelSchema[] */
+    /** @var array<ModelSchema> */
     private static array $schemaMap = [];
 
     public static function setModelSchema(string $modelName, ModelSchema $schema)

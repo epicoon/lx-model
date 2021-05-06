@@ -9,10 +9,6 @@ use lx\model\repository\db\Repository;
 use lx\model\schema\relation\ModelRelation;
 use lx\model\schema\relation\RelationTypeEnum;
 
-/**
- * Class RelatedLoader
- * @package lx\model\repository\db\tools\crud
- */
 class RelatedLoader
 {
     private Repository $repository;
@@ -23,11 +19,9 @@ class RelatedLoader
     }
 
     /**
-     * @param Model $model
-     * @param string $relationName
-     * @return Model[]
+     * @return iterable<Model>
      */
-    public function loadForModel(Model $model, string $relationName): array
+    public function loadForModel(Model $model, string $relationName): iterable
     {
         $schema = $model->getSchema();
         $relation = $schema->getRelation($relationName);
@@ -47,11 +41,9 @@ class RelatedLoader
     }
 
     /**
-     * @param Model $model
-     * @param ModelRelation $relation
-     * @return Model[]
+     * @return iterable<Model>
      */
-    private function runForManyToMany(Model $model, ModelRelation $relation): array
+    private function runForManyToMany(Model $model, ModelRelation $relation): iterable
     {
         $modelId = $model->getId();
         if (!$modelId) {
@@ -86,11 +78,9 @@ class RelatedLoader
     }
 
     /**
-     * @param Model $model
-     * @param ModelRelation $relation
-     * @return Model[]
+     * @return iterable<Model>
      */
-    private function runForManyToOne(Model $model, ModelRelation $relation): array
+    private function runForManyToOne(Model $model, ModelRelation $relation): iterable
     {
         $fk = $model->getRelatedKey($relation->getName());
         if ($fk === null) {
@@ -108,11 +98,9 @@ class RelatedLoader
     }
 
     /**
-     * @param Model $model
-     * @param ModelRelation $relation
-     * @return Model[]
+     * @return iterable<Model>
      */
-    private function runForOneToMany(Model $model, ModelRelation $relation): array
+    private function runForOneToMany(Model $model, ModelRelation $relation): iterable
     {
         $context = $this->repository->getContext();
         $nameConverter = $context->getNameConverter();
@@ -138,11 +126,9 @@ class RelatedLoader
     }
 
     /**
-     * @param Model $model
-     * @param ModelRelation $relation
-     * @return Model[]
+     * @return iterable<Model>
      */
-    private function runForOneToOne(Model $model, ModelRelation $relation): array
+    private function runForOneToOne(Model $model, ModelRelation $relation): iterable
     {
 
         //TODO

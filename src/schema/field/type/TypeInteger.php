@@ -2,10 +2,6 @@
 
 namespace lx\model\schema\field\type;
 
-/**
- * Class TypeInteger
- * @package lx\model\schema\field\type
- */
 class TypeInteger extends Type
 {
     public function getTypeName(): string
@@ -20,7 +16,6 @@ class TypeInteger extends Type
 
     /**
      * @param mixed $value
-     * @return bool
      */
     public function validateValue($value): bool
     {
@@ -29,7 +24,7 @@ class TypeInteger extends Type
 
     /**
      * @param mixed $value
-     * @return mixed
+     * @return int
      */
     public function normalizeValue($value)
     {

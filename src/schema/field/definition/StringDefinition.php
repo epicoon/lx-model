@@ -2,17 +2,13 @@
 
 namespace lx\model\schema\field\definition;
 
-/**
- * Class StringDefinition
- * @package lx\model\schema\field\definition
- */
 class StringDefinition extends AbstractDefinition
 {
     const DEFAULT_LENGTH = 256;
 
     private int $size;
 
-    public function init(array $definition)
+    public function init(array $definition): void
     {
         $this->size = (int)($definition['size'] ?? self::DEFAULT_LENGTH);
     }

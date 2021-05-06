@@ -4,10 +4,6 @@ namespace lx\model\managerTools\refresher;
 
 use lx\model\managerTools\ModelsContext;
 
-/**
- * Class ModelNamesProvider
- * @package lx\model\managerTools\refresher
- */
 class ModelNamesProvider
 {
     private ModelsContext $context;
@@ -45,7 +41,7 @@ class ModelNamesProvider
         return $this->map[$modelName]['mediatorNamespace'] ?? '';
     }
 
-    private function defineNamesForModel($fullModelName): array
+    private function defineNamesForModel(string $fullModelName): array
     {
         $psr = $this->context->getService()->getConfig('autoload.psr-4');
         if (!$psr) {

@@ -4,10 +4,6 @@ namespace lx\model\repository\db\tools\holdStack;
 
 use lx\model\Model;
 
-/**
- * Class HoldStack
- * @package lx\model\repository\db\tools\holdStack
- */
 class HoldStack
 {
     private bool $_isActive;
@@ -73,7 +69,7 @@ class HoldStack
         return $result;
     }
 
-    public function add(Model $model)
+    public function add(Model $model): void
     {
         $count = count($this->stack);
         $this->stack[$count - 1][] = $model;

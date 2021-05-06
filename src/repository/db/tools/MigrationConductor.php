@@ -7,10 +7,6 @@ use lx\ArrayHelper;
 use lx\DataFileInterface;
 use lx\File;
 
-/**
- * Class MigrationConductor
- * @package lx\model\repository\db\tools
- */
 class MigrationConductor
 {
     private RepositoryContext $context;
@@ -23,7 +19,7 @@ class MigrationConductor
     }
 
     /**
-     * @return Migration[]
+     * @return array<Migration>
      */
     public function getMigrations(): array
     {

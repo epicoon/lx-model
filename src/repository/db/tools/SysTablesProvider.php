@@ -7,10 +7,6 @@ use lx\DbTableBuilder;
 use lx\DbTableField;
 use lx\DbTableSchema;
 
-/**
- * Class SysTablesProvider
- * @package lx\model\repository\db\tools
- */
 class SysTablesProvider
 {
     const MIGRATIONS_TABLE = 'lx.migrations';
@@ -56,7 +52,7 @@ class SysTablesProvider
         }
     }
 
-    private function createMigrationsTable()
+    private function createMigrationsTable(): void
     {
         $db = $this->context->getRepository()->getMainDb();
         $dbSchema = DbTableSchema::createByConfig($db, [
@@ -80,7 +76,7 @@ class SysTablesProvider
         $builder->createTable();
     }
 
-    private function createTypesTable()
+    private function createTypesTable(): void
     {
         $db = $this->context->getRepository()->getMainDb();
         $dbSchema = DbTableSchema::createByConfig($db, [
@@ -104,7 +100,7 @@ class SysTablesProvider
         $builder->createTable();
     }
 
-    private function createMigrationsMetaDataTable()
+    private function createMigrationsMetaDataTable(): void
     {
         $db = $this->context->getRepository()->getMainDb();
         $dbSchema = DbTableSchema::createByConfig($db, [

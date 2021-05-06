@@ -9,10 +9,6 @@ use lx\model\repository\db\tools\RepositoryContext;
 use lx\model\repository\db\tools\Migration;
 use lx\model\repository\db\tools\MigrationConductor;
 
-/**
- * Class MigrationExecutor
- * @package lx\model\repository\db\migrationExecutor
- */
 class MigrationExecutor
 {
     private RepositoryContext $context;
@@ -94,7 +90,7 @@ class MigrationExecutor
     private function applyMigration(Migration $migration, bool $rollback = false): bool
     {
         $actions = $this->normalizeActions($migration);
-        if (!$actions) {
+        if ($actions === null) {
             return false;
         }
 
@@ -131,10 +127,9 @@ class MigrationExecutor
     }
 
     /**
-     * @param Migration $migration
-     * @return BaseMigrationAction[]|false
+     * @return array<BaseMigrationAction>
      */
-    private function normalizeActions(Migration $migration)
+    private function normalizeActions(Migration $migration): ?array
     {
         $data = $migration->get();
 

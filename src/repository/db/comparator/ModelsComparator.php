@@ -7,10 +7,6 @@ use lx\model\repository\db\tools\RepositoryContext;
 use lx\model\repository\db\tools\MigrationConductor;
 use lx\model\managerTools\ModelsContext;
 
-/**
- * Class ModelsComparator
- * @package lx\model\repository\db\comparator
- */
 class ModelsComparator
 {
     private ModelsContext $context;

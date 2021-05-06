@@ -4,10 +4,6 @@ namespace lx\model\repository;
 
 use lx\DataFileInterface;
 
-/**
- * Interface MigrationInterface
- * @package lx\model\repository
- */
 interface MigrationInterface
 {
     public function isApplied(): bool;

@@ -8,10 +8,6 @@ use lx\model\schema\field\parser\CommonParser;
 use lx\model\schema\field\type\TypesRegistryTrait;
 use lx\Service;
 
-/**
- * Class FieldParser
- * @package lx\model\managerTools\refresher\parser
- */
 class FieldParser
 {
     use FlightRecorderHolderTrait;
@@ -33,14 +29,13 @@ class FieldParser
 
     /**
      * @param array|string $fieldDefinition
-     * @return array|false
      */
-    public function parse($fieldDefinition)
+    public function parse($fieldDefinition): ?array
     {
         $typeName = $this->defineType($fieldDefinition);
         if (!$typeName) {
             $this->addFlightRecord('Undefined type');
-            return false;
+            return null;
         }
 
         $type = $this->getTypeByName($typeName);
@@ -52,25 +47,24 @@ class FieldParser
         $recorder = $parser->getFlightRecorder();
         if (!$recorder->isEmpty()) {
             $this->addFlightRecords($recorder->getRecords());
-            return false;
+            return null;
         }
 
         $this->validate();
         if (!$this->getFlightRecorder()->isEmpty()) {
-            return false;
+            return null;
         }
 
         return $result;
     }
 
 
-    /*******************************************************************************************************************
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      * PRIVATE
-     ******************************************************************************************************************/
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     /**
      * @param string|array $definition
-     * @return string|null
      */
     private function defineType($definition): ?string
     {
@@ -100,7 +94,7 @@ class FieldParser
         return null;
     }
 
-    private function validate()
+    private function validate(): void
     {
         //TODO
         /*

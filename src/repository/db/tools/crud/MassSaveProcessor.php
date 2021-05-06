@@ -9,15 +9,11 @@ use lx\model\modelTools\ModelsCollection;
 use lx\model\repository\db\Repository;
 use lx\model\repository\db\tools\RepositoryContext;
 
-/**
- * Class MassSaveProcessor
- * @package lx\model\repository\db\tools\crud
- */
 class MassSaveProcessor
 {
     private Repository $repository;
     private RepositoryContext $context;
-    /** @var ModelsCollection|Model[] */
+    /** @var iterable<Model> */
     private $models;
 
     public function __construct(Repository $repository, array $models = [])
@@ -28,9 +24,9 @@ class MassSaveProcessor
     }
 
     /**
-     * @param ModelsCollection|Model[] $models
+     * @param iterable<Model> $models
      */
-    public function setModels(array $models)
+    public function setModels(array $models): void
     {
         $this->models = $models;
     }
@@ -56,10 +52,9 @@ class MassSaveProcessor
     }
 
     /**
-     * @param Model[] $list
-     * @return array
+     * @param iterable<Model> $list
      */
-    public function analyzeModelsList(array $list): array
+    public function analyzeModelsList(iterable $list): array
     {
         $forSave = [];
         $forRelationsUpdate = [];
@@ -110,11 +105,9 @@ class MassSaveProcessor
     }
 
     /**
-     * @param string $modelName
-     * @param Model[] $models
-     * @return bool
+     * @param iterable<Model> $models
      */
-    private function runInsert(string $modelName, array $models): bool
+    private function runInsert(string $modelName, iterable $models): bool
     {
         if (empty($models)) {
             return true;
@@ -139,11 +132,9 @@ class MassSaveProcessor
     }
 
     /**
-     * @param string $modelName
-     * @param Model[] $models
-     * @return bool
+     * @param iterable<Model> $models
      */
-    private function runUpdate(string $modelName, array $models): bool
+    private function runUpdate(string $modelName, iterable $models): bool
     {
         if (empty($models)) {
             return true;

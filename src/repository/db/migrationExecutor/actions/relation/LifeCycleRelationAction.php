@@ -5,10 +5,6 @@ namespace lx\model\repository\db\migrationExecutor\actions\relation;
 use lx\model\repository\db\migrationExecutor\actions\BaseMigrationAction;
 use lx\model\schema\relation\RelationTypeEnum;
 
-/**
- * Class LifeCycleRelationAction
- * @package lx\model\repository\db\migrationExecutor\actions\relation
- */
 abstract class LifeCycleRelationAction extends BaseMigrationAction
 {
     const CONSTRAINT_PREFIX_ONE_TO_ONE = 'fh';

@@ -5,10 +5,6 @@ namespace lx\model\schema\field\type;
 use lx\model\schema\field\definition\StringDefinition;
 use lx\model\schema\field\parser\StringParser;
 
-/**
- * Class TypeString
- * @package lx\model\schema\field\type
- */
 class TypeString extends Type
 {
     public function getTypeName(): string
@@ -23,7 +19,6 @@ class TypeString extends Type
 
     /**
      * @param mixed $value
-     * @return bool
      */
     public function validateValue($value): bool
     {

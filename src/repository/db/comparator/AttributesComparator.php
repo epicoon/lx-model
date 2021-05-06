@@ -5,15 +5,9 @@ namespace lx\model\repository\db\comparator;
 use lx\model\schema\ModelAttribute;
 use lx\model\schema\ModelSchema;
 
-/**
- * Class AttributesComparator
- * @package lx\model\repository\db\comparator
- */
 abstract class AttributesComparator
 {
     /**
-     * @param ModelSchema $schemaByCode
-     * @param ModelSchema $schemaByRepo
      * @return array [changed[], renamed[], added[], deleted[]]
      */
     public function run(ModelSchema $schemaByCode, ModelSchema $schemaByRepo): array
@@ -50,8 +44,6 @@ abstract class AttributesComparator
     }
 
     /**
-     * @param ModelSchema $schemaByCode
-     * @param ModelSchema $schemaByRepo
      * @return array [namesCodeOnly[], namesRepoOnly[], namesCommon[]]
      */
     private function splitAttributeNames(ModelSchema $schemaByCode, ModelSchema $schemaByRepo): array

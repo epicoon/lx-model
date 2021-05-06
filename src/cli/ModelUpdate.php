@@ -7,10 +7,6 @@ use lx\model\repository\MigrationReporter;
 use lx\model\ModelManager;
 use lx\ServiceCliExecutor;
 
-/**
- * Class ModelUpdate
- * @package lx\model\cli
- */
 class ModelUpdate extends ServiceCliExecutor
 {
     const LEVEL_FULL = 'full';
@@ -18,10 +14,9 @@ class ModelUpdate extends ServiceCliExecutor
     const LEVEL_GEN_MIGRATION = 'gen-migration';
     const LEVEL_RUN_MIGRATION = 'run-migration';
 
-    /** @var array */
-    private $levels;
+    private array $levels;
 
-    public function run()
+    public function run(): void
     {
         $this->defineService();
         $models = $this->processor->getArg('model');
@@ -53,10 +48,7 @@ class ModelUpdate extends ServiceCliExecutor
         $this->runForAll();
     }
 
-    /**
-     * @return void
-     */
-    private function runForAll()
+    private function runForAll(): void
     {
         $servicesData = MigrationReporter::getServicesData();
         foreach ($servicesData as $serviceData) {
@@ -78,11 +70,7 @@ class ModelUpdate extends ServiceCliExecutor
         }
     }
 
-    /**
-     * @param string $serviceName
-     * @param array|null $models
-     */
-    private function runForService($serviceName, $models = null)
+    private function runForService(string $serviceName, ?array $models = null): void
     {
         $service = lx::$app->getService($serviceName);
         if (!$service) {
@@ -138,11 +126,7 @@ class ModelUpdate extends ServiceCliExecutor
         }
     }
 
-    /**
-     * @param ModelManager $modelManager
-     * @param array $models
-     */
-    private function refreshModels($modelManager, $models)
+    private function refreshModels(ModelManager $modelManager, array $models): void
     {
         $report = $modelManager->refreshModels($models)->toArray();
 
@@ -184,10 +168,7 @@ class ModelUpdate extends ServiceCliExecutor
         }
     }
 
-    /**
-     * @param ModelManager $modelManager
-     */
-    private function genMigrations($modelManager)
+    private function genMigrations(ModelManager $modelManager): void
     {
         $report = $modelManager->refreshMigrations();
         if ($report->isEmpty()) {
@@ -201,10 +182,7 @@ class ModelUpdate extends ServiceCliExecutor
         }
     }
 
-    /**
-     * @param ModelManager $modelManager
-     */
-    private function runMigrations($modelManager)
+    private function runMigrations(ModelManager $modelManager): void
     {
         $report = $modelManager->runMigrations()->toArray();
         $this->processor->outln('* Migrations have been applied:', ['decor' => 'b']);
@@ -213,12 +191,7 @@ class ModelUpdate extends ServiceCliExecutor
         }
     }
 
-    /**
-     * @param string
-     * $level
-     * @return bool
-     */
-    private function isLevelAllowed($level)
+    private function isLevelAllowed(string $level): bool
     {
         return in_array($level, $this->levels);
     }

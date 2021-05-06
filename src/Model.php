@@ -11,10 +11,6 @@ use lx\model\schema\ModelSchema;
 use lx\model\schema\ModelSchemaProvider;
 use lx\Service;
 
-/**
- * Class Model
- * @package lx\model
- */
 abstract class Model implements ModelInterface
 {
     private static $nullCache = null;
@@ -24,7 +20,7 @@ abstract class Model implements ModelInterface
     private array $_fields;
     private array $_oldFields;
 
-    /** @var ModelRelationKeeper[] */
+    /** @var array<ModelRelationKeeper> */
     private array $_relations;
 
     private ?DataObject $_metaData;
@@ -58,7 +54,6 @@ abstract class Model implements ModelInterface
     }
 
     /**
-     * @param string $name
      * @param mixed $value
      */
     public function __set(string $name, $value)
@@ -75,7 +70,6 @@ abstract class Model implements ModelInterface
     }
 
     /**
-     * @param string $name
      * @return mixed|null
      */
     public function &__get(string $name)
@@ -158,7 +152,7 @@ abstract class Model implements ModelInterface
         $this->_oldFields = [];
     }
 
-    public function commitChanges()
+    public function commitChanges(): void
     {
         $this->_oldFields = [];
         foreach ($this->_relations as $relation) {
@@ -180,7 +174,6 @@ abstract class Model implements ModelInterface
     }
 
     /**
-     * @param string $name
      * @param mixed $value
      */
     public function setField(string $name, $value): void
@@ -214,7 +207,6 @@ abstract class Model implements ModelInterface
     }
 
     /**
-     * @param string$name
      * @return mixed|null
      */
     public function &getField(string $name)
@@ -236,7 +228,7 @@ abstract class Model implements ModelInterface
         return $this->_id;
     }
 
-    public function setId(int $id)
+    public function setId(int $id): void
     {
         if ($this->_id === null) {
             $this->_id = $id;
@@ -272,8 +264,7 @@ abstract class Model implements ModelInterface
     }
 
     /**
-     * @param array|null $condition
-     * @return Model[]
+     * @return array<Model>
      */
     public static function find(?array $condition = null): array
     {
@@ -318,7 +309,6 @@ abstract class Model implements ModelInterface
     }
 
     /**
-     * @param string $name
      * @return mixed|null
      */
     public function &getRelated(string $name)
@@ -378,11 +368,17 @@ abstract class Model implements ModelInterface
         return $result;
     }
 
+    /**
+     * @return null|int|int[]
+     */
     public function getRelatedKey(string $name)
     {
         return $this->getRelationKeeper($name)->getKey();
     }
 
+    /**
+     * @param int|int[] $key
+     */
     private function setRelatedKey(string $name, $key): void
     {
         $this->getRelationKeeper($name)->setKey($key);
@@ -530,7 +526,6 @@ abstract class Model implements ModelInterface
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     /**
-     * @param string $name
      * @param mixed $value
      */
     private function actualizeOldField(string $name, $value): void

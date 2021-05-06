@@ -21,10 +21,6 @@ use lx\model\repository\db\comparator\ModelsComparator;
 use lx\model\repository\db\tools\RepositoryContext;
 use lx\model\managerTools\ModelsContext;
 
-/**
- * Class Repository
- * @package lx\model
- */
 class Repository implements RepositoryInterface
 {
     const CONNECTION_KEY_MAIN = 'main';
@@ -38,7 +34,7 @@ class Repository implements RepositoryInterface
     private ?DB $readDb = null;
     private ?DB $writeDb = null;
 
-    public function setContext(ModelsContext $context)
+    public function setContext(ModelsContext $context): void
     {
         $this->context = new RepositoryContext($context, $this);
         $this->holdStack = new HoldStack();
@@ -46,7 +42,7 @@ class Repository implements RepositoryInterface
         $this->crudProcessor = new CrudProcessor($this);
     }
 
-    public function setConfig(array $config)
+    public function setConfig(array $config): void
     {
         $this->config = $config;
     }
@@ -62,7 +58,6 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @param string $key
      * @return mixed|null
      */
     public function getConfig(string $key)
@@ -107,7 +102,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @return MigrationInterface[]
+     * @return array<MigrationInterface>
      */
     public function getMigrations(): array
     {
@@ -273,10 +268,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @param string $modelName
      * @param int|array $condition
-     * @param bool $useUnitMap
-     * @return Model|null
      */
     public function findModel(string $modelName, $condition, bool $useUnitMap = true): ?Model
     {
@@ -301,7 +293,10 @@ class Repository implements RepositoryInterface
         return $models[0] ?? null;
     }
 
-    public function findModelAsArray(string $modelName, int $id, bool $useUnitMap = true): ?array
+    /**
+     * @return null|iterable<Model>
+     */
+    public function findModelAsArray(string $modelName, int $id, bool $useUnitMap = true): ?iterable
     {
         $model = $useUnitMap ? $this->unitMap->get($modelName, $id) : null;
         if ($model) {
@@ -311,7 +306,10 @@ class Repository implements RepositoryInterface
         return $this->crudProcessor->findModelAsArray($modelName, $id);
     }
 
-    public function findModels(string $modelName, ?array $condition = null, bool $useUnitMap = true): array
+    /**
+     * @return iterable<Model>
+     */
+    public function findModels(string $modelName, ?array $condition = null, bool $useUnitMap = true): iterable
     {
         if ($condition) {
             $condition = ModelFieldsConverter::toRepositoryForCondition($this->context, $modelName, $condition);
@@ -329,12 +327,10 @@ class Repository implements RepositoryInterface
         return $this->findModelsByIds($modelName, $ids);
     }
 
-        /**
-     * @param string $modelName
-     * @param array $ids
-     * @return Model[]
+    /**
+     * @return iterable<Model>
      */
-    public function findModelsByIds(string $modelName, array $ids): array
+    public function findModelsByIds(string $modelName, array $ids): iterable
     {
         $models = $this->unitMap->getList($modelName, $ids);
 
@@ -353,19 +349,16 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @param Model $model
-     * @param string $relationName
-     * @return Model[]
+     * @return iterable<Model>
      */
-    public function findRelatedModels(Model $model, string $relationName): array
+    public function findRelatedModels(Model $model, string $relationName): iterable
     {
         $loader = new RelatedLoader($this);
         return $loader->loadForModel($model, $relationName);
     }
 
     /**
-     * @param Model[] $models
-     * @return bool
+     * @param iterable<Model> $models
      */
     public function saveModels(iterable $models): bool
     {
@@ -389,8 +382,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @param Model[] $models
-     * @return bool
+     * @param iterable<Model> $models
      */
     public function deleteModels(iterable $models): bool
     {

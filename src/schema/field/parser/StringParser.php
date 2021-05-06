@@ -2,16 +2,9 @@
 
 namespace lx\model\schema\field\parser;
 
-/**
- * Class StringParser
- * @package lx\model\schema\field\parser
- */
 class StringParser extends CommonParser
 {
-    /**
-     * @return array
-     */
-    protected function getArrayParseProtocol()
+    protected function getArrayParseProtocol(): array
     {
         return array_merge(
             parent::getArrayParseProtocol(),
@@ -21,7 +14,7 @@ class StringParser extends CommonParser
         );
     }
 
-    protected function parseType()
+    protected function parseType(): void
     {
         preg_match('/^ *\b(.+?)\b(\(\d+?\))?/', $this->definitionSource, $matches);
         $type = $matches[1] ?? null;

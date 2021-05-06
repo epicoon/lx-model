@@ -9,10 +9,6 @@ use lx\model\repository\db\Repository;
 use lx\model\repository\db\tools\RepositoryContext;
 use lx\model\schema\relation\ModelRelation;
 
-/**
- * Class CrudProcessor
- * @package lx\model\repository\db\tools\crud
- */
 class CrudProcessor
 {
     const RELATION_FOR_ADD = 'add';
@@ -150,10 +146,9 @@ class CrudProcessor
     }
 
     /**
-     * @param Model[] $models
-     * @return bool
+     * @param iterable<Model> $models
      */
-    public function saveModels(array $models): bool
+    public function saveModels(iterable $models): bool
     {
         $processor = new MassSaveProcessor($this->repository);
         $list = $processor->analyzeModelsList($models);
@@ -175,10 +170,9 @@ class CrudProcessor
     }
 
     /**
-     * @param Model[] $models
-     * @return bool
+     * @param iterable<Model> $models
      */
-    public function deleteModels(array $models): bool
+    public function deleteModels(iterable $models): bool
     {
         if (empty($models)) {
             return true;
@@ -215,10 +209,9 @@ class CrudProcessor
     }
 
     /**
-     * @param Model[] $models
-     * @return array
+     * @param iterable<Model> $models
      */
-    private function splitModels(array $models): array
+    private function splitModels(iterable $models): array
     {
         $groups = [];
         foreach ($models as $model) {

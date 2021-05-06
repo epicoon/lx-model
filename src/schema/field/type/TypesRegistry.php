@@ -5,16 +5,12 @@ namespace lx\model\schema\field\type;
 use lx\FusionComponentTrait;
 use lx\ObjectTrait;
 
-/**
- * Class TypesRegistry
- * @package lx\model\schema\field\type
- */
 abstract class TypesRegistry
 {
     use ObjectTrait;
     use FusionComponentTrait;
 
-    /** @var Type[] */
+    /** @var array<Type> */
     private array $typesMap = [];
 
     public function __construct(array $config = [])
@@ -24,7 +20,7 @@ abstract class TypesRegistry
         $this->initProviders($config['providers'] ?? []);
     }
 
-    abstract protected function init();
+    abstract protected function init(): void;
 
     public function getTypeNames(): array
     {
@@ -44,7 +40,7 @@ abstract class TypesRegistry
     /**
      * @param string|Type $type
      */
-    public function register($type)
+    public function register($type): void
     {
         if (is_string($type) && is_subclass_of($type, Type::class)) {
             /** @var Type $typeInstance */
@@ -56,9 +52,9 @@ abstract class TypesRegistry
     }
 
     /**
-     * @param TypesProviderInterface[] $providers
+     * @param array<TypesProviderInterface> $providers
      */
-    private function initProviders(array $providers)
+    private function initProviders(array $providers): void
     {
         foreach ($providers as $provider) {
             if (!is_subclass_of($provider, TypesProviderInterface::class)) {

@@ -5,10 +5,6 @@ namespace lx\model\schema\relation;
 use lx\model\schema\ModelAttribute;
 use lx\model\schema\ModelSchema;
 
-/**
- * Class ModelRelation
- * @package lx\model\schema\relation
- */
 class ModelRelation extends ModelAttribute
 {
     private string $type;
@@ -105,9 +101,7 @@ class ModelRelation extends ModelAttribute
     }
 
     /**
-     * @param string $methodName
      * @param mixed $currentValue
-     * @param array $arguments
      * @return mixed
      */
     public function callMethod(string $methodName, $currentValue, array $arguments)

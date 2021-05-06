@@ -7,10 +7,6 @@ use lx\model\repository\db\tools\RepositoryContext;
 use lx\model\repository\db\tools\SyncSchema;
 use lx\model\schema\ModelSchema;
 
-/**
- * Class ModelComparator
- * @package lx\model\repository\db\comparator
- */
 class ModelComparator
 {
     private RepositoryContext $context;
@@ -48,8 +44,6 @@ class ModelComparator
     }
 
     /**
-     * @param ModelSchema $schemaByCode
-     * @param ModelSchema $schemaByRepo
      * @return array
      *     [
      *         ?fields=>[changed[], renamed[], added[], deleted[]],

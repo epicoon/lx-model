@@ -4,15 +4,11 @@ namespace lx\model\repository\db;
 
 use lx\model\managerTools\ModelsContext;
 
-/**
- * Class SingleRepository
- * @package lx\model\repository\db
- */
 class SingleRepository extends Repository
 {
     private static array $registered = [];
 
-    public function setContext(ModelsContext $context)
+    public function setContext(ModelsContext $context): void
     {
         parent::setContext($context);
 

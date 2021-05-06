@@ -6,10 +6,6 @@ use lx\model\repository\db\tools\RepositoryContext;
 use lx\model\repository\db\tools\SysTablesProvider;
 use lx\model\schema\field\ModelField;
 
-/**
- * Class CustomTypesRecorder
- * @package lx\model\repository\db\migrationExecutor
- */
 class CustomTypesRecorder
 {
     private RepositoryContext $context;
@@ -39,8 +35,7 @@ class CustomTypesRecorder
     }
 
     /**
-     * @param string $tableName
-     * @param ModelField[] $fields
+     * @param array<ModelField> $fields
      */
     public function onAdded(string $tableName, array $fields): void
     {
@@ -74,8 +69,7 @@ class CustomTypesRecorder
     }
 
     /**
-     * @param ModelField[] $fields
-     * @return array
+     * @param array<ModelField> $fields
      */
     private function getList(array $fields): array
     {

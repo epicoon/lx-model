@@ -2,10 +2,6 @@
 
 namespace lx\model\repository\db\migrationExecutor\actions;
 
-/**
- * Class TypeEnum
- * @package lx\model\repository\db\migrationExecutor\actions
- */
 class MigrationActionTypeEnum
 {
     const CREATE_TABLE = 'createTable';

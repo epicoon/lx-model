@@ -2,10 +2,6 @@
 
 namespace lx\model\schema\field\type;
 
-/**
- * Class TypeBoolean
- * @package lx\model\schema\field\type
- */
 class TypeBoolean extends Type
 {
     public function getTypeName(): string
@@ -20,7 +16,6 @@ class TypeBoolean extends Type
 
     /**
      * @param mixed $value
-     * @return bool
      */
     public function validateValue($value): bool
     {
@@ -29,7 +24,7 @@ class TypeBoolean extends Type
 
     /**
      * @param mixed $value
-     * @return mixed
+     * @return bool
      */
     public function normalizeValue($value)
     {

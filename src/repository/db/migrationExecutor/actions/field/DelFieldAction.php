@@ -8,10 +8,6 @@ use lx\model\repository\db\migrationExecutor\actions\BaseMigrationAction;
 use lx\model\repository\db\migrationExecutor\actions\MigrationActionTypeEnum;
 use lx\model\repository\db\migrationExecutor\CustomTypesRecorder;
 
-/**
- * Class DelFieldAction
- * @package lx\model\repository\db\migrationExecutor\actions
- */
 class DelFieldAction extends BaseMigrationAction
 {
     public function inverse(): BaseMigrationAction

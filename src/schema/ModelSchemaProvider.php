@@ -2,13 +2,9 @@
 
 namespace lx\model\schema;
 
-/**
- * Class ModelSchemaProvider
- * @package lx\model
- */
 class ModelSchemaProvider
 {
-    /** @var ModelSchema[] */
+    /** @var array<ModelSchema> */
     private static array $list = [];
 
     public static function getSchema(string $modelClass): ?ModelSchema

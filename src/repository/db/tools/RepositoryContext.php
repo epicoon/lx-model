@@ -5,10 +5,6 @@ namespace lx\model\repository\db\tools;
 use lx\model\repository\db\Repository;
 use lx\model\managerTools\ModelsContext;
 
-/**
- * Class RepositoryContext
- * @package lx\model\repository\db
- */
 class RepositoryContext extends ModelsContext
 {
     private Repository $repository;

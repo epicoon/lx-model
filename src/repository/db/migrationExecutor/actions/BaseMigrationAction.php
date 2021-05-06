@@ -19,10 +19,6 @@ use lx\model\repository\db\migrationExecutor\MigrationExecuteReport;
 use lx\model\repository\db\tools\RepositoryContext;
 use lx\model\repository\db\tools\Migration;
 
-/**
- * Class BaseMigrationAction
- * @package lx\model\repository\db\migrationExecutor\actions
- */
 abstract class BaseMigrationAction
 {
     protected RepositoryContext $context;
@@ -97,10 +93,7 @@ abstract class BaseMigrationAction
 
     abstract protected function execute(): void;
 
-    /**
-     * @param string $error
-     */
-    protected function addError(string $error)
+    protected function addError(string $error): void
     {
         $data = [
             'migration' => $this->data['migration']->getVersion(),

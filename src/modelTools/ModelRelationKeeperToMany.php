@@ -7,10 +7,6 @@ use lx\model\Model;
 use lx\model\modelTools\relationModelWrapper\RelationModelConnector;
 use lx\model\modelTools\relationModelWrapper\RelationModelEraser;
 
-/**
- * Class ModelRelationKeeperToMany
- * @package lx\model\modelTools
- */
 class ModelRelationKeeperToMany extends ModelRelationKeeper
 {
     /** @var int[] */
@@ -34,6 +30,9 @@ class ModelRelationKeeperToMany extends ModelRelationKeeper
         $this->keys = array_values(array_unique(array_merge($this->keys, (array)$key)));
     }
 
+    /**
+     * @return int[]
+     */
     public function getKey()
     {
         return $this->keys;

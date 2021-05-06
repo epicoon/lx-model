@@ -7,10 +7,6 @@ use lx\model\Model;
 use lx\model\modelTools\relationModelWrapper\RelationModelWrapper;
 use lx\model\schema\relation\ModelRelation;
 
-/**
- * Class ModelRelationKeeper
- * @package lx\model\modelTools
- */
 abstract class ModelRelationKeeper
 {
     protected Model $model;
@@ -44,6 +40,9 @@ abstract class ModelRelationKeeper
      * @param int|int[] $key
      */
     abstract public function setKey($key): void;
+    /**
+     * @return null|int|int[]
+     */
     abstract public function getKey();
     abstract public function pushModel(?ModelInterface $model): void;
     abstract public function dropModel(?ModelInterface $model = null): void;

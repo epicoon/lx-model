@@ -10,19 +10,12 @@ use lx\ObjectTrait;
 use lx\ServiceCliInterface;
 use lx\ServiceCliExecutor;
 
-/**
- * Class Cli
- * @package lx\model\cli
- */
 class Cli implements FusionComponentInterface, ServiceCliInterface
 {
     use ObjectTrait;
 	use FusionComponentTrait;
 
-    /**
-     * @return array
-     */
-	public function getExtensionData()
+	public function getExtensionData(): array
 	{
 		return [
 			[

@@ -6,9 +6,6 @@ use lx;
 use lx\Service;
 
 /**
- * Trait TypesRegistryTrait
- * @package lx\model\schema\field\type
- *
  * Class with this trait ought to implement method [[getService()]] to provide its service
  */
 trait TypesRegistryTrait

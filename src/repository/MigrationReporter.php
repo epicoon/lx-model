@@ -6,10 +6,6 @@ use lx;
 use lx\model\ModelManager;
 use lx\PackageBrowser;
 
-/**
- * Class MigrationReporter
- * @package lx\model\repository
- */
 class MigrationReporter
 {
     public static function getServicesData(): array

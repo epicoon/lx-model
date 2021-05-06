@@ -7,34 +7,19 @@ use lx\Respondent as lxRespondent;
 use lx\model\ModelManager;
 use lx\model\repository\MigrationReporter;
 
-/**
- * Class Respondent
- * @package lx\model\plugins\migrationManager\backend
- */
 class Respondent extends lxRespondent
 {
-    /**
-     * @return array
-     */
-    public function getServicesData()
+    public function getServicesData(): array
     {
         return MigrationReporter::getServicesData();
     }
 
-    /**
-     * @param string $serviceName
-     * @return array
-     */
-    public function renewServiceData($serviceName)
+    public function renewServiceData(string $serviceName): array
     {
         return MigrationReporter::getServiceData($serviceName);
     }
 
-    /**
-     * @param string $serviceName
-     * @return array
-     */
-    public function createMigrations($serviceName)
+    public function createMigrations(string $serviceName): array
     {
         $service = lx::$app->getService($serviceName);
         if (!$service) {
@@ -52,12 +37,7 @@ class Respondent extends lxRespondent
         ];
     }
 
-    /**
-     * @param string $serviceName
-     * @param int$count
-     * @return array
-     */
-    public function runMigrations($serviceName, $count = null)
+    public function runMigrations(string $serviceName, ?int $count = null): array
     {
         $service = lx::$app->getService($serviceName);
         if (!$service) {
@@ -74,12 +54,7 @@ class Respondent extends lxRespondent
         ];
     }
 
-    /**
-     * @param string $serviceName
-     * @param int $count
-     * @return array
-     */
-    public function rollbackMigrations($serviceName, $count = null)
+    public function rollbackMigrations(string $serviceName, ?int $count = null): array
     {
         $service = lx::$app->getService($serviceName);
         if (!$service) {
@@ -96,11 +71,7 @@ class Respondent extends lxRespondent
         ];
     }
 
-    /**
-     * @param string $serviceName
-     * @return array
-     */
-    public function getServiceMigrations($serviceName)
+    public function getServiceMigrations(string $serviceName): array
     {
         $service = lx::$app->getService($serviceName);
         if (!$service) {
@@ -122,12 +93,7 @@ class Respondent extends lxRespondent
         return $result;
     }
 
-    /**
-     * @param string $serviceName
-     * @param string $migrationName
-     * @return string
-     */
-    public function getMigrationText($serviceName, $migrationName)
+    public function getMigrationText(string $serviceName, string $migrationName): string
     {
         $service = lx::$app->getService($serviceName);
         if (!$service) {
@@ -141,33 +107,4 @@ class Respondent extends lxRespondent
 
         return $file->getText();
     }
-
-//    /**
-//     * @param string $serviceName
-//     * @return array|null
-//     */
-//    private function getServiceData($serviceName)
-//    {
-//        $service = lx::$app->getService($serviceName);
-//        if (!$service) {
-//            return null;
-//        }
-//
-//        /** @var ModelManager $modelManager */
-//        $modelManager = $service->modelManager;
-//        $models = $modelManager->getModelNames();
-//        if (empty($models)) {
-//            return null;
-//        }
-//
-//        $report = $modelManager->compareRepository()->toArray();
-//        $modelsCompareReport = $modelManager->compareModels()->toArray();
-//        $report['modelsNeedUpdate'] = $modelsCompareReport['modelsNeedUpdate'] ?? [];
-//
-//        return [
-//            'serviceName' => $serviceName,
-//            'serviceCategory' => $service->getCategory(),
-//            'report' => $report,
-//        ];
-//    }
 }

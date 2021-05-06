@@ -9,10 +9,6 @@ use lx\model\schema\field\type\Type;
 use lx\model\schema\field\type\TypesRegistryTrait;
 use lx\Service;
 
-/**
- * Class ModelField
- * @package lx\model\schema\field
- */
 class ModelField extends ModelAttribute
 {
     use TypesRegistryTrait;
@@ -94,7 +90,6 @@ class ModelField extends ModelAttribute
 
     /**
      * @param mixed $value
-     * @return bool
      */
     public function validateValue($value): bool
     {
@@ -126,9 +121,7 @@ class ModelField extends ModelAttribute
     }
 
     /**
-     * @param string $methodName
      * @param mixed $currentValue
-     * @param array $arguments
      * @return mixed
      */
     public function callMethod(string $methodName, $currentValue, array $arguments)

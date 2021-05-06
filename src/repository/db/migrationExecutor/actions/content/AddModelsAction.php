@@ -8,10 +8,6 @@ use lx\model\repository\db\migrationExecutor\actions\BaseMigrationAction;
 use lx\model\repository\db\tools\SyncSchema;
 use lx\model\repository\db\tools\SysTablesProvider;
 
-/**
- * Class AddModelAction
- * @package lx\model\repository\db\migrationExecutor\actions\content
- */
 class AddModelsAction extends BaseMigrationAction
 {
     private bool $inversed = false;
@@ -237,8 +233,6 @@ class AddModelsAction extends BaseMigrationAction
     }
 
     /**
-     * @param array $_vars
-     * @param string $_code
      * @return mixed
      */
     private function eval(array $_vars, string $_code)

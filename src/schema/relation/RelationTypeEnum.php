@@ -9,11 +9,7 @@ class RelationTypeEnum
     const MANY_TO_ONE = 'manyToOne';
     const ONE_TO_ONE = 'oneToOne';
 
-    /**
-     * @param string $type
-     * @return string|null
-     */
-    public static function getContrType($type)
+    public static function getContrType(string $type): ?string
     {
         switch ($type) {
             case self::ONE_TO_ONE:

@@ -2,10 +2,6 @@
 
 namespace lx\model\schema;
 
-/**
- * Class ModelAttributeMethod
- * @package lx\model\schema
- */
 class ModelAttributeMethod
 {
     private string $returnType;

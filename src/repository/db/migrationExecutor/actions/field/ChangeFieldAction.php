@@ -8,10 +8,6 @@ use lx\model\repository\db\migrationExecutor\CustomTypesRecorder;
 use lx\model\repository\db\tools\SyncSchema;
 use lx\model\schema\field\ModelField;
 
-/**
- * Class ChangeFieldAction
- * @package lx\model\repository\db\migrationExecutor\actions
- */
 class ChangeFieldAction extends BaseMigrationAction
 {
     public function inverse(): BaseMigrationAction

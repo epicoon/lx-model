@@ -6,10 +6,6 @@ use lx\model\schema\ModelAttribute;
 use lx\model\schema\ModelSchema;
 use lx\model\schema\relation\ModelRelation;
 
-/**
- * Class RelationsComparator
- * @package lx\model\repository\db\comparator
- */
 class RelationsComparator extends AttributesComparator
 {
     protected function getAttributes(ModelSchema $schema): array

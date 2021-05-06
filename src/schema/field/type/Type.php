@@ -8,17 +8,12 @@ use lx\model\schema\field\definition\CommonDefinition;
 use lx\model\schema\field\parser\CommonParser;
 use lx\model\schema\ModelAttributeMethod;
 
-/**
- * Class Type
- * @package lx\model\schema\field\type
- */
 abstract class Type
 {
     abstract public function getTypeName(): string;
 
     /**
      * @param mixed $value
-     * @return bool
      */
     abstract public function validateValue($value): bool;
 
@@ -67,13 +62,10 @@ abstract class Type
     }
 
     /**
-     * @param $field
-     * @param string $methodName
      * @param mixed $currentValue
-     * @param array $arguments
      * @return mixed
      */
-    public function processMethod(ModelField $field, string $methodName, $currentValue, array $arguments): array
+    public function processMethod(ModelField $field, string $methodName, $currentValue, array $arguments)
     {
         return $currentValue;
     }

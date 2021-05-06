@@ -2,16 +2,9 @@
 
 namespace lx\model\schema\field\type;
 
-/**
- * Class CommonTypesRegistry
- * @package lx\model\schema\field\type
- */
 class CommonTypesRegistry extends TypesRegistry
 {
-    /**
-     * @return void
-     */
-    protected function init()
+    protected function init(): void
     {
         $this->register(TypeString::class);
         $this->register(TypeInteger::class);

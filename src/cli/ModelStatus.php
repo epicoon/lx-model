@@ -7,7 +7,7 @@ use lx\ServiceCliExecutor;
 
 class ModelStatus extends ServiceCliExecutor
 {
-    public function run()
+    public function run(): void
     {
         $this->defineService();
         $models = $this->processor->getArg('model');
@@ -28,10 +28,7 @@ class ModelStatus extends ServiceCliExecutor
         $this->runForAll();
     }
 
-    /**
-     * @return void
-     */
-    private function runForAll()
+    private function runForAll(): void
     {
         $fullReport = MigrationReporter::getServicesData();
 
@@ -54,19 +51,13 @@ class ModelStatus extends ServiceCliExecutor
         }
     }
 
-    /**
-     * @param array|null $models
-     */
-    private function runForService($models)
+    private function runForService(?array $models): void
     {
         $report = MigrationReporter::getServiceData($this->service->name, $models);
         $this->printServiceReport($report['report']);
     }
 
-    /**
-     * @param array $report
-     */
-    private function printServiceReport($report)
+    private function printServiceReport(array $report): void
     {
         if (!empty($report['wrongModelNames'])) {
             $this->processor->outln('* The following models not found:', ['decor' => 'b']);

@@ -7,10 +7,6 @@ use lx\model\repository\db\tools\NameConverter;
 use lx\model\repository\db\tools\RepositoryContext;
 use lx\model\schema\ModelSchema;
 
-/**
- * Class ModelFieldsConverter
- * @package lx\model\repository\db\tools\crud
- */
 class ModelFieldsConverter
 {
     public static function toRepositoryForModel(RepositoryContext $context, Model $model): array
@@ -25,11 +21,9 @@ class ModelFieldsConverter
     }
 
     /**
-     * @param RepositoryContext $context
-     * @param Model[] $models
-     * @return array
+     * @param iterable<Model> $models
      */
-    public static function toRepositoryForModels(RepositoryContext $context, array $models): array
+    public static function toRepositoryForModels(RepositoryContext $context, iterable $models): array
     {
         $nameConverter = $context->getNameConverter();
         $schema = $models[0]->getSchema();

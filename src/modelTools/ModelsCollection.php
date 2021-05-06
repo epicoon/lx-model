@@ -6,10 +6,6 @@ use lx\ArrayInterface;
 use lx\ArrayTrait;
 use lx\model\Model;
 
-/**
- * Class ModelCollection
- * @package lx\model\modelTools
- */
 class ModelsCollection implements ArrayInterface
 {
     use ArrayTrait;

@@ -15,10 +15,6 @@ use lx\model\managerTools\refresher\RefreshReport;
 use lx\model\schema\ModelSchema;
 use lx\ObjectTrait;
 
-/**
- * Class ModelManager
- * @package lx\model
- */
 class ModelManager implements ModelManagerInterface, FusionComponentInterface
 {
     use ObjectTrait;

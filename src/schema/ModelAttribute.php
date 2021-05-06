@@ -2,10 +2,6 @@
 
 namespace lx\model\schema;
 
-/**
- * Class ModelAttribute
- * @package lx\model
- */
 abstract class ModelAttribute
 {
     protected ModelSchema $schema;
@@ -45,9 +41,7 @@ abstract class ModelAttribute
     abstract public function isEqual(ModelAttribute $attribute): bool;
 
     /**
-     * @param string $methodName
      * @param mixed $currentValue
-     * @param array $arguments
      * @return mixed
      */
     abstract public function callMethod(string $methodName, $currentValue, array $arguments);

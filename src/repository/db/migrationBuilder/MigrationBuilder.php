@@ -8,10 +8,6 @@ use lx\model\repository\db\tools\RepositoryContext;
 use lx\model\repository\db\tools\SyncSchema;
 use lx\model\repository\ReportInterface;
 
-/**
- * Class MigrationBuilder
- * @package lx\model\repository\db\migrationBuilder
- */
 class MigrationBuilder
 {
     private RepositoryContext $context;
@@ -218,7 +214,7 @@ class MigrationBuilder
         return $result;
     }
 
-    private function genMigration(array $data)
+    private function genMigration(array $data): void
     {
         $migrationName = date('Ymd_His') . '.' . $this->context->getMigrationExtension();
         $dir = $this->context->getConductor()->getMigrationsDirectory();

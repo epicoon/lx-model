@@ -4,15 +4,10 @@ namespace lx\model\modelTools;
 
 use lx\model\Model;
 
-/**
- * Class ModelsSerializer
- * @package lx\model\modelTools
- */
 class ModelsSerializer
 {
     /**
-     * @param Model[] $models
-     * @return array
+     * @param iterable<Model> $models
      */
     public function collectionToArray(iterable $models): array
     {

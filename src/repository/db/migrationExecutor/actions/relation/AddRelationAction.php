@@ -9,10 +9,6 @@ use lx\model\repository\db\migrationExecutor\actions\BaseMigrationAction;
 use lx\model\repository\db\migrationExecutor\actions\MigrationActionTypeEnum;
 use lx\model\repository\db\tools\SyncSchema;
 
-/**
- * Class AddRelationAction
- * @package lx\model\repository\db\migrationExecutor\actions\relation
- */
 class AddRelationAction extends LifeCycleRelationAction
 {
     public function inverse(): BaseMigrationAction

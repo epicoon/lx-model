@@ -5,10 +5,6 @@ namespace lx\model\modelTools;
 use lx\model\Model;
 use lx\model\modelTools\relationModelWrapper\RelationModelSetter;
 
-/**
- * Class RelatedModelsCollection
- * @package lx\model\modelTools
- */
 class RelatedModelsCollection extends ModelsCollection
 {
     private ModelRelationKeeperToMany $relationKeeper;
@@ -19,7 +15,7 @@ class RelatedModelsCollection extends ModelsCollection
         $this->relationKeeper = $relationKeeper;
     }
 
-    public function removeModel(Model $model)
+    public function removeModel(Model $model): void
     {
         if (!$this->contains($this->relationKeeper->unpackModel($model))) {
             return;
@@ -56,7 +52,7 @@ class RelatedModelsCollection extends ModelsCollection
     }
 
     /**
-     * @param Model[] $iterable
+     * @param iterable<Model> $iterable
      * @return iterable
      */
     public function merge($iterable)
@@ -77,9 +73,8 @@ class RelatedModelsCollection extends ModelsCollection
     /**
      * @param mixed $key
      * @param mixed $value
-     * @return bool
      */
-    protected function beforeUnset($key, $value)
+    protected function beforeUnset($key, $value): bool
     {
         $this->relationKeeper->onCollectionDeleting($value);
         return true;
@@ -88,9 +83,8 @@ class RelatedModelsCollection extends ModelsCollection
     /**
      * @param int $key
      * @param Model $value
-     * @return bool
      */
-    protected function beforeSet($key, $value)
+    protected function beforeSet($key, $value): bool
     {
         if ($this->contains($this->relationKeeper->unpackModel($value))) {
             return false;

@@ -6,10 +6,6 @@ use lx\DbTableBuilder;
 use lx\DbTableSchema;
 use lx\model\repository\db\migrationExecutor\actions\BaseMigrationAction;
 
-/**
- * Class RenameFieldAction
- * @package lx\model\repository\db\migrationExecutor\actions
- */
 class RenameFieldAction extends BaseMigrationAction
 {
     public function inverse(): BaseMigrationAction

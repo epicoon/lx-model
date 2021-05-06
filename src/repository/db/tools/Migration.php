@@ -6,22 +6,13 @@ use lx\DataFileInterface;
 use lx\File;
 use lx\model\repository\MigrationInterface;
 
-/**
- * Class Migration
- * @package lx\model\repository\db\tools
- */
 class Migration implements MigrationInterface
 {
-    /** @var File&DataFileInterface */
-    private $file;
+    /** @var DataFileInterface&File */
+    private DataFileInterface $file;
     private bool $isApplied;
 
-    /**
-     * Migration constructor.
-     * @param $file
-     * @param bool $isApplied
-     */
-    public function __construct($file, bool $isApplied)
+    public function __construct(DataFileInterface $file, bool $isApplied)
     {
         $this->file = $file;
         $this->isApplied = $isApplied;

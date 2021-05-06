@@ -5,10 +5,6 @@ namespace lx\model\schema\field\type;
 use lx\model\schema\ModelAttributeMethod;
 use lx\model\schema\field\ModelField;
 
-/**
- * Class TypeDictionary
- * @package lx\model\schema\field\type
- */
 class TypeDictionary extends Type
 {
     const METHOD_PREFIX_ADD = 'addTo';
@@ -21,7 +17,6 @@ class TypeDictionary extends Type
 
     /**
      * @param mixed $value
-     * @return bool
      */
     public function validateValue($value): bool
     {
@@ -89,13 +84,10 @@ class TypeDictionary extends Type
     }
 
     /**
-     * @param $field
-     * @param string $methodName
-     * @param mixed $currentValue
-     * @param array $arguments
+     * @param array $currentValue
      * @return array
      */
-    public function processMethod(ModelField $field, string $methodName, $currentValue, array $arguments): array
+    public function processMethod(ModelField $field, string $methodName, $currentValue, array $arguments)
     {
         if (strpos($methodName, self::METHOD_PREFIX_ADD) === 0) {
             return $this->processAdd($currentValue, $arguments);
@@ -109,24 +101,14 @@ class TypeDictionary extends Type
         return $currentValue;
     }
 
-    /**
-     * @param mixed $currentValue
-     * @param array $arguments
-     * @return array
-     */
-    private function processAdd($currentValue, array $arguments): array
+    private function processAdd(?array $currentValue, array $arguments): array
     {
         $result = $currentValue ?? [];
         $result[$arguments[0]] = $arguments[1] ?? null;
         return $result;
     }
 
-    /**
-     * @param mixed $currentValue
-     * @param array $arguments
-     * @return array
-     */
-    private function processRemove($currentValue, array $arguments): array
+    private function processRemove(?array $currentValue, array $arguments): array
     {
         $result = $currentValue ?? [];
         unset($result[$arguments[0]]);

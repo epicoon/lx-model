@@ -4,10 +4,6 @@ namespace lx\model\repository\db\tools;
 
 use lx\StringHelper;
 
-/**
- * Class NameConverter
- * @package lx\model\repository\db\tools
- */
 class NameConverter
 {
     const RELATION_PREFIX = 'fk_';
@@ -83,7 +79,6 @@ class NameConverter
 
     public function restoreFieldName(string $modelName, string $fieldName): string
     {
-
         return StringHelper::snakeToCamel($fieldName);
     }
 

@@ -8,10 +8,6 @@ use lx\model\schema\relation\ModelRelation;
 use lx\ModelSchemaInterface;
 use lx\Service;
 
-/**
- * Class ModelSchema
- * @package lx\model
- */
 class ModelSchema implements ModelSchemaInterface
 {
     private ?Service $service;
@@ -20,9 +16,9 @@ class ModelSchema implements ModelSchemaInterface
     private ?string $modelClassName;
     private ?array $array;
 
-    /** @var ModelField[] */
+    /** @var array<ModelField> */
     private array $fields;
-    /** @var ModelRelation[] */
+    /** @var array<ModelRelation> */
     private array $relations;
 
     private array $setters;
@@ -30,10 +26,9 @@ class ModelSchema implements ModelSchemaInterface
     private array $methods;
 
     /**
-     * @param string|Model $modelClass
-     * @return ModelSchema|null
+     * @param string&Model $modelClass
      */
-    public static function createFromModelClass($modelClass): ?ModelSchema
+    public static function createFromModelClass(string $modelClass): ?ModelSchema
     {
         $schemaArray = $modelClass::getSchemaArray();
         if (!array_key_exists('name', $schemaArray)) {
@@ -105,7 +100,7 @@ class ModelSchema implements ModelSchemaInterface
     }
 
     /**
-     * @return ModelField[]
+     * @return array<ModelField>
      */
     public function getFields(): array
     {
@@ -123,7 +118,7 @@ class ModelSchema implements ModelSchemaInterface
     }
 
     /**
-     * @return ModelRelation[]
+     * @return array<ModelRelation>
      */
     public function getRelations(): array
     {
@@ -140,7 +135,7 @@ class ModelSchema implements ModelSchemaInterface
         return $this->methods[$name] ?? null;
     }
 
-    private function construct(array $schemaArray, ?Service $service = null)
+    private function construct(array $schemaArray, ?Service $service = null): void
     {
         $this->service = $service;
         $this->modelName = $schemaArray['name'];

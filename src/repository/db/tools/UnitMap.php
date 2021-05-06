@@ -4,10 +4,6 @@ namespace lx\model\repository\db\tools;
 
 use lx\model\Model;
 
-/**
- * Class UnitMap
- * @package lx\model\repository\db\tools
- */
 class UnitMap
 {
     private array $map = [];
@@ -41,9 +37,8 @@ class UnitMap
     }
 
     /**
-     * @param string $modelName
      * @param int[] $ids
-     * @return Model[]
+     * @return array<Model>
      */
     public function getList(string $modelName, array $ids): array
     {
@@ -59,16 +54,16 @@ class UnitMap
     }
 
     /**
-     * @param Model[] $models
+     * @param iterable<Model> $models
      */
-    public function registerList(array $models): void
+    public function registerList(iterable $models): void
     {
         foreach ($models as $model) {
             $this->register($model);
         }
     }
 
-    public function unregisterList(array $list): void
+    public function unregisterList(iterable $list): void
     {
         foreach ($list as $item) {
             $this->unregister($item['model'], $item['id']);

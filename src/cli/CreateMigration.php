@@ -5,13 +5,9 @@ namespace lx\model\cli;
 use lx\ModelManagerInterface;
 use lx\ServiceCliExecutor;
 
-/**
- * Class CreateMigration
- * @package lx\model\cli
- */
 class CreateMigration extends ServiceCliExecutor
 {
-    public function run()
+    public function run(): void
     {
         $this->defineService();
         if (!$this->service) {

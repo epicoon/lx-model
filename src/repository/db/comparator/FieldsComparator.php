@@ -5,10 +5,6 @@ namespace lx\model\repository\db\comparator;
 use lx\model\schema\ModelAttribute;
 use lx\model\schema\ModelSchema;
 
-/**
- * Class FieldsComparator
- * @package lx\model\repository\db\comparator
- */
 class FieldsComparator extends AttributesComparator
 {
     protected function getAttributes(ModelSchema $schema): array

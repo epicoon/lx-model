@@ -5,10 +5,6 @@ namespace lx\model\managerTools;
 use lx\model\ModelManager;
 use lx\Service;
 
-/**
- * Class ModelsContext
- * @package lx\model\managerTools
- */
 class ModelsContext
 {
     private Service $service;

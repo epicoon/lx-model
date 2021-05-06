@@ -8,10 +8,6 @@ use lx\model\modelTools\relationModelWrapper\RelationModelConnector;
 use lx\model\modelTools\relationModelWrapper\RelationModelEraser;
 use lx\model\modelTools\relationModelWrapper\RelationModelSetter;
 
-/**
- * Class ModelRelationKeeperNoOne
- * @package lx\model\modelTools
- */
 class ModelRelationKeeperToOne extends ModelRelationKeeper
 {
     private ?int $key;
@@ -35,6 +31,9 @@ class ModelRelationKeeperToOne extends ModelRelationKeeper
         $this->oldKey = $key;
     }
 
+    /**
+     * @return int|null
+     */
     public function getKey()
     {
         return $this->key;
