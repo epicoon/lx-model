@@ -122,8 +122,9 @@ const defaultHandlers = {
 		var plugin = core.getRespondentPlugin();
 		plugin.ajax(core.respondentName+'.getCoreData', [plugin.attributes]).send().then((res)=>{
 			core.onStart();
-			core.setModel(res.serviceName, res.modelName);
-			core.setRelation(res.relation);
+			var data = res.data;
+			core.setModel(data.serviceName, data.modelName);
+			core.setRelation(data.relation);
 		});
 	},
 
@@ -155,19 +156,20 @@ const defaultHandlers = {
 		]).send().then((res)=>{
 			if (core.processError(res)) return;
 
-			core.modelData1.serviceName = res.relatedServiceName;
-			core.modelData1.modelName = res.relatedModelName;
+			var data = res.data;
+			core.modelData1.serviceName = data.relatedServiceName;
+			core.modelData1.modelName = data.relatedModelName;
 
 			core.modelData0.setList({
-				list: res.models0,
-				total: res.count0
+				list: data.models0,
+				total: data.count0
 			});
 			core.modelData1.setList({
-				list: res.models1,
-				total: res.count1
+				list: data.models1,
+				total: data.count1
 			});
 
-			core.relations = res.relations;
+			core.relations = data.relations;
 
 			core.plugin.eventManager.trigger('afterRefresh');
 			core.plugin.eventManager.trigger('fillBody');

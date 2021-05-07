@@ -6,12 +6,13 @@ use lx;
 use lx\model\Model;
 use lx\model\modelTools\ModelsSerializer;
 use lx\model\schema\relation\ModelRelation;
+use lx\ResponseInterface;
 
 class Respondent extends \lx\Respondent
 {
     const PER_PAGE_DEFAULT = 10;
 
-    public function getCoreData(array $attributes): array
+    public function getCoreData(array $attributes): ResponseInterface
     {
         $serviceName = null;
         $modelName = null;
@@ -28,11 +29,11 @@ class Respondent extends \lx\Respondent
             $relation = $attributes['relation'];
         }
 
-        return [
+        return $this->prepareResponse([
             'serviceName' => $serviceName,
             'modelName' => $modelName,
             'relation' => $relation,
-        ];
+        ]);
     }
 
     public function getRelationData(
@@ -40,15 +41,12 @@ class Respondent extends \lx\Respondent
         string $modelName,
         string $relationName,
         array $filters
-    ): array
+    ): ResponseInterface
     {
         $modelClass = $this->defineModelClass($serviceName, $modelName);
         $relation = $this->defineRelation($modelClass, $relationName);
         if ($this->hasErrors()) {
-            return [
-                'success' => false,
-                'message' => $this->getFirstError(),
-            ];
+            return $this->prepareWarningResponse($this->getFirstError());
         }
 
         /** @var string&Model $relModelClass */
@@ -133,7 +131,7 @@ class Respondent extends \lx\Respondent
             }
         }
 
-        return [
+        return $this->prepareResponse([
             'count0' => $totalCount0,
             'count1' => $totalCount1,
             'models0' => $modelsData0,
@@ -141,7 +139,7 @@ class Respondent extends \lx\Respondent
             'relatedServiceName' => $relModelClass::getModelService()->name,
             'relatedModelName' => $relation->getRelatedModelName(),
             'relations' => $relationsMap,
-        ];
+        ]);
     }
 
 	public function createRelation(
@@ -150,15 +148,12 @@ class Respondent extends \lx\Respondent
         int $pk0,
         string $relationName,
         int $pk1
-    ): ?array
+    ): ?ResponseInterface
 	{
         $modelClass = $this->defineModelClass($serviceName, $modelName);
         $relation = $this->defineRelation($modelClass, $relationName);
         if ($this->hasErrors()) {
-            return [
-                'success' => false,
-                'message' => $this->getFirstError(),
-            ];
+            return $this->prepareWarningResponse($this->getFirstError());
         }
 
         $model = $modelClass::findOne($pk0);
@@ -175,15 +170,12 @@ class Respondent extends \lx\Respondent
         int $pk0,
         string $relationName,
         int $pk1
-    ): ?array
+    ): ?ResponseInterface
 	{
         $modelClass = $this->defineModelClass($serviceName, $modelName);
         $relation = $this->defineRelation($modelClass, $relationName);
         if ($this->hasErrors()) {
-            return [
-                'success' => false,
-                'message' => $this->getFirstError(),
-            ];
+            return $this->prepareWarningResponse($this->getFirstError());
         }
 
         $model = $modelClass::findOne($pk0);
@@ -194,14 +186,11 @@ class Respondent extends \lx\Respondent
         return null;
 	}
 
-	public function createModel(string $serviceName, string $modelName, array $fields): ?array
+	public function createModel(string $serviceName, string $modelName, array $fields): ?ResponseInterface
 	{
         $modelClass = $this->defineModelClass($serviceName, $modelName);
         if ($this->hasErrors()) {
-            return [
-                'success' => false,
-                'message' => $this->getFirstError(),
-            ];
+            return $this->prepareWarningResponse($this->getFirstError());
         }
 
         $model = new $modelClass($fields);
@@ -210,14 +199,11 @@ class Respondent extends \lx\Respondent
         return null;
 	}
 
-	public function deleteModel(string $serviceName, string $modelName, int $pk): ?array
+	public function deleteModel(string $serviceName, string $modelName, int $pk): ?ResponseInterface
 	{
         $modelClass = $this->defineModelClass($serviceName, $modelName);
         if ($this->hasErrors()) {
-            return [
-                'success' => false,
-                'message' => $this->getFirstError(),
-            ];
+            return $this->prepareWarningResponse($this->getFirstError());
         }
 
         $model = $modelClass::findOne($pk);
@@ -227,9 +213,9 @@ class Respondent extends \lx\Respondent
 	}
 
 
-	/*******************************************************************************************************************
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 * PROTECTED
-	 ******************************************************************************************************************/
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     /**
      * @param string&Model $className

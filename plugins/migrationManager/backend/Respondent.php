@@ -6,24 +6,25 @@ use lx;
 use lx\Respondent as lxRespondent;
 use lx\model\ModelManager;
 use lx\model\repository\MigrationReporter;
+use lx\ResponseInterface;
 
 class Respondent extends lxRespondent
 {
-    public function getServicesData(): array
+    public function getServicesData(): ResponseInterface
     {
-        return MigrationReporter::getServicesData();
+        return $this->prepareResponse(MigrationReporter::getServicesData());
     }
 
-    public function renewServiceData(string $serviceName): array
+    public function renewServiceData(string $serviceName): ResponseInterface
     {
-        return MigrationReporter::getServiceData($serviceName);
+        return $this->prepareResponse(MigrationReporter::getServiceData($serviceName));
     }
 
-    public function createMigrations(string $serviceName): array
+    public function createMigrations(string $serviceName): ResponseInterface
     {
         $service = lx::$app->getService($serviceName);
         if (!$service) {
-            return [];
+            return $this->prepareResponse([]);
         }
 
         /** @var ModelManager $modelManager */
@@ -31,51 +32,51 @@ class Respondent extends lxRespondent
         $reportModels = $modelManager->refreshModels();
         $reportMigrations = $modelManager->refreshMigrations();
 
-        return [
+        return $this->prepareResponse([
             'actionReport' => array_merge($reportModels->toArray(), $reportMigrations->toArray()),
             'serviceState' => MigrationReporter::getServiceData($serviceName)
-        ];
+        ]);
     }
 
-    public function runMigrations(string $serviceName, ?int $count = null): array
+    public function runMigrations(string $serviceName, ?int $count = null): ResponseInterface
     {
         $service = lx::$app->getService($serviceName);
         if (!$service) {
-            return [];
+            return $this->prepareResponse([]);
         }
 
         /** @var ModelManager $modelManager */
         $modelManager = $service->modelManager;
         $report = $modelManager->runMigrations($count);
 
-        return [
+        return $this->prepareResponse([
             'actionReport' => $report->toArray(),
             'serviceState' => MigrationReporter::getServiceData($serviceName)
-        ];
+        ]);
     }
 
-    public function rollbackMigrations(string $serviceName, ?int $count = null): array
+    public function rollbackMigrations(string $serviceName, ?int $count = null): ResponseInterface
     {
         $service = lx::$app->getService($serviceName);
         if (!$service) {
-            return [];
+            return $this->prepareResponse([]);
         }
 
         /** @var ModelManager $modelManager */
         $modelManager = $service->modelManager;
         $report = $modelManager->rollbackMigrations($count);
 
-        return [
+        return $this->prepareResponse([
             'actionReport' => $report->toArray(),
             'serviceState' => MigrationReporter::getServiceData($serviceName)
-        ];
+        ]);
     }
 
-    public function getServiceMigrations(string $serviceName): array
+    public function getServiceMigrations(string $serviceName): ResponseInterface
     {
         $service = lx::$app->getService($serviceName);
         if (!$service) {
-            return [];
+            return $this->prepareResponse([]);
         }
 
         /** @var ModelManager $modelManager */
@@ -90,14 +91,14 @@ class Respondent extends lxRespondent
             ];
         }
 
-        return $result;
+        return $this->prepareResponse($result);
     }
 
-    public function getMigrationText(string $serviceName, string $migrationName): string
+    public function getMigrationText(string $serviceName, string $migrationName): ResponseInterface
     {
         $service = lx::$app->getService($serviceName);
         if (!$service) {
-            return 'error';
+            return $this->prepareResponse('error');
         }
 
         /** @var ModelManager $modelManager */
@@ -105,6 +106,6 @@ class Respondent extends lxRespondent
         $migration = $modelManager->getRepository()->getMigration($migrationName);
         $file = $migration->getFile();
 
-        return $file->getText();
+        return $this->prepareResponse($file->getText());
     }
 }

@@ -43,7 +43,7 @@ class MigrationsInfo #lx:namespace lx.models {
 		this.serviceData = serviceData;
 		^Respondent.getServiceMigrations(serviceData.getTitle()).then(res=>{
 			this.migrations.clear();
-			res.each(data=>this.migrations.add(new Migration(data)));
+			res.data.each(data=>this.migrations.add(new Migration(data)));
 		});
 	}
 
@@ -54,7 +54,7 @@ class MigrationsInfo #lx:namespace lx.models {
 				this.migrationText.selectedMigration.selected = false;
 			this.migrationText.selectedMigration = migration;
 			migration.selected = true;
-			var text = '<pre>' + res + '</pre>';
+			var text = '<pre>' + res.data + '</pre>';
 			this.migrationText.setText(text);
 		});
 	}
@@ -88,7 +88,8 @@ class MigrationsInfo #lx:namespace lx.models {
 		});
 
 		if (migration.isApplied) {
-			^Respondent.rollbackMigrations(this.serviceData.getTitle(), count).then(data=>{
+			^Respondent.rollbackMigrations(this.serviceData.getTitle(), count).then(res=>{
+				var data = res.data
 				if (data.actionReport.migrationErrors.len) {
 					this.context.processMigrationErrors(this.serviceData.getTitle(), data.actionReport);
 					return;
@@ -104,7 +105,8 @@ class MigrationsInfo #lx:namespace lx.models {
 				this.checkIntentions(migration);
 			});
 		} else {
-			^Respondent.runMigrations(this.serviceData.getTitle(), count).then(data=>{
+			^Respondent.runMigrations(this.serviceData.getTitle(), count).then(res=>{
+				var data = res.data;
 				if (data.actionReport.migrationErrors.len) {
 					this.context.processMigrationErrors(this.serviceData.getTitle(), data.actionReport);
 					return;

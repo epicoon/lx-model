@@ -15,11 +15,11 @@ class Context #lx:namespace lx.models {
 	}
 
 	renew() {
-		^Respondent.getServicesData().then(data=>{
+		^Respondent.getServicesData().then(res=>{
 			var tree = new lx.Tree();
 			var treeBox = this.widgets.treeBox;
 
-			data.each(item=>{
+			res.data.each(item=>{
 				var serviceCategoryKey = item.serviceCategory.replace('/', '_');
 				if (!tree.has(serviceCategoryKey)) {
 					var node = tree.add(serviceCategoryKey);
@@ -180,14 +180,15 @@ function __initTreeButtons(leaf) {
 
 function __leafRenewHandler(e) {
 	let model = this.parent.node.data;
-	^Respondent.renewServiceData(model.getTitle()).then(data=>{
-		model.setReport(data.report);
+	^Respondent.renewServiceData(model.getTitle()).then(res=>{
+		model.setReport(res.data.report);
 	});
 }
 
 function __leafCreateMigrationsHandler(e) {
 	let model = this.parent.node.data;
-	^Respondent.createMigrations(model.getTitle()).then(data=>{
+	^Respondent.createMigrations(model.getTitle()).then(res=>{
+		var data = res.data;
 		if (data.actionReport.errors.len) {
 			this.getPlugin().context.processMigrationErrors(model.getTitle(), data.actionReport);
 			return;
@@ -225,7 +226,8 @@ function __leafCreateMigrationsHandler(e) {
 
 function __leafUpMigrationsHandler(e) {
 	let model = this.parent.node.data;
-	^Respondent.runMigrations(model.getTitle()).then(data=>{
+	^Respondent.runMigrations(model.getTitle()).then(res=>{
+		var data = res.data;
 		if (data.actionReport.migrationErrors.len) {
 			this.getPlugin().context.processMigrationErrors(model.getTitle(), data.actionReport);
 			return;
