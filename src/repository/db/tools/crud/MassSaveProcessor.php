@@ -186,6 +186,6 @@ class MassSaveProcessor
     {
         $nameConverter = $this->context->getNameConverter();
         $tableName = $nameConverter->getTableName($modelName);
-        return $this->repository->getMainDb()->table($tableName);
+        return $this->repository->getMainDb()->getTable($tableName);
     }
 }

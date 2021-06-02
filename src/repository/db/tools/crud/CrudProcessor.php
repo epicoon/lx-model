@@ -2,7 +2,7 @@
 
 namespace lx\model\repository\db\tools\crud;
 
-use lx\DB;
+use lx\DbConnection;
 use lx\DbTable;
 use lx\model\Model;
 use lx\model\repository\db\Repository;
@@ -226,16 +226,16 @@ class CrudProcessor
         return $groups;
     }
 
-    private function getTableByModel(DB $db, Model $model): DbTable
+    private function getTableByModel(DbConnection $db, Model $model): DbTable
     {
         return $this->getTableByModelName($db, $model->getModelName());
     }
 
-    private function getTableByModelName(DB $db, string $modelName): DbTable
+    private function getTableByModelName(DbConnection $db, string $modelName): DbTable
     {
         $nameConverter = $this->context->getNameConverter();
         $tableName = $nameConverter->getTableName($modelName);
-        return $db->table($tableName);
+        return $db->getTable($tableName);
     }
 
     private function splitManyToManyRelations(array $list): array
@@ -304,8 +304,8 @@ class CrudProcessor
                 $model1->commitChanges();
             }
 
-            $table = $this->repository->getMainDb()->table($tableName);
-            $table->insert($fields, $values, false);
+            $table = $this->repository->getMainDb()->getTable($tableName);
+            $table->insert($fields, $values);
         }
     }
 
@@ -315,7 +315,7 @@ class CrudProcessor
         foreach ($delete as $tableName => $rows) {
             //TODO оптимальнее?
 
-            $table = $this->repository->getMainDb()->table($tableName);
+            $table = $this->repository->getMainDb()->getTable($tableName);
             foreach ($rows as $row) {
                 /** @var Model $model0 */
                 $model0 = $row[0];

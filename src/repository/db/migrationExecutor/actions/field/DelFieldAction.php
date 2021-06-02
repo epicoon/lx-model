@@ -2,7 +2,7 @@
 
 namespace lx\model\repository\db\migrationExecutor\actions\field;
 
-use lx\DbTableBuilder;
+use lx\DbTableEditor;
 use lx\DbTableSchema;
 use lx\model\repository\db\migrationExecutor\actions\BaseMigrationAction;
 use lx\model\repository\db\migrationExecutor\actions\MigrationActionTypeEnum;
@@ -23,12 +23,9 @@ class DelFieldAction extends BaseMigrationAction
         $tableName = $nameConverter->getTableName($this->data['modelName']);
         $fieldName = $nameConverter->getFieldName($this->data['modelName'], $this->data['fieldName']);
 
-        $tableSchema = DbTableSchema::createByTableName(
-            $this->context->getRepository()->getMainDb(),
-            $tableName
-        );
-        $builder = new DbTableBuilder($tableSchema);
-        $result = $builder->delField($fieldName);
+        $editor = new DbTableEditor();
+        $editor->loadTableSchema($this->context->getRepository()->getMainDb(), $tableName);
+        $result = $editor->delField($fieldName);
         if (!$result) {
             $this->addError('Can not delete a field');
         }

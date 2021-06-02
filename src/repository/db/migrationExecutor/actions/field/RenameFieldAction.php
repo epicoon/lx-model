@@ -2,7 +2,7 @@
 
 namespace lx\model\repository\db\migrationExecutor\actions\field;
 
-use lx\DbTableBuilder;
+use lx\DbTableEditor;
 use lx\DbTableSchema;
 use lx\model\repository\db\migrationExecutor\actions\BaseMigrationAction;
 
@@ -23,12 +23,9 @@ class RenameFieldAction extends BaseMigrationAction
         $oldFieldName = $nameConverter->getFieldName($this->data['modelName'], $this->data['oldFieldName']);
         $newFieldName = $nameConverter->getFieldName($this->data['modelName'], $this->data['newFieldName']);
 
-        $tableSchema = DbTableSchema::createByTableName(
-            $this->context->getRepository()->getMainDb(),
-            $tableName
-        );
-        $builder = new DbTableBuilder($tableSchema);
-        $result = $builder->renameField($oldFieldName, $newFieldName);
+        $editor = new DbTableEditor();
+        $editor->loadTableSchema($this->context->getRepository()->getMainDb(), $tableName);
+        $result = $editor->renameField($oldFieldName, $newFieldName);
         if (!$result) {
             $this->addError('Can not rename a field');
         }

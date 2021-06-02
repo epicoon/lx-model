@@ -2,7 +2,7 @@
 
 namespace lx\model\repository\db\migrationExecutor\actions\field;
 
-use lx\DbTableBuilder;
+use lx\DbTableEditor;
 use lx\model\repository\db\migrationExecutor\actions\BaseMigrationAction;
 use lx\model\repository\db\migrationExecutor\actions\MigrationActionTypeEnum;
 use lx\model\repository\db\migrationExecutor\CustomTypesRecorder;
@@ -23,13 +23,14 @@ class AddFieldAction extends BaseMigrationAction
         $syncSchema = new SyncSchema($this->context, $this->data['modelName']);
 
         $dbSchema = $syncSchema->loadDbSchema()->getDbSchema();
-        $builder = new DbTableBuilder($dbSchema);
+        $editor = new DbTableEditor();
+        $editor->setTableSchema($dbSchema);
 
         $modelSchema = $syncSchema->loadModelSchema()->getModelSchema();
         $field = new ModelField($modelSchema, $this->data['fieldName'], $this->data['definition']);
         $dbFieldDefinition = $syncSchema->fieldToDbDefinition($field);
 
-        $result = $builder->addField($dbFieldDefinition);
+        $result = $editor->addField($dbFieldDefinition);
         if (!$result) {
             $this->addError('Can not add the field');
             return;

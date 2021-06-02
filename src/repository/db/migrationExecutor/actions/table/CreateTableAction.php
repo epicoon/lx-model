@@ -2,7 +2,7 @@
 
 namespace lx\model\repository\db\migrationExecutor\actions\table;
 
-use lx\DbTableBuilder;
+use lx\DbTableEditor;
 use lx\DbTableField;
 use lx\model\repository\db\migrationExecutor\actions\BaseMigrationAction;
 use lx\model\repository\db\migrationExecutor\actions\MigrationActionTypeEnum;
@@ -41,14 +41,13 @@ class CreateTableAction extends BaseMigrationAction
 
         $tableSchema->addField([
             'name' => 'id',
-            'type' => DbTableField::TYPE_INTEGER,
+            'type' => DbTableField::TYPE_SERIAL,
             'pk' => true,
-            'nullable' => false,
         ]);
-        $tableSchema->setPK('id');
 
-        $builder = new DbTableBuilder($tableSchema);
-        if (!$builder->createTable()) {
+        $editor = new DbTableEditor();
+        $editor->setTableSchema($tableSchema);
+        if (!$editor->createTable()) {
             $this->addError('Wrong schema configuration');
             return;
         }

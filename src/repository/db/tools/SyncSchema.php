@@ -135,7 +135,8 @@ class SyncSchema
         }
 
         $db = $this->context->getRepository()->getMainDb();
-        $this->dbSchema = DbTableSchema::createByConfig($db, $schema);
+        $this->dbSchema = DbTableSchema::createByConfig($schema);
+        $this->dbSchema->setDb($db);
         return $this;
     }
 
@@ -185,15 +186,14 @@ class SyncSchema
         }
 
         $db = $this->context->getRepository()->getMainDb();
-        $this->dbSchema = DbTableSchema::createByConfig($db, $schema);
+        $this->dbSchema = DbTableSchema::createByConfig($schema);
+        $this->dbSchema->setDb($db);
 
         $this->dbSchema->addField([
             'name' => 'id',
-            'type' => DbTableField::TYPE_INTEGER,
+            'type' => DbTableField::TYPE_SERIAL,
             'pk' => true,
-            'nullable' => false,
         ]);
-        $this->dbSchema->setPK('id');
 
         return $this;
     }
@@ -234,6 +234,10 @@ class SyncSchema
 
             if ($field->isFk()) {
                 $fkName = $nameConverter->restoreRelationName($this->modelName, $field->getName());
+
+                //TODO In PostgreSQL, identifiers — table names, column names, constraint names, etc. — are limited to a maximum length of 63 bytes
+                // нужно отвязаться от парсинга имени ключа, и предусмотреть возможность длинных названий ключей и таблиц
+                //@see-all todo-stop-parse-fk-name
                 $fkConstraintName = $field->getDefinition()['fk']['name'];
                 $fkConstraintArr = explode('__', $fkConstraintName);
                 $relModel = $nameConverter->restoreModelName($fkConstraintArr[3]);
@@ -293,21 +297,23 @@ class SyncSchema
         }
 
         // Relations from another tables
-        $contrForeignKeys = $this->dbSchema->getContrForeignKeysInfo();
-        foreach ($contrForeignKeys as $key) {
-            $fkConstraintArr = explode('__', $key['name']);
+        $contrForeignKeys = $this->dbSchema->getContrForeignKeysInfo('id');
+        foreach ($contrForeignKeys as $keyData) {
+            $mmReg = '/^' . $nameConverter->getServiceSchemaName() . '_rel__/';
             // MANY_TO_MANY
-            if (preg_match('/^' . $nameConverter->getServiceSchemaName() . '_rel__/', $key['table'])) {
-                $relModel = $nameConverter->restoreModelName($fkConstraintArr[3]);
+            if (preg_match($mmReg, $keyData['relatedTable'])
+            ) {
+                $proxyTableName = preg_replace($mmReg, $keyData['relatedTable']);
+                $namesArr = explode('__', $proxyTableName);
+                $relModel = $nameConverter->restoreModelName($namesArr[0]);
                 if ($relModel == $this->modelName) {
-                    $relModel = $nameConverter->restoreModelName($fkConstraintArr[5]);
-                    $relAttribute = $nameConverter->restoreFieldName($relModel, $fkConstraintArr[6]);
-                    $attribute = $nameConverter->restoreFieldName($this->modelName, $fkConstraintArr[4]);
+                    $relModel = $nameConverter->restoreModelName($namesArr[2]);
+                    $relAttribute = $nameConverter->restoreFieldName($relModel, $namesArr[3]);
+                    $attribute = $nameConverter->restoreFieldName($this->modelName, $namesArr[1]);
                 } else {
-                    $relAttribute = $nameConverter->restoreFieldName($relModel, $fkConstraintArr[4]);
-                    $attribute = $nameConverter->restoreFieldName($this->modelName, $fkConstraintArr[6]);
+                    $relAttribute = $nameConverter->restoreFieldName($relModel, $namesArr[1]);
+                    $attribute = $nameConverter->restoreFieldName($this->modelName, $namesArr[3]);
                 }
-
                 $schemaArray['relations'][$attribute] = [
                     'type' => RelationTypeEnum::MANY_TO_MANY,
                     'relatedEntityName' => $relModel,
@@ -315,10 +321,14 @@ class SyncSchema
                 ];
             // ONE_TO_(ONE|MANY)
             } else {
-                if (count($$fkConstraintArr) == 4) {
+                //TODO In PostgreSQL, identifiers — table names, column names, constraint names, etc. — are limited to a maximum length of 63 bytes
+                // нужно отвязаться от парсинга имени ключа, и предусмотреть возможность длинных названий ключей и таблиц
+                //@see-all todo-stop-parse-fk-name
+                $fkConstraintArr = explode('__', $keyData['name']);
+                if (count($fkConstraintArr) == 4) {
                     continue;
                 }
-
+                
                 $attribute = $nameConverter->restoreFieldName($this->modelName, $fkConstraintArr[4]);
                 $relModel = $nameConverter->restoreModelName($fkConstraintArr[1]);
                 $relAttribute = $nameConverter->restoreFieldName($relModel, $fkConstraintArr[2]);

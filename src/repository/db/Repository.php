@@ -3,7 +3,7 @@
 namespace lx\model\repository\db;
 
 use lx\ArrayHelper;
-use lx\DB;
+use lx\DbConnection;
 use lx\DbConnector;
 use lx\model\Model;
 use lx\model\repository\db\tools\crud\CrudProcessor;
@@ -31,8 +31,8 @@ class Repository implements RepositoryInterface
     private HoldStack $holdStack;
     private UnitMap $unitMap;
     private CrudProcessor $crudProcessor;
-    private ?DB $readDb = null;
-    private ?DB $writeDb = null;
+    private ?DbConnection $readDb = null;
+    private ?DbConnection $writeDb = null;
 
     public function setContext(ModelsContext $context): void
     {
@@ -195,7 +195,7 @@ class Repository implements RepositoryInterface
         $nameConverter = $this->context->getNameConverter();
         $tableName = $nameConverter->getTableName($modelName);
         $db = $this->getReplicaDb();
-        $table = $db->table($tableName);
+        $table = $db->getTable($tableName);
         if (!$table) {
             return 0;
         }
@@ -321,7 +321,7 @@ class Repository implements RepositoryInterface
 
         $nameConverter = $this->context->getNameConverter();
         $tableName = $nameConverter->getTableName($modelName);
-        $table = $this->getReplicaDb()->table($tableName);
+        $table = $this->getReplicaDb()->getTable($tableName);
         $data = $table->select('id', $condition);
         $ids = ArrayHelper::getColumn($data, 'id');
         return $this->findModelsByIds($modelName, $ids);
@@ -418,7 +418,7 @@ class Repository implements RepositoryInterface
     {
         $nameConverter = $this->context->getNameConverter();
         $tableName = $nameConverter->getTableName($modelName);
-        $table = $this->getMainDb()->table($tableName);
+        $table = $this->getMainDb()->getTable($tableName);
 
         if ($condition) {
             $condition = ModelFieldsConverter::toRepositoryForCondition($this->context, $modelName, $condition);
@@ -437,7 +437,7 @@ class Repository implements RepositoryInterface
 
 
 
-    public function getMainDb(): ?DB
+    public function getMainDb(): ?DbConnection
     {
         if (!$this->writeDb) {
             $connector = $this->getConnector();
@@ -452,7 +452,7 @@ class Repository implements RepositoryInterface
         return $this->writeDb;
     }
 
-    public function getReplicaDb(): ?DB
+    public function getReplicaDb(): ?DbConnection
     {
         if (!$this->readDb) {
             $connector = $this->getConnector();

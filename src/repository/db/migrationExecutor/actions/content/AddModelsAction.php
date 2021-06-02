@@ -163,7 +163,7 @@ class AddModelsAction extends BaseMigrationAction
                 $model->getId(),
             ];
         }
-        $table->insert(['version', 'model_name', 'model_id'], $metaData, false);
+        $table->insert(['version', 'model_name', 'model_id'], $metaData);
     }
 
     private function rollback(): void
@@ -211,7 +211,7 @@ class AddModelsAction extends BaseMigrationAction
                     $relation->getRelatedModelName(),
                     $relation->getRelatedAttributeName()
                 );
-                $relTable = $db->table($relTableName);
+                $relTable = $db->getTable($relTableName);
                 $fkName = $nameConverter->getRelationName($schema->getModelName());
                 $relTable->delete([
                     $fkName => $model->getId(),
@@ -224,7 +224,7 @@ class AddModelsAction extends BaseMigrationAction
             }
 
             $relTableName = $nameConverter->getTableName($relation->getRelatedModelName());
-            $relTable = $db->table($relTableName);
+            $relTable = $db->getTable($relTableName);
             $fkName = $nameConverter->getRelationName($schema->getModelName(), $relation->getName());
             $relTable->update([$fkName => null], [
                 $fkName => $model->getId(),

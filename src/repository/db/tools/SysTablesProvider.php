@@ -3,7 +3,7 @@
 namespace lx\model\repository\db\tools;
 
 use lx\DbTable;
-use lx\DbTableBuilder;
+use lx\DbTableEditor;
 use lx\DbTableField;
 use lx\DbTableSchema;
 
@@ -34,7 +34,7 @@ class SysTablesProvider
 
         }
 
-        return $db->table($name);
+        return $db->getTable($name);
     }
 
     private function createTable(string $name): void
@@ -54,8 +54,7 @@ class SysTablesProvider
 
     private function createMigrationsTable(): void
     {
-        $db = $this->context->getRepository()->getMainDb();
-        $dbSchema = DbTableSchema::createByConfig($db, [
+        DbTableEditor::createTableFromConfig($this->context->getRepository()->getMainDb(), [
             'name' => self::MIGRATIONS_TABLE,
             'fields' => [
                 'service' => [
@@ -72,14 +71,11 @@ class SysTablesProvider
                 ],
             ],
         ]);
-        $builder = new DbTableBuilder($dbSchema);
-        $builder->createTable();
     }
 
     private function createTypesTable(): void
     {
-        $db = $this->context->getRepository()->getMainDb();
-        $dbSchema = DbTableSchema::createByConfig($db, [
+        DbTableEditor::createTableFromConfig($this->context->getRepository()->getMainDb(), [
             'name' => self::SCHEMA_CUSTOM_TYPES_TABLE,
             'fields' => [
                 'table_name' => [
@@ -96,14 +92,11 @@ class SysTablesProvider
                 ],
             ],
         ]);
-        $builder = new DbTableBuilder($dbSchema);
-        $builder->createTable();
     }
 
     private function createMigrationsMetaDataTable(): void
     {
-        $db = $this->context->getRepository()->getMainDb();
-        $dbSchema = DbTableSchema::createByConfig($db, [
+        DbTableEditor::createTableFromConfig($this->context->getRepository()->getMainDb(), [
             'name' => self::MIGRATIONS_META_DATA,
             'fields' => [
                 'version' => [
@@ -120,7 +113,5 @@ class SysTablesProvider
                 ],
             ],
         ]);
-        $builder = new DbTableBuilder($dbSchema);
-        $builder->createTable();
     }
 }

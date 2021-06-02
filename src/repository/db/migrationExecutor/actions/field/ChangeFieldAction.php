@@ -2,7 +2,7 @@
 
 namespace lx\model\repository\db\migrationExecutor\actions\field;
 
-use lx\DbTableBuilder;
+use lx\DbTableEditor;
 use lx\model\repository\db\migrationExecutor\actions\BaseMigrationAction;
 use lx\model\repository\db\migrationExecutor\CustomTypesRecorder;
 use lx\model\repository\db\tools\SyncSchema;
@@ -23,13 +23,14 @@ class ChangeFieldAction extends BaseMigrationAction
         $syncSchema = new SyncSchema($this->context, $this->data['modelName']);
 
         $dbSchema = $syncSchema->loadDbSchema()->getDbSchema();
-        $builder = new DbTableBuilder($dbSchema);
+        $editor = new DbTableEditor();
+        $editor->setTableSchema($dbSchema);
 
         $modelSchema = $syncSchema->loadModelSchema()->getModelSchema();
         $field = new ModelField($modelSchema, $this->data['fieldName'], $this->data['newDefinition']);
         $dbFieldDefinition = $syncSchema->fieldToDbDefinition($field);
 
-        $result = $builder->changeField($dbFieldDefinition);
+        $result = $editor->changeField($dbFieldDefinition);
         if (!$result) {
             $this->addError('Can not change field');
             return;

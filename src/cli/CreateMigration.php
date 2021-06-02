@@ -2,7 +2,6 @@
 
 namespace lx\model\cli;
 
-use lx\ModelManagerInterface;
 use lx\ServiceCliExecutor;
 
 class CreateMigration extends ServiceCliExecutor
@@ -22,7 +21,6 @@ class CreateMigration extends ServiceCliExecutor
 
         //TODO запрещать создавать новые миграции, если есть ненакаченные (вообще если не актуальное состояние моделей)
 
-        /** @var ModelManagerInterface $modelManager */
         $modelManager = $this->service->modelManager;
         $modelManager->createNewMigration();
 

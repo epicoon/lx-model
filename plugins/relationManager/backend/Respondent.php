@@ -102,7 +102,7 @@ class Respondent extends \lx\Respondent
                 $relation->getRelatedModelName(),
                 $relation->getRelatedAttributeName()
             );
-            $table = $context->getRepository()->getReplicaDb()->table($tableName);
+            $table = $context->getRepository()->getReplicaDb()->getTable($tableName);
             $match = $table->select('*', [
                 $key0 => $ids0,
                 $key1 => $ids1,
@@ -263,7 +263,6 @@ class Respondent extends \lx\Respondent
             return '';
         }
 
-        /** @var lx\ModelManagerInterface $modelManager */
         $modelManager = $service->modelManager;
         if (!$modelManager) {
             $this->addError("Model manager for service $serviceName not found");

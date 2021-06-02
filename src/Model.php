@@ -406,7 +406,6 @@ abstract class Model implements ModelInterface
                 return null;
             }
 
-            /** @var lx\ModelManagerInterface $modelManager */
             $modelManager = $service->modelManager;
             if (!$modelManager) {
                 return null;

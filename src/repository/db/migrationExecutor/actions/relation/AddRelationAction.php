@@ -2,7 +2,7 @@
 
 namespace lx\model\repository\db\migrationExecutor\actions\relation;
 
-use lx\DbTableBuilder;
+use lx\DbTableEditor;
 use lx\DbTableField;
 use lx\DbTableSchema;
 use lx\model\repository\db\migrationExecutor\actions\BaseMigrationAction;
@@ -24,7 +24,8 @@ class AddRelationAction extends LifeCycleRelationAction
         $syncSchema = new SyncSchema($this->context, $this->modelName);
         $dbSchema = $syncSchema->loadDbSchema()->getDbSchema();
 
-        $builder = new DbTableBuilder($dbSchema);
+        $editor = new DbTableEditor();
+        $editor->setTableSchema($dbSchema);
         $tableKey = str_replace('.', '_', $nameConverter->getTableName($this->modelName));
         $fieldName = $nameConverter->getFieldName($this->modelName, $this->attributeName);
         $relationName = $nameConverter->getRelationName($this->modelName, $this->attributeName);
@@ -34,7 +35,7 @@ class AddRelationAction extends LifeCycleRelationAction
         $relFieldName = $this->relAttributeName
             ? $nameConverter->getFieldName($this->relModelName, $this->relAttributeName)
             : null;
-        $result = $builder->addField([
+        $result = $editor->addField([
             'name' => $relationName,
             'type' => DbTableField::TYPE_INTEGER,
             'fk' => [
@@ -59,8 +60,8 @@ class AddRelationAction extends LifeCycleRelationAction
             $this->relModelName,
             $this->relAttributeName
         );
-
-        $schema = DbTableSchema::createByConfig($this->context->getRepository()->getMainDb(), [
+        
+        DbTableEditor::createTableFromConfig($this->context->getRepository()->getMainDb(), [
             'name' => $tableName,
             'fields' => [
                 $nameConverter->getRelationName($this->modelName) => [
@@ -81,8 +82,5 @@ class AddRelationAction extends LifeCycleRelationAction
                 ],
             ]
         ]);
-
-        $builder = new DbTableBuilder($schema);
-        $builder->createTable();
     }
 }

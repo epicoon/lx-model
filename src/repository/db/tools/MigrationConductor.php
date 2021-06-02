@@ -109,7 +109,7 @@ class MigrationConductor
                 $fields[] = [$this->context->getService()->name, $appliedName, date('Y-m-d h:i:s')];
             }
 
-            $table->insert(['service', 'version', 'created_at'], $fields, false);
+            $table->insert(['service', 'version', 'created_at'], $fields);
         }
 
         return true;

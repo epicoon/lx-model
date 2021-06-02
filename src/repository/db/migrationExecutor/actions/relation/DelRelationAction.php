@@ -2,7 +2,7 @@
 
 namespace lx\model\repository\db\migrationExecutor\actions\relation;
 
-use lx\DbTableBuilder;
+use lx\DbTableEditor;
 use lx\DbTableSchema;
 use lx\model\repository\db\migrationExecutor\actions\BaseMigrationAction;
 use lx\model\repository\db\migrationExecutor\actions\MigrationActionTypeEnum;
@@ -22,12 +22,9 @@ class DelRelationAction extends LifeCycleRelationAction
         $tableName = $nameConverter->getTableName($this->data['modelName']);
         $fieldName = 'fk_' . $nameConverter->getFieldName($this->modelName, $this->attributeName);
 
-        $tableSchema = DbTableSchema::createByTableName(
-            $this->context->getRepository()->getMainDb(),
-            $tableName
-        );
-        $builder = new DbTableBuilder($tableSchema);
-        $result = $builder->delField($fieldName);
+        $editor = new DbTableEditor();
+        $editor->loadTableSchema($this->context->getRepository()->getMainDb(), $tableName);
+        $result = $editor->delField($fieldName);
         if (!$result) {
             $this->addError('Can not delete a field');
         }
@@ -43,8 +40,9 @@ class DelRelationAction extends LifeCycleRelationAction
             $this->relModelName,
             $this->relAttributeName
         );
-        $schema = DbTableSchema::createByTableName($this->context->getRepository()->getMainDb(), $tableName);
-        $builder = new DbTableBuilder($schema);
-        $builder->dropTable();
+
+        $editor = new DbTableEditor();
+        $editor->loadTableSchema($this->context->getRepository()->getMainDb(), $tableName);
+        $editor->dropTable();
     }
 }
