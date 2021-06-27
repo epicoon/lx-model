@@ -12,7 +12,6 @@ use lx\ServiceCliExecutor;
 
 class Cli implements FusionComponentInterface, ServiceCliInterface
 {
-    use ObjectTrait;
 	use FusionComponentTrait;
 
 	public function getExtensionData(): array

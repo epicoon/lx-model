@@ -17,7 +17,7 @@ class ModelField extends ModelAttribute
     private AbstractDefinition $definition;
     private bool $required;
     private bool $readonly;
-    /** @var mixed|null */
+    /** @var mixed */
     private $default;
 
     public function __construct(ModelSchema $schema, string $name, array $definition)
@@ -64,7 +64,7 @@ class ModelField extends ModelAttribute
     }
 
     /**
-     * @return mixed|null
+     * @return mixed
      */
     public function getDefault()
     {

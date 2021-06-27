@@ -10,8 +10,8 @@ class ModelsCollection implements ArrayInterface
 {
     use ArrayTrait;
 
-    public function __construct(?iterable $collection = null)
+    public function __construct(iterable $collection = [])
     {
-        $this->__constructArray($collection ?? []);
+        $this->__constructArray($collection);
     }
 }

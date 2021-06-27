@@ -17,7 +17,6 @@ use lx\ObjectTrait;
 
 class ModelManager implements ModelManagerInterface, FusionComponentInterface
 {
-    use ObjectTrait;
     use FusionComponentTrait;
 
     const DEFAULT_MODEL_SCHEMAS_PATH = 'schemas/models';

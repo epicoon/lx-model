@@ -70,7 +70,7 @@ abstract class Model implements ModelInterface
     }
 
     /**
-     * @return mixed|null
+     * @return mixed
      */
     public function &__get(string $name)
     {
@@ -207,7 +207,7 @@ abstract class Model implements ModelInterface
     }
 
     /**
-     * @return mixed|null
+     * @return mixed
      */
     public function &getField(string $name)
     {
@@ -309,7 +309,7 @@ abstract class Model implements ModelInterface
     }
 
     /**
-     * @return mixed|null
+     * @return mixed
      */
     public function &getRelated(string $name)
     {

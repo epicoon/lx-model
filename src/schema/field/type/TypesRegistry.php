@@ -2,12 +2,12 @@
 
 namespace lx\model\schema\field\type;
 
+use lx\FusionComponentInterface;
 use lx\FusionComponentTrait;
 use lx\ObjectTrait;
 
-abstract class TypesRegistry
+abstract class TypesRegistry implements FusionComponentInterface
 {
-    use ObjectTrait;
     use FusionComponentTrait;
 
     /** @var array<Type> */

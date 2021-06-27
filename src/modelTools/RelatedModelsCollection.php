@@ -53,9 +53,8 @@ class RelatedModelsCollection extends ModelsCollection
 
     /**
      * @param iterable<Model> $iterable
-     * @return iterable
      */
-    public function merge($iterable)
+    public function merge(iterable $iterable): iterable
     {
         $list = [];
         foreach ($iterable as $model) {

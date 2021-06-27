@@ -58,7 +58,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @return mixed|null
+     * @return mixed
      */
     public function getConfig(string $key)
     {
