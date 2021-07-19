@@ -22,7 +22,7 @@ class Cli implements FusionComponentInterface, ServiceCliInterface
                 'description' => 'Show models status',
                 'arguments' => [
                     ServiceCliExecutor::getServiceArgument(),
-                    (new CliArgument())->setKey(['model', 'm'])
+                    (new CliArgument())->setKeys(['model', 'm'])
                         ->setDescription('Model name or array of names'),
                 ],
 				'handler' => ModelStatus::class,
@@ -33,9 +33,9 @@ class Cli implements FusionComponentInterface, ServiceCliInterface
                 'description' => 'Update models: synchronizing with mediators, generating migrations, applying migrations',
                 'arguments' => [
                     ServiceCliExecutor::getServiceArgument(),
-                    (new CliArgument())->setKey(['model', 'm'])
+                    (new CliArgument())->setKeys(['model', 'm'])
                         ->setDescription('Model name or array of names'),
-                    (new CliArgument())->setKey(['level', 'l'])
+                    (new CliArgument())->setKeys(['level', 'l'])
                         ->setEnum([
                             ModelUpdate::LEVEL_FULL,
                             ModelUpdate::LEVEL_MEDIATOR,
@@ -57,7 +57,7 @@ class Cli implements FusionComponentInterface, ServiceCliInterface
             ],
 
             [
-                'type' => CliProcessor::COMMAND_TYPE_WEB_ONLY,
+                'type' => CliProcessor::COMMAND_TYPE_WEB,
                 'command' => 'model-migrations-manage',
                 'description' => 'Run plugin to manage model statuses and migrations',
                 'handler' => MigrationsManage::class,

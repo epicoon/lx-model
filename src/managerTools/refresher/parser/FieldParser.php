@@ -51,7 +51,7 @@ class FieldParser
         }
 
         $this->validate();
-        if (!$this->getFlightRecorder()->isEmpty()) {
+        if ($this->hasFlightRecords()) {
             return null;
         }
 

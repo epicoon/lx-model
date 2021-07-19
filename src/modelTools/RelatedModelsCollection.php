@@ -54,7 +54,7 @@ class RelatedModelsCollection extends ModelsCollection
     /**
      * @param iterable<Model> $iterable
      */
-    public function merge(iterable $iterable): iterable
+    public function merge(iterable $iterable): void
     {
         $list = [];
         foreach ($iterable as $model) {
@@ -66,7 +66,7 @@ class RelatedModelsCollection extends ModelsCollection
             $this->relationKeeper->onCollectionAdding($model);
         }
 
-        return parent::merge($list);
+        parent::merge($list);
     }
 
     /**

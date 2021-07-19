@@ -7,9 +7,13 @@ use lx\model\Model;
 use lx\model\modelTools\ModelsSerializer;
 use lx\model\schema\relation\ModelRelation;
 use lx\ResponseInterface;
+use lx\FlightRecorderHolderInterface;
+use lx\FlightRecorderHolderTrait;
 
-class Respondent extends \lx\Respondent
+class Respondent extends \lx\Respondent implements FlightRecorderHolderInterface
 {
+    use FlightRecorderHolderTrait;
+    
     const PER_PAGE_DEFAULT = 10;
 
     public function getCoreData(array $attributes): ResponseInterface
@@ -45,8 +49,8 @@ class Respondent extends \lx\Respondent
     {
         $modelClass = $this->defineModelClass($serviceName, $modelName);
         $relation = $this->defineRelation($modelClass, $relationName);
-        if ($this->hasErrors()) {
-            return $this->prepareWarningResponse($this->getFirstError());
+        if ($this->hasFlightRecords()) {
+            return $this->prepareWarningResponse($this->getFirstFlightRecord());
         }
 
         /** @var string&Model $relModelClass */
@@ -152,8 +156,8 @@ class Respondent extends \lx\Respondent
 	{
         $modelClass = $this->defineModelClass($serviceName, $modelName);
         $relation = $this->defineRelation($modelClass, $relationName);
-        if ($this->hasErrors()) {
-            return $this->prepareWarningResponse($this->getFirstError());
+        if ($this->hasFlightRecords()) {
+            return $this->prepareWarningResponse($this->getFirstFlightRecord());
         }
 
         $model = $modelClass::findOne($pk0);
@@ -174,8 +178,8 @@ class Respondent extends \lx\Respondent
 	{
         $modelClass = $this->defineModelClass($serviceName, $modelName);
         $relation = $this->defineRelation($modelClass, $relationName);
-        if ($this->hasErrors()) {
-            return $this->prepareWarningResponse($this->getFirstError());
+        if ($this->hasFlightRecords()) {
+            return $this->prepareWarningResponse($this->getFirstFlightRecord());
         }
 
         $model = $modelClass::findOne($pk0);
@@ -189,8 +193,8 @@ class Respondent extends \lx\Respondent
 	public function createModel(string $serviceName, string $modelName, array $fields): ?ResponseInterface
 	{
         $modelClass = $this->defineModelClass($serviceName, $modelName);
-        if ($this->hasErrors()) {
-            return $this->prepareWarningResponse($this->getFirstError());
+        if ($this->hasFlightRecords()) {
+            return $this->prepareWarningResponse($this->getFirstFlightRecord());
         }
 
         $model = new $modelClass($fields);
@@ -202,8 +206,8 @@ class Respondent extends \lx\Respondent
 	public function deleteModel(string $serviceName, string $modelName, int $pk): ?ResponseInterface
 	{
         $modelClass = $this->defineModelClass($serviceName, $modelName);
-        if ($this->hasErrors()) {
-            return $this->prepareWarningResponse($this->getFirstError());
+        if ($this->hasFlightRecords()) {
+            return $this->prepareWarningResponse($this->getFirstFlightRecord());
         }
 
         $model = $modelClass::findOne($pk);
