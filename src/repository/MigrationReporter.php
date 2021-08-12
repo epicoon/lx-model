@@ -36,7 +36,7 @@ class MigrationReporter
         if (empty($models)) {
             return null;
         }
-
+        
         $report = $modelManager->compareRepository($modelNames)->toArray();
         $modelsCompareReport = $modelManager->compareModels($modelNames)->toArray();
         $report['modelsNeedUpdate'] = $modelsCompareReport['modelsNeedUpdate'] ?? [];

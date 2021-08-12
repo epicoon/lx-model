@@ -66,7 +66,7 @@ class SysTablesProvider
                     'nullable' => false,
                 ],
                 'created_at' => [
-                    'type' => DbTableField::TYPE_STRING, //TODO datetime
+                    'type' => DbTableField::TYPE_TIMESTAMP,
                     'nullable' => false,
                 ],
             ],

@@ -4,10 +4,11 @@ namespace lx\model\schema\field\type;
 
 class PhpTypeEnum
 {
-    const INTEGER = 'integer';
+    const INTEGER = 'int';
     const FLOAT = 'float';
     const STRING = 'string';
-    const BOOLEAN = 'boolean';
+    const BOOLEAN = 'bool';
     const ARRAY = 'array';
     const OBJECT = 'object';
+    const DATETIME = '\DateTime';
 }

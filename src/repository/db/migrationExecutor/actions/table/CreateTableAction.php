@@ -39,12 +39,6 @@ class CreateTableAction extends BaseMigrationAction
             return;
         }
 
-        $tableSchema->addField([
-            'name' => 'id',
-            'type' => DbTableField::TYPE_SERIAL,
-            'pk' => true,
-        ]);
-
         $editor = new DbTableEditor();
         $editor->setTableSchema($tableSchema);
         if (!$editor->createTable()) {

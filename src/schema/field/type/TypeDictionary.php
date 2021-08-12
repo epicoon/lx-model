@@ -15,6 +15,11 @@ class TypeDictionary extends Type
         return 'dict';
     }
 
+    public function getPhpType(): string
+    {
+        return PhpTypeEnum::ARRAY;
+    }
+
     /**
      * @param mixed $value
      */
@@ -30,11 +35,6 @@ class TypeDictionary extends Type
     public function normalizeValue($value)
     {
         return (array)$value;
-    }
-
-    public function getPhpType(): string
-    {
-        return PhpTypeEnum::ARRAY;
     }
 
     /**

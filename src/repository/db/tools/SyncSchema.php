@@ -303,7 +303,7 @@ class SyncSchema
             // MANY_TO_MANY
             if (preg_match($mmReg, $keyData['relatedTable'])
             ) {
-                $proxyTableName = preg_replace($mmReg, $keyData['relatedTable']);
+                $proxyTableName = preg_replace($mmReg, '', $keyData['relatedTable']);
                 $namesArr = explode('__', $proxyTableName);
                 $relModel = $nameConverter->restoreModelName($namesArr[0]);
                 if ($relModel == $this->modelName) {
@@ -413,6 +413,9 @@ class SyncSchema
             case PhpTypeEnum::ARRAY:
                 return DbTableField::TYPE_STRING;
 
+            case PhpTypeEnum::DATETIME:
+                return DbTableField::TYPE_TIMESTAMP;
+                
             //TODO можно object сериализовать
         }
 
@@ -435,6 +438,9 @@ class SyncSchema
             case DbTableField::TYPE_DECIMAL:
             case DbTableField::TYPE_TIMESTAMP:
                 return PhpTypeEnum::STRING;
+                
+            case DbTableField::TYPE_TIMESTAMP:
+                return PhpTypeEnum::DATETIME;
         }
 
         return PhpTypeEnum::STRING;

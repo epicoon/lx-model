@@ -2,9 +2,10 @@
 
 namespace lx\model\schema\field\parser;
 
+use lx\FlightRecorderHolderInterface;
 use lx\FlightRecorderHolderTrait;
 
-class CommonParser
+class CommonParser implements FlightRecorderHolderInterface
 {
     use FlightRecorderHolderTrait;
 

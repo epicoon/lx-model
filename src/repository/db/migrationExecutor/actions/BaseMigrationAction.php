@@ -95,14 +95,18 @@ abstract class BaseMigrationAction
 
     protected function addError(string $error): void
     {
+        /** @var Migration $migration */
+        $migration = $this->data['migration'];
+        
         $data = [
-            'migration' => $this->data['migration']->getVersion(),
+            'service' => $this->context->getService()->name,
+            'migration' => $migration->getVersion(),
             'error' => $error,
         ];
 
         $db = $this->context->getRepository()->getMainDb();
-        if ($db->hasError()) {
-            $data['dbError'] = $db->getError();
+        if ($db->hasFlightRecords()) {
+            $data['dbError'] = $db->getFirstFlightRecord();
         }
 
         $this->report->addToMigrationErrors($data);

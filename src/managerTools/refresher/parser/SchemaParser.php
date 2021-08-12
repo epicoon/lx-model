@@ -2,12 +2,13 @@
 
 namespace lx\model\managerTools\refresher\parser;
 
+use lx\FlightRecorderHolderInterface;
 use lx\FlightRecorderHolderTrait;
 use lx\model\managerTools\ModelsContext;
 use lx\model\schema\relation\RelationTypeEnum;
 use lx\Service;
 
-class SchemaParser
+class SchemaParser implements FlightRecorderHolderInterface
 {
     use FlightRecorderHolderTrait;
 

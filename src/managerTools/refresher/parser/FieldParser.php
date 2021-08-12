@@ -2,13 +2,14 @@
 
 namespace lx\model\managerTools\refresher\parser;
 
+use lx\FlightRecorderHolderInterface;
 use lx\FlightRecorderHolderTrait;
 use lx\model\managerTools\ModelsContext;
 use lx\model\schema\field\parser\CommonParser;
 use lx\model\schema\field\type\TypesRegistryTrait;
 use lx\Service;
 
-class FieldParser
+class FieldParser implements FlightRecorderHolderInterface
 {
     use FlightRecorderHolderTrait;
     use TypesRegistryTrait;

@@ -65,6 +65,7 @@ class MigrationBuilder
             $schema = $this->context->getModelManager()->getModelSchema($modelName);
             $fields = [];
             $fieldConverter = new SyncSchema($this->context, $modelName);
+
             foreach ($schema->getFields() as $fieldName => $field) {
                 $fields[$fieldName] = $fieldConverter->fieldToBasicDefinitionArray($field);
             }

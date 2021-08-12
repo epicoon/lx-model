@@ -126,7 +126,7 @@ class ModelUpdate extends ServiceCliExecutor
         }
     }
 
-    private function refreshModels(ModelManager $modelManager, array $models): void
+    private function refreshModels(ModelManager $modelManager, ?array $models): void
     {
         $report = $modelManager->refreshModels($models)->toArray();
 
@@ -185,9 +185,27 @@ class ModelUpdate extends ServiceCliExecutor
     private function runMigrations(ModelManager $modelManager): void
     {
         $report = $modelManager->runMigrations()->toArray();
-        $this->processor->outln('* Migrations have been applied:', ['decor' => 'b']);
-        foreach ($report['appliedMigrations'] as $migrationName) {
-            $this->processor->outln(">>> $migrationName");
+        $appliedMigrations = $report['appliedMigrations'] ?? [];
+        if (empty($appliedMigrations)) {
+            $this->processor->outln('* Migrations havn\'t been applied', ['decor' => 'b']);
+        } else {
+            $this->processor->outln('* Migrations have been applied:', ['decor' => 'b']);
+            foreach ($appliedMigrations as $migrationName) {
+                $this->processor->outln(">>> $migrationName");
+            }
+        }
+
+        $errors = $report['migrationErrors'] ?? [];
+        if (!empty($errors)) {
+            $this->processor->outln('* Migration errors:', ['decor' => 'b']);
+            foreach ($errors as $error) {
+                $this->processor->outln("> migration: {$error['service']} - {$error['migration']}");
+                $this->processor->outln(">>> message: {$error['error']}");
+                $dbError = $error['dbError'] ?? null;
+                if ($dbError) {
+                    $this->processor->outln(">>> details: {$dbError}");
+                }
+            }
         }
     }
 
