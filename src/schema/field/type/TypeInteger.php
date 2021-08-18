@@ -4,10 +4,7 @@ namespace lx\model\schema\field\type;
 
 class TypeInteger extends Type
 {
-    public function getTypeName(): string
-    {
-        return PhpTypeEnum::INTEGER;
-    }
+    const TYPE = 'int';
 
     public function isCustom(): bool
     {
@@ -29,5 +26,13 @@ class TypeInteger extends Type
     public function normalizeValue($value)
     {
         return (int)$value;
+    }
+
+    /**
+     * @return int
+     */
+    public function getValueIfRequired()
+    {
+        return 0;
     }
 }

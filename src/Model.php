@@ -10,6 +10,7 @@ use lx\model\repository\RepositoryInterface;
 use lx\model\schema\ModelSchema;
 use lx\model\schema\ModelSchemaProvider;
 use lx\Service;
+use lx\model\schema\field\value\ValueAsObject;
 
 abstract class Model implements ModelInterface
 {
@@ -42,13 +43,22 @@ abstract class Model implements ModelInterface
             if ($schema->hasField($name)) {
                 $this->setField($name, $field);
             } elseif ($schema->hasRelation($name)) {
+                if ($field instanceof ModelInterface) {
+                    $field = $field->getId();
+                }
                 $this->setRelatedKey($name, $field);
             }
         }
 
         foreach ($schema->getFields() as $field) {
-            if ($field->getDefault() !== null && ($this->_fields[$field->getName()] ?? null) === null) {
-                $this->setField($field->getName(), $field->getDefault());
+            if ($field->getDefault() !== null) {
+                if (($this->_fields[$field->getName()] ?? null) === null) {
+                    $this->setField($field->getName(), $field->getDefault());
+                }
+            } elseif ($field->isRequired()) {
+                if (($this->_fields[$field->getName()] ?? null) === null) {
+                    $this->setField($field->getName(), $field->getValueIfRequired());
+                }
             }
         }
     }
@@ -191,7 +201,7 @@ abstract class Model implements ModelInterface
         }
 
         $value = $fieldDef->normalizeValue($value);
-        if (array_key_exists($name, $this->_fields) && $this->_fields[$name] == $value) {
+        if (array_key_exists($name, $this->_fields) && $fieldDef->valuesAreEqual($this->_fields[$name], $value)) {
             return;
         }
 
@@ -212,6 +222,13 @@ abstract class Model implements ModelInterface
     public function &getField(string $name)
     {
         if (array_key_exists($name, $this->_fields)) {
+            return $this->_fields[$name];
+        }
+
+        $field = $this->getSchema()->getField($name);
+        $prearrangedValue = $field->getPrearrangedValue();
+        if ($prearrangedValue) {
+            $this->_fields[$name] = $prearrangedValue;
             return $this->_fields[$name];
         }
 
@@ -534,18 +551,25 @@ abstract class Model implements ModelInterface
         }
 
         if (array_key_exists($name, $this->_oldFields)) {
-            if ($this->_oldFields[$name] == $value) {
+            $field = $this->getSchema()->getField($name);
+            if ($field->valuesAreEqual($this->_oldFields[$name], $value)) {
                 unset($this->_oldFields[$name]);
             }
-
             return;
         }
 
-        if (array_key_exists($name, $this->_fields)) {
-            $this->_oldFields[$name] = $this->_fields[$name];
-        } else {
+        if (!array_key_exists($name, $this->_fields)) {
             $this->_oldFields[$name] = null;
+            return;
         }
+
+        $oldField = $this->_fields[$name];
+        if ($oldField instanceof ValueAsObject && $oldField->isNull()) {
+            $this->_oldFields[$name] = null;
+            return;
+        }
+
+        $this->_oldFields[$name] = $oldField;
     }
 
     private function getRelationKeeper(string $name): ModelRelationKeeper

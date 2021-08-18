@@ -27,7 +27,6 @@ class ModelField extends ModelAttribute
         $this->required = $definition['required'] ?? false;
         $this->readonly = $definition['readonly'] ?? false;
         $this->default = $definition['default'] ?? null;
-
         $this->type = $this->getTypeByName($definition['type']);
         $this->definition = $this->type->getNewDefinition();
         $this->definition->init($definition);
@@ -71,6 +70,22 @@ class ModelField extends ModelAttribute
         return $this->default;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getValueIfRequired()
+    {
+        return $this->type->getValueIfRequired();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrearrangedValue()
+    {
+        return $this->type->getPrearrangedValue();
+    }
+
     public function isEqual(ModelAttribute $attribute): bool
     {
         if (!($attribute instanceof ModelField)) {
@@ -103,6 +118,11 @@ class ModelField extends ModelAttribute
     public function normalizeValue($value)
     {
         return $this->type->normalizeValue($value);
+    }
+    
+    public function valuesAreEqual($value1, $value2): bool
+    {
+        return $this->type->valuesAreEqual($value1, $value2);
     }
 
     public function getSetters(): array

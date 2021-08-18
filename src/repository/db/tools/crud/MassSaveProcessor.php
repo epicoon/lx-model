@@ -63,7 +63,7 @@ class MassSaveProcessor
             $relationChanges = $model->getRelationChanges();
 
             $isForSave = false;
-            if ($model->fieldsChanged()) {
+            if ($model->fieldsChanged() && !in_array($model, $forSave)) {
                 $isForSave = true;
                 $forSave[] = $model;
             }
@@ -91,7 +91,7 @@ class MassSaveProcessor
                     }
                 }
 
-                if (!$isForSave && $relation->isFkHolder()) {
+                if (!$isForSave && $relation->isFkHolder() && !in_array($model, $forSave)) {
                     $isForSave = true;
                     $forSave[] = $model;
                 }
@@ -103,7 +103,7 @@ class MassSaveProcessor
             'forRelationsUpdate' => $forRelationsUpdate,
         ];
     }
-
+    
     /**
      * @param iterable<Model> $models
      */

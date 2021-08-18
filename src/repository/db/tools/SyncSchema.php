@@ -6,6 +6,11 @@ use lx\DbTableField;
 use lx\DbTableSchema;
 use lx\model\Model;
 use lx\model\repository\db\migrationExecutor\actions\relation\LifeCycleRelationAction;
+use lx\model\schema\field\type\TypeBoolean;
+use lx\model\schema\field\type\TypeDateTime;
+use lx\model\schema\field\type\TypeInteger;
+use lx\model\schema\field\type\TypeString;
+use lx\model\schema\field\value\DateTimeValue;
 use lx\model\schema\ModelSchema;
 use lx\model\schema\field\type\PhpTypeEnum;
 use lx\model\schema\field\ModelField;
@@ -413,7 +418,7 @@ class SyncSchema
             case PhpTypeEnum::ARRAY:
                 return DbTableField::TYPE_STRING;
 
-            case PhpTypeEnum::DATETIME:
+            case DateTimeValue::class:
                 return DbTableField::TYPE_TIMESTAMP;
                 
             //TODO можно object сериализовать
@@ -426,23 +431,24 @@ class SyncSchema
     {
         switch ($dbType) {
             case DbTableField::TYPE_INTEGER:
-                return PhpTypeEnum::INTEGER;
+                return TypeInteger::TYPE;
 
             case DbTableField::TYPE_FLOAT:
                 return PhpTypeEnum::FLOAT;
+                //TODO return TypeFloat::TYPE;
 
             case DbTableField::TYPE_BOOLEAN:
-                return PhpTypeEnum::BOOLEAN;
+                return TypeBoolean::TYPE;
 
             case DbTableField::TYPE_STRING:
-            case DbTableField::TYPE_DECIMAL:
+                return TypeString::TYPE;
+
+            //TODO case DbTableField::TYPE_DECIMAL:
+
             case DbTableField::TYPE_TIMESTAMP:
-                return PhpTypeEnum::STRING;
-                
-            case DbTableField::TYPE_TIMESTAMP:
-                return PhpTypeEnum::DATETIME;
+                return TypeDateTime::TYPE;
         }
 
-        return PhpTypeEnum::STRING;
+        return TypeString::TYPE;
     }
 }

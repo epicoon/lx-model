@@ -24,6 +24,7 @@ class ModelRefresher
     private string $mediatorNamespace;
     private string $mediatorPath;
     private array $options;
+    private array $uses;
     private RefreshReport $report;
 
     public function __construct(ModelsContext $context, string $modelName, ModelNamesProvider $modelNamesProvider)
@@ -38,6 +39,7 @@ class ModelRefresher
 
         $this->schemaArray = [];
         $this->options = [];
+        $this->uses = [];
         $this->report = new RefreshReport();
     }
 
@@ -94,12 +96,12 @@ class ModelRefresher
         $template = $conductor->getMediatorTemplate();
         $text = $template;
         $text = str_replace('<namespace>', $this->mediatorNamespace, $text);
+        $propertiesString = $this->getPropertiesString();
         $text = str_replace('<use>', $this->getUseString(), $text);
         $text = str_replace('<class>', $this->mediatorName, $text);
         $text = str_replace('<service>', $this->context->getService()->name, $text);
         $schemaString = $this->getSchemaString();
         $text = str_replace('<schema>', $schemaString, $text);
-        $propertiesString = $this->getPropertiesString();
         $text = str_replace('<fields>', $propertiesString, $text);
 
         $modelSchema = ModelSchema::createFromArray($this->schemaArray, $this->context->getService());
@@ -147,10 +149,17 @@ class ModelRefresher
     {
         return in_array($name, $this->options);
     }
+    
+    private function addUsed(string $name): void
+    {
+        if (!in_array($name, $this->uses)) {
+            $this->uses[] = "use $name;";
+        }
+    }
 
     private function getUseString(): string
     {
-        $uses = [];
+        $uses = $this->uses;
         foreach ($this->schema->getRelations() as $relation) {
             if ($relation->isToMany()) {
                 $class = RelatedModelsCollection::class;
@@ -188,13 +197,25 @@ class ModelRefresher
         $settersArr = [];
         /** @var ModelField $setter */
         foreach ($setters as $name => $setter) {
-            $settersArr[] = ' * @property ' . $setter->getPhpType() . ' $' . $name;
+            $phpType = $setter->getPhpType();
+            if (preg_match('/\\\\/', $phpType)) {
+                $this->addUsed($phpType);
+                $arr = explode('\\', $phpType);
+                $phpType = array_pop($arr);
+            }
+            $settersArr[] = ' * @property ' . $phpType . ' $' . $name;
         }
 
         $gettersArr = [];
         /** @var ModelField $getter */
         foreach ($getters as $name => $getter) {
-            $gettersArr[] = ' * @property-read ' . $getter->getPhpType() . ' $' . $name;
+            $phpType = $getter->getPhpType();
+            if (preg_match('/\\\\/', $phpType)) {
+                $this->addUsed($phpType);
+                $arr = explode('\\', $phpType);
+                $phpType = array_pop($arr);
+            }
+            $gettersArr[] = ' * @property-read ' . $phpType . ' $' . $name;
         }
 
         $methods = $this->schema->getMethods();

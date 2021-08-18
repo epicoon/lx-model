@@ -4,10 +4,7 @@ namespace lx\model\schema\field\type;
 
 class TypeBoolean extends Type
 {
-    public function getTypeName(): string
-    {
-        return PhpTypeEnum::BOOLEAN;
-    }
+    const TYPE = 'bool';
 
     public function isCustom(): bool
     {
@@ -19,7 +16,7 @@ class TypeBoolean extends Type
      */
     public function validateValue($value): bool
     {
-        return (filter_var($value, FILTER_VALIDATE_BOOLEAN) !== false);
+        return ($value === true || $value === false);
     }
 
     /**
@@ -29,5 +26,13 @@ class TypeBoolean extends Type
     public function normalizeValue($value)
     {
         return (bool)$value;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getValueIfRequired()
+    {
+        return false;
     }
 }

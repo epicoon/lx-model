@@ -10,7 +10,12 @@ use lx\model\schema\ModelAttributeMethod;
 
 abstract class Type
 {
-    abstract public function getTypeName(): string;
+    const TYPE = 'undefined';
+
+    public function getTypeName(): string
+    {
+        return static::TYPE;
+    }
 
     /**
      * @param mixed $value
@@ -23,9 +28,27 @@ abstract class Type
      */
     abstract public function normalizeValue($value);
 
+    /**
+     * @return mixed
+     */
+    abstract public function getValueIfRequired();
+    
+    /**
+     * @return mixed
+     */
+    public function getPrearrangedValue()
+    {
+        return null;
+    }
+
     public function getPhpType(): string
     {
         return $this->getTypeName();
+    }
+
+    public function valuesAreEqual($value1, $value2): bool
+    {
+        return $value1 === $value2;
     }
 
     public function isCustom(): bool

@@ -10,5 +10,4 @@ class PhpTypeEnum
     const BOOLEAN = 'bool';
     const ARRAY = 'array';
     const OBJECT = 'object';
-    const DATETIME = '\DateTime';
 }

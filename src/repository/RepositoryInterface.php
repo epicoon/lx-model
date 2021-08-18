@@ -24,6 +24,7 @@ interface RepositoryInterface
     public function getMigrations(): array;
     public function getMigration(string $name): MigrationInterface;
 
+    public function isOnHold(): bool;
     public function hold(): void;
     public function drop(): void;
     public function commit(): bool;

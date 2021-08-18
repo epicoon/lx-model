@@ -36,6 +36,11 @@ class ModelRelationKeeperToOne extends ModelRelationKeeper
      */
     public function getKey()
     {
+        // If related model was new
+        if ($this->related && $this->key === null) {
+            $this->key = $this->related->getId();
+        }
+
         return $this->key;
     }
 

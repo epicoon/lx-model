@@ -7,13 +7,10 @@ use lx\model\schema\field\ModelField;
 
 class TypeDictionary extends Type
 {
+    const TYPE = 'dict';
+    
     const METHOD_PREFIX_ADD = 'addTo';
     const METHOD_PREFIX_REMOVE = 'removeFrom';
-
-    public function getTypeName(): string
-    {
-        return 'dict';
-    }
 
     public function getPhpType(): string
     {
@@ -37,6 +34,14 @@ class TypeDictionary extends Type
         return (array)$value;
     }
 
+    /**
+     * @return array
+     */
+    public function getValueIfRequired()
+    {
+        return [];    
+    }
+    
     /**
      * @param array $value
      * @return string

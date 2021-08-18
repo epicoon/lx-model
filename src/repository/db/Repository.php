@@ -115,6 +115,11 @@ class Repository implements RepositoryInterface
         $conductor = new MigrationConductor($this->context);
         return $conductor->getMigration($name);
     }
+    
+    public function isOnHold(): bool
+    {
+        return $this->holdStack->isActive();
+    }
 
     public function hold(): void
     {
@@ -128,7 +133,7 @@ class Repository implements RepositoryInterface
 
     public function commit(bool $force = false): bool
     {
-        if (!$this->holdStack->isActive()) {
+        if (!$this->isOnHold()) {
             return false;
         }
 

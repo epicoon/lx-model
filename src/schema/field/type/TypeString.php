@@ -7,10 +7,7 @@ use lx\model\schema\field\parser\StringParser;
 
 class TypeString extends Type
 {
-    public function getTypeName(): string
-    {
-        return PhpTypeEnum::STRING;
-    }
+    const TYPE = 'string';
 
     public function isCustom(): bool
     {
@@ -33,6 +30,14 @@ class TypeString extends Type
     {
         if (is_numeric($value)) $value = ''.$value;
         return $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getValueIfRequired()
+    {
+        return '';
     }
 
     public function getDefinitionClass(): string
