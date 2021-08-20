@@ -34,7 +34,7 @@ class RelatedModelsCollection extends ModelsCollection
             return null;
         }
 
-        $this->relationKeeper->onCollectionDeleting($this[$this->len() - 1]);
+        $this->relationKeeper->onCollectionDeleting($this[$this->count() - 1]);
         return parent::pop();
     }
 
