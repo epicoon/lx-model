@@ -54,11 +54,16 @@ class ModelStatus extends ServiceCliExecutor
     private function runForService(?array $models): void
     {
         $report = MigrationReporter::getServiceData($this->service->name, $models);
-        $this->printServiceReport($report['report']);
+        $this->printServiceReport($report['report'] ?? []);
     }
 
     private function printServiceReport(array $report): void
     {
+        if (empty($report)) {
+            $this->processor->outln('No changes');
+            return;
+        }
+
         if (!empty($report['wrongModelNames'])) {
             $this->processor->outln('* The following models not found:', ['decor' => 'b']);
             foreach ($report['wrongModelNames'] as $name) {
