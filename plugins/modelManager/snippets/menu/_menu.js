@@ -5,7 +5,7 @@
  */
 
 #lx:use lx.Button;
-#lx:use lx.tools.widget.LanguageSwitcher;
+#lx:use lx.LanguageSwitcher;
 
 Snippet.onLoad(()=>{#lx:require onclient;});
 
@@ -14,7 +14,7 @@ Snippet.widget.streamProportional({indent:'10px'});
 
 var height = '40px';
 
-new lx.tools.widget.LanguageSwitcher({height});
+new lx.LanguageSwitcher({height});
 
 var vis = new lx.Box({height});
 vis.gridProportional({step:'10px'});
