@@ -22,7 +22,7 @@ class ColumnsForShow extends lx.BindableModel {
 	static onAfterSet(field, val) {
 		if (field == 'showFields') {
 			var back = this.backup.getField(field);
-			this.diffFields = [].lxMerge(val.diff(back)).lxMerge(back.diff(val));
+			this.diffFields = [].lxMerge(val.lxDiff(back)).lxMerge(back.lxDiff(val));
 		}
 	}
 }
@@ -75,9 +75,9 @@ Snippet->>butManageColsApply.click(()=>{
 	for (var i in columnsForShow.showFields) {
 		showList.push(columnsMap[columnsForShow.showFields[i]]);
 	}
-	leftEntitiesListDisplayer.init({ hide: columnsMap.diff(showList) });
+	leftEntitiesListDisplayer.init({ hide: columnsMap.lxDiff(showList) });
 	leftEntitiesListDisplayer.reset();
-	rightEntitiesListDisplayer.init({ hide: columnsMap.diff(showList) });
+	rightEntitiesListDisplayer.init({ hide: columnsMap.lxDiff(showList) });
 	rightEntitiesListDisplayer.reset();
 });
 Snippet->>butManageColsReset.click(()=>columnsForShow.reset());

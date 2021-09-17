@@ -57,7 +57,7 @@ class SelectedModel {
 			return;
 		}
 
-		Plugin->confirmPopup.open( #lx:i18n(confirm.delete_model, {name: this.model.modelName}), ()=>{
+		Plugin.root->confirmPopup.open( #lx:i18n(confirm.delete_model, {name: this.model.modelName})).yes(()=>{
 			^MainBack.removeModel(this.model.modelName).then((res)=>{
 				modelsListBackup.removeAt(this.selectedIndex());
 				modelsList.remove(this.model);

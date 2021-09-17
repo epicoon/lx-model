@@ -115,8 +115,8 @@ class Model extends lx.BindableModel {
 
 		var fieldNames = schema.fields.lxGetKeys(),
 			oldFieldNames = oldSchema.fields.lxGetKeys(),
-			addedFields = fieldNames.diff(oldFieldNames),
-			deletedFields = oldFieldNames.diff(fieldNames);
+			addedFields = fieldNames.lxDiff(oldFieldNames),
+			deletedFields = oldFieldNames.lxDiff(fieldNames);
 
 		for (var i=0, l=addedFields.len; i<l; i++) {
 			var params = schema.fields[addedFields[i]].lxClone();

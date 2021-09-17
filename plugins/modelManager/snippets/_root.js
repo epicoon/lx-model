@@ -68,5 +68,7 @@ var migrations = new lx.ActiveBox({
 });
 migrations.setSnippet('migrations');
 
-Snippet.addSnippet({plugin:'lx/tools:snippets',snippet:'inputPopup'});
-Snippet.addSnippet({plugin:'lx/tools:snippets',snippet:'confirmPopup'});
+#lx:use lx.InputPopup;
+#lx:use lx.ConfirmPopup;
+new lx.InputPopup();
+new lx.ConfirmPopup();
