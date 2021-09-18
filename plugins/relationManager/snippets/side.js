@@ -55,7 +55,7 @@ Snippet.onLoad(()=>{
 				defaults[key] = properties['default'];
 		}
 
-		Plugin->inputPopup.open(fieldNames, defaults, (values)=>{
+		Plugin.root->inputPopup.open(fieldNames, defaults).confirm((values)=>{
 			var fields = {};
 			if (!values.isArray) values = [values];
 			for (var i in values) fields[fieldNames[i]] = values[i];

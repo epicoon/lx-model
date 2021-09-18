@@ -21,7 +21,7 @@ class ServiceData extends lx.BindableModel #lx:namespace lx.models {
 		} else if (
 			this.report.modelsNeedUpdate.len
 			|| this.report.modelsNeedTable.len
-			|| !this.report.modelsChanged.lxEmpty
+			|| !this.report.modelsChanged.lxEmpty()
 		) {
 			this.status = self::STATUS_NEED_UPDATE;
 		} else {

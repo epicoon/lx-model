@@ -57,7 +57,7 @@ class SelectedModel {
 			return;
 		}
 
-		Plugin.root->confirmPopup.open( #lx:i18n(confirm.delete_model, {name: this.model.modelName})).yes(()=>{
+		Plugin.root->confirmPopup.open( #lx:i18n(confirm.delete_model, {name: this.model.modelName})).confirm(()=>{
 			^MainBack.removeModel(this.model.modelName).then((res)=>{
 				modelsListBackup.removeAt(this.selectedIndex());
 				modelsList.remove(this.model);
@@ -222,7 +222,7 @@ class SelectedModel {
 				defaults[properties.name] = properties['default'];
 		}
 
-		Plugin->inputPopup.open(fieldNames, defaults, (values)=>{
+		Plugin.root->inputPopup.open(fieldNames, defaults).confirm((values)=>{
 			var data = {};
 			if (!values.isArray) values = [values];
 			for (var i in values) data[fieldNames[i]] = values[i];

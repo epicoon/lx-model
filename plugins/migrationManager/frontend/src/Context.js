@@ -196,19 +196,19 @@ function __leafCreateMigrationsHandler(e) {
 
 		model.setReport(data.serviceState.report);
 		var report = new lx.models.ActionReport(model.getTitle());
-		if (!data.actionReport.modelsCreated.lxEmpty) {
+		if (!data.actionReport.modelsCreated.lxEmpty()) {
 			report.addAction(
 				#lx:i18n(modelsCreated),
 				data.actionReport.modelsCreated.lxGetKeys()
 			);
 		}
-		if (!data.actionReport.mediatorCreated.lxEmpty) {
+		if (!data.actionReport.mediatorCreated.lxEmpty()) {
 			report.addAction(
 				#lx:i18n(mediatorCreated),
 				data.actionReport.mediatorCreated.lxGetKeys()
 			);
 		}
-		if (!data.actionReport.mediatorUpdated.lxEmpty) {
+		if (!data.actionReport.mediatorUpdated.lxEmpty()) {
 			report.addAction(
 				#lx:i18n(mediatorUpdated),
 				data.actionReport.mediatorUpdated.lxGetKeys()
@@ -260,7 +260,7 @@ function __leafInfoHandler(e) {
 				model.report.modelsNeedTable
 			);
 		}
-		if (!model.report.modelsChanged.lxEmpty) {
+		if (!model.report.modelsChanged.lxEmpty()) {
 			report.addAction(
 				#lx:i18n(modelsChanged),
 				model.report.modelsChanged.lxGetKeys()

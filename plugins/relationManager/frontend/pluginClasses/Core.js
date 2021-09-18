@@ -20,7 +20,7 @@ class Core {
 		this.respondentPlugin = this.plugin.attributes.getRespondentPlugin
 			|| function(core) {return core.plugin;};
 		if (this.respondentPlugin.isString)
-			this.respondentPlugin = lx.stringToFunction(this.respondentPlugin);
+			this.respondentPlugin = lx._f.stringToFunction(this.respondentPlugin);
 		delete this.plugin.attributes.getRespondentPlugin;
 
 		var eventHandlers = this.plugin.attributes.eventHandlers || {};
@@ -105,7 +105,7 @@ function __initEventManager(self, eventHandlers) {
 
 	var handlers = defaultHandlers.lxMerge(eventHandlers, true);
 	for (var i in handlers)
-		if (handlers[i].isString) handlers[i] = lx.stringToFunction(handlers[i]);
+		if (handlers[i].isString) handlers[i] = lx._f.stringToFunction(handlers[i]);
 
 	for (let i in defaultHandlers)
 		self.plugin.eventManager.subscribe(i, (...args)=>{

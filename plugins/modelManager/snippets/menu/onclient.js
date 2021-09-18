@@ -14,7 +14,7 @@ const snippetSwitcher = new SnippetSwitcher();
 
 // Кнопка создания новой модели
 Snippet->>butNewModel.click(()=>{
-	Plugin->inputPopup.open(#lx:i18n(Model name), function(name) {
+	Plugin.root->inputPopup.open(#lx:i18n(Model name)).confirm((name)=>{
 		var error = false;
 		modelsList.each(function(model) {
 			if (model.modelName == name) {

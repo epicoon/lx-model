@@ -53,7 +53,7 @@ rightBox->>butEntityAdd.click(()=>{
 			defaults[properties.name] = properties['default'];
 	}
 
-	Plugin->inputPopup.open(fieldNames, defaults, (values)=>{
+	Plugin.root->inputPopup.open(fieldNames, defaults).confirm((values)=>{
 		if (!values.isArray) values = [values];
 		var data = {};
 		fieldNames.each((a, i)=>data[a]=values[i]);
