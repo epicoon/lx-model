@@ -43,7 +43,7 @@ class MigrationsInfo #lx:namespace lx.models {
 		this.serviceData = serviceData;
 		^Respondent.getServiceMigrations(serviceData.getTitle()).then(res=>{
 			this.migrations.clear();
-			res.data.each(data=>this.migrations.add(new Migration(data)));
+			res.data.forEach(data=>this.migrations.add(new Migration(data)));
 		});
 	}
 
@@ -62,14 +62,14 @@ class MigrationsInfo #lx:namespace lx.models {
 	checkIntentions(migration) {
 		if (migration.isApplied) {
 			var match = false;
-			this.migrations.each(m=>{
+			this.migrations.forEach(m=>{
 				if (match) return;
 				if (m.isApplied) m.intention = self::INTENTION_DOWN;
 				if (m === migration) match = true;
 			});
 		} else {
 			var match = false;
-			this.migrations.each(m=>{
+			this.migrations.forEach(m=>{
 				if (m === migration) match = true;
 				if (!match) return;
 				if (!m.isApplied) m.intention = self::INTENTION_UP;
@@ -78,12 +78,12 @@ class MigrationsInfo #lx:namespace lx.models {
 	}
 
 	dropIntentions() {
-		this.migrations.each(migration=>migration.intention = self::INTENTION_NO);
+		this.migrations.forEach(migration=>migration.intention = self::INTENTION_NO);
 	}
 
 	swapMigration(migration) {
 		var count = 0;
-		this.migrations.each(m=>{
+		this.migrations.forEach(m=>{
 			if (m.intention != self::INTENTION_NO) count++;
 		});
 
@@ -97,8 +97,8 @@ class MigrationsInfo #lx:namespace lx.models {
 
 				this.serviceData.setReport(data.serviceState.report);
 				var list = data.actionReport.appliedMigrations;
-				this.migrations.each(m=>{
-					if (list.contains(m.name))
+				this.migrations.forEach(m=>{
+					if (list.includes(m.name))
 						m.isApplied = false;
 				});
 				this.dropIntentions();
@@ -114,8 +114,8 @@ class MigrationsInfo #lx:namespace lx.models {
 
 				this.serviceData.setReport(data.serviceState.report);
 				var list = data.actionReport.appliedMigrations;
-				this.migrations.each(m=>{
-					if (list.contains(m.name))
+				this.migrations.forEach(m=>{
+					if (list.includes(m.name))
 						m.isApplied = true;
 				});
 				this.dropIntentions();

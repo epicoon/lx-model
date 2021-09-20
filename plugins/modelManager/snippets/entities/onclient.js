@@ -53,7 +53,7 @@ Plugin.EventSupervisor.subscribe('modelSelected', (model)=>{
 	^MainBack.getModelEntities(model.service, model.modelName).then((res)=>{
 		DynamicModel.initSchema(res.schema);
 
-		res.entities.each((data)=>modelEntities.add(new DynamicModel(data)));
+		res.entities.forEach(data=>modelEntities.add(new DynamicModel(data)));
 
 		leftEntitiesListDisplayer.apply({data: modelEntities});
 		rightEntitiesListDisplayer.apply({data: modelEntitiesForMigration});
@@ -63,11 +63,11 @@ Plugin.EventSupervisor.subscribe('modelSelected', (model)=>{
 
 
 function selectSnippet() {
-	Snippet->header.getChildren().each((a, i)=>a.fill('lightgray'));
+	Snippet->header.getChildren().forEach((a, i)=>a.fill('lightgray'));
 	this.fill('white');	
-	snippets.each((a)=>a.hide());
+	snippets.forEach(a=>a.hide());
 	var key = this.key.split('_')[1];
 	snippets[key].show();
 }
-Snippet->header.getChildren().each((a, i)=>a.click(selectSnippet));
+Snippet->header.getChildren().forEach((a, i)=>a.click(selectSnippet));
 selectSnippet.call(Snippet->header.child(0));

@@ -54,9 +54,9 @@ rightBox->>butEntityAdd.click(()=>{
 	}
 
 	Plugin.root->inputPopup.open(fieldNames, defaults).confirm((values)=>{
-		if (!values.isArray) values = [values];
+		if (!lx.isArray(values)) values = [values];
 		var data = {};
-		fieldNames.each((a, i)=>data[a]=values[i]);
+		fieldNames.forEach((a, i)=>data[a]=values[i]);
 		modelEntitiesForMigration.add(new DynamicModel(data));
 	});
 });
@@ -71,7 +71,7 @@ rightBox->>butEntityDel.click(()=>{
 	var entities = rightSelectedEntity.get();
 	rightSelectedEntity.reset();
 
-	entities.each((a)=>{
+	entities.forEach(a=>{
 		if (a.id) garbage.add(a);
 		modelEntitiesForMigration.remove(a);
 	});
@@ -81,7 +81,7 @@ rightBox->>butEntityDel.click(()=>{
 rightBox->>butEntityReset.click(()=>{
 	rightSelectedEntity.reset();
 
-	modelEntitiesForMigration.each((a)=>{
+	modelEntitiesForMigration.forEach(a=>{
 		if (a.id) {
 			a.reset();
 			modelEntities.add(a);
@@ -89,7 +89,7 @@ rightBox->>butEntityReset.click(()=>{
 	});
 	modelEntitiesForMigration.clear();
 
-	garbage.each((a)=>{
+	garbage.forEach(a=>{
 		a.reset();
 		modelEntities.add(a);
 	});
@@ -104,11 +104,11 @@ rightBox->>butEntityApply.click(()=>{
 	}
 
 	var add = [], del = [], edit = [];
-	modelEntitiesForMigration.each((a)=>{
+	modelEntitiesForMigration.forEach(a=>{
 		if (a.id) edit.push([a.backup.getFields(), a.getFields()]);
 		else add.push(a.getFields());
 	});
-	garbage.each((a)=>del.push(a.getFields()));
+	garbage.forEach(a=>del.push(a.getFields()));
 
 	selectedModel.correctEntitiesWithMigrate(add, del, edit);
 });

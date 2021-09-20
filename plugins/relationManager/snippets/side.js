@@ -57,7 +57,7 @@ Snippet.onLoad(()=>{
 
 		Plugin.root->inputPopup.open(fieldNames, defaults).confirm((values)=>{
 			var fields = {};
-			if (!values.isArray) values = [values];
+			if (!lx.isArray(values)) values = [values];
 			for (var i in values) fields[fieldNames[i]] = values[i];
 
 			Plugin.eventManager.trigger('createModel', [

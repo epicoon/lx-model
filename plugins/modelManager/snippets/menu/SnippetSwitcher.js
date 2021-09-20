@@ -10,7 +10,7 @@ class SnippetSwitcher extends lx.BindableModel {
 	get list() {
 		if (!this.__snippetSwitchers) {
 			this.__snippetSwitchers = new lx.Collection();
-			self::getFieldNames().each((a)=>{
+			self::getFieldNames().forEach(a=>{
 				var vis = Snippet.find(a);
 				vis.getTarget = function() {
 					var key = this.key.split(/^vis/)[1];
@@ -33,7 +33,7 @@ class SnippetSwitcher extends lx.BindableModel {
 
 	constructor() {
 		super();
-		this.list.each((a)=>{
+		this.list.forEach(a=>{
 			var target = a.getTarget();
 			target->header.add(lx.Box, {
 				geom: [null, '2px', '20px', '20px', '2px'],

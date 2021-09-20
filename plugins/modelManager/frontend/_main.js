@@ -36,7 +36,7 @@ function resetModelsList(modelName = null) {
 		selectedModel.select(null);
 		modelsListBackup.clear();
 		modelsList.clear();
-		res.each((a)=>{
+		res.forEach(a=>{
 			modelsListBackup.add(a.lxClone());
 			modelsList.add(new Model(a));
 		});

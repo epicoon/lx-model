@@ -45,17 +45,18 @@ Snippet.widget.update = function() {
 		geom: [10, 20, 80, 80]
 	});
 
-	checkList.labels().each((label)=>{
+	checkList.labels().forEach(label=>{
 		label.setField('diffFields', function(val) {
 			this.style(
 				'color',
-				val.contains(this.parent.index) ? 'red' : ''
+				val.includes(this.parent.index) ? 'red' : ''
 			);
 		}, lx.Binder.BIND_TYPE_READ);
 	});
 
 	var showFields = new Array(columnsMap.len);
-	showFields.each((item, i)=>showFields[i]=i);
+	for (let i=0; i<columnsMap.len; i++)
+		showFields[i] = i;
 	columnsForShow._showFields = showFields;
 	columnsForShow.commit();
 	columnsForShow.bind(checkList);

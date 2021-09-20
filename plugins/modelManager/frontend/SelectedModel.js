@@ -39,7 +39,7 @@ class SelectedModel {
 			fields = backup.getFields();
 		for (var key in fields) {
 			var value = fields[key];
-			if (value && (value.isObject || value.isArray)) this.model[key] = value.lxClone();
+			if (value && (lx.isObject(value) || lx.isArray(value))) this.model[key] = value.lxClone();
 			else this.model[key] = value;
 		}
 		this.model.tableName = backup.schema.table;
@@ -224,7 +224,7 @@ class SelectedModel {
 
 		Plugin.root->inputPopup.open(fieldNames, defaults).confirm((values)=>{
 			var data = {};
-			if (!values.isArray) values = [values];
+			if (!lx.isArray(values)) values = [values];
 			for (var i in values) data[fieldNames[i]] = values[i];
 			^MainBack.addModelEntity(this.model.service, this.model.modelName, data).then((res)=>{
 				this.reselect();
@@ -243,7 +243,7 @@ class SelectedModel {
 		}
 
 		var ids = [];
-		entities.each((a)=>ids.push(a.id));
+		entities.forEach(a=>ids.push(a.id));
 		^MainBack.delModelEntities(this.model.service, this.model.modelName, ids).then((res)=>{
 			this.reselect();
 			lx.Tost( #lx:i18n(warning.delete_entity) );

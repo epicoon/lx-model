@@ -138,7 +138,7 @@ class Model extends lx.BindableModel {
 		}
 
 		for (var key in schema.fields) {
-			if (addedFields.contains(key)) continue;
+			if (addedFields.includes(key)) continue;
 			var field = schema.fields[key],
 				oldField = oldSchema.fields[key];
 			if (field.name != oldField.name) {
@@ -180,7 +180,7 @@ class Model extends lx.BindableModel {
 	 *
 	 * */
 	static onAfterSet(field, value) {
-		if (['modelName', 'code'].contains(field)) this.checkBackupDiffrent();
+		if (['modelName', 'code'].includes(field)) this.checkBackupDiffrent();
 	}
 }
 

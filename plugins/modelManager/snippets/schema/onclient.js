@@ -34,13 +34,13 @@ modelNameFon.setField('editStatus', function(val) {
 });
 
 function selectSnippet() {
-	Snippet->header.getChildren().each((a, i)=>{if(!i)return;a.fill('lightgray')});
+	Snippet->header.getChildren().forEach((a, i)=>{if(!i)return;a.fill('lightgray')});
 	this.fill('white');	
-	snippets.each((a)=>a.hide());
+	snippets.forEach(a=>a.hide());
 	var key = this.key.split('_')[1];
 	snippets[key].show();
 }
-Snippet->header.getChildren().each((a, i)=>{
+Snippet->header.getChildren().forEach((a, i)=>{
 	if (!i) return;
 	a.click(selectSnippet);
 });
@@ -72,7 +72,7 @@ schemaMatrix.matrix(modelSchema, (form)=>{
 	form.click(()=>selectSchemaItem(form));
 	form.getChildren().call('on', 'focus', ()=>selectSchemaItem(form));
 }, (form, field)=>{
-	form.getChildren().each((a)=>field.checkBackupDiffrent(a._field));	
+	form.getChildren().forEach(a=>field.checkBackupDiffrent(a._field));	
 });
 
 Plugin.EventSupervisor.subscribe('modelSelected', (model)=>{
@@ -91,7 +91,7 @@ Plugin.EventSupervisor.subscribe('modelSelected', (model)=>{
 		item.default = (field.default) ? field.default : '--null--';
 		schema[i] = item;
 	}
-	schema.each((a, i)=>modelSchema.add(new ModelField(model, i, a)));
+	schema.forEach((a, i)=>modelSchema.add(new ModelField(model, i, a)));
 });
 
 

@@ -19,7 +19,7 @@ class Context #lx:namespace lx.models {
 			var tree = new lx.Tree();
 			var treeBox = this.widgets.treeBox;
 
-			res.data.each(item=>{
+			res.data.forEach(item=>{
 				var serviceCategoryKey = item.serviceCategory.replace('/', '_');
 				if (!tree.has(serviceCategoryKey)) {
 					var node = tree.add(serviceCategoryKey);
@@ -48,7 +48,7 @@ class Context #lx:namespace lx.models {
 			data: errorReport.errors
 		});
 
-		if (errorReport.migrationErrors) errorReport.migrationErrors.each(error=>{
+		if (errorReport.migrationErrors) errorReport.migrationErrors.forEach(error=>{
 			report.actions.push({
 				title: 'Migration ' + error.migration + ' error',
 				data: [error.error]
@@ -89,12 +89,12 @@ function __initWidgets(self) {
 	self.widgets.actionReportBox.run = function(data) {
 		this.clear();
 		this.useRenderCache();
-		data.each(service=>{
+		data.forEach(service=>{
 			var name = this.add(lx.Box, {text:service.service, css:'lx-model-action-report-service'});
 			name.align(lx.CENTER, lx.MIDDLE);
-			service.actions.each(action=>{
+			service.actions.forEach(action=>{
 				this.add(lx.Box, {text:action.title, css:'lx-model-action-report-title'});
-				action.data.each(row=>{
+				action.data.forEach(row=>{
 					this.add(lx.Box, {text:row, css:'lx-model-action-report-row'});
 				});
 			});

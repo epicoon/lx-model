@@ -23,7 +23,7 @@ vis.begin();
 		new lx.Box({field:'visModelSchema',     text:#lx:i18n(Schema),     width:4}),
 		new lx.Box({field:'visModelEntities',   text:#lx:i18n(Entities),   width:4}),
 		new lx.Box({field:'visModelMigrations', text:#lx:i18n(Migrations), width:4})
-	)).each((a)=>{
+	)).forEach((a)=>{
 		a.align(lx.CENTER, lx.MIDDLE);
 		a.roundCorners('8px');
 		a.style('cursor', 'pointer');

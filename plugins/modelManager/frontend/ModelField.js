@@ -15,7 +15,7 @@ class ModelField extends lx.BindableModel {
 		if (this.model.backupModel().schema.fields[this.key])
 			backValue = this.model.backupModel().schema.fields[this.key][property];
 		if (backValue === undefined) backValue = '--null--';
-		widgets.each((a)=>a.toggleClassOnCondition(backValue!=value, 'lxDW_model_changed_field'));
+		widgets.forEach(a=>a.toggleClassOnCondition(backValue!=value, 'lxDW_model_changed_field'));
 
 		this.model.checkBackupDiffrent();
 	}

@@ -16,7 +16,7 @@ const snippetSwitcher = new SnippetSwitcher();
 Snippet->>butNewModel.click(()=>{
 	Plugin.root->inputPopup.open(#lx:i18n(Model name)).confirm((name)=>{
 		var error = false;
-		modelsList.each(function(model) {
+		modelsList.forEach(function(model) {
 			if (model.modelName == name) {
 				lx.Tost.warning( #lx:i18n(warning.model_exists, {name}) );
 				this.stop();

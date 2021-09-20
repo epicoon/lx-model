@@ -87,6 +87,6 @@ buttonDownOne.click(()=>{
 function resetMigrationsList() {
 	migrations.clear();
 	^MigrationsBack.getData().then((res)=>{
-		res.each((a)=>migrations.add(a));
+		res.forEach(a=>migrations.add(a));
 	});
 }

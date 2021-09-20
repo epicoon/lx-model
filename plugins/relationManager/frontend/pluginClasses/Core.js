@@ -19,7 +19,7 @@ class Core {
 
 		this.respondentPlugin = this.plugin.attributes.getRespondentPlugin
 			|| function(core) {return core.plugin;};
-		if (this.respondentPlugin.isString)
+		if (lx.isString(this.respondentPlugin))
 			this.respondentPlugin = lx._f.stringToFunction(this.respondentPlugin);
 		delete this.plugin.attributes.getRespondentPlugin;
 
@@ -105,7 +105,7 @@ function __initEventManager(self, eventHandlers) {
 
 	var handlers = defaultHandlers.lxMerge(eventHandlers, true);
 	for (var i in handlers)
-		if (handlers[i].isString) handlers[i] = lx._f.stringToFunction(handlers[i]);
+		if (lx.isString(handlers[i])) handlers[i] = lx._f.stringToFunction(handlers[i]);
 
 	for (let i in defaultHandlers)
 		self.plugin.eventManager.subscribe(i, (...args)=>{
@@ -232,7 +232,7 @@ const defaultHandlers = {
 				formModifier: function(form) {
 					form.click(function(e) {
 						var target = e.target.__lx;
-						if (target.is(lx.Checkbox)) return;
+						if (lx.isInstance(target, lx.Checkbox)) return;
 						modelData.select(this.index);
 					});
 				}
@@ -264,8 +264,8 @@ const defaultHandlers = {
 	},
 
 	setCheckboxes: function(core, modelData, pks) {
-		modelData.list.each((model, i)=>{
-			if ( ! pks.contains(model.getPk())) return;
+		modelData.list.forEach((model, i)=>{
+			if ( ! pks.includes(model.getPk())) return;
 			modelData.displayer.getRow(i).side->>match.value(true);
 		});
 	},

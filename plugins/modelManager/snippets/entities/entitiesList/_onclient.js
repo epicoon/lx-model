@@ -27,7 +27,7 @@ class SelectedEntity {
 	}
 
 	reset() {
-		this.indexes.each((a)=>this.unselect(a));
+		this.indexes.forEach(a=>this.unselect(a));
 		this.indexes = [];
 	}
 
@@ -39,7 +39,7 @@ class SelectedEntity {
 	}
 
 	unselect(index) {
-		if (!this.indexes.contains(index)) return;
+		if (!this.indexes.includes(index)) return;
 		var row = this.displayer.getRow(index);
 		row.side.fill('');
 		row.body.fill('');
@@ -49,7 +49,7 @@ class SelectedEntity {
 
 	get() {
 		var result = [];
-		this.indexes.each((a)=>result.push(this.collection.at(a)));
+		this.indexes.forEach(a=>result.push(this.collection.at(a)));
 		return result;
 	}
 }
@@ -69,7 +69,7 @@ Snippet->>butToLeft.click(()=>{
 	var selected = rightSelectedEntity.get();
 	rightSelectedEntity.reset();
 
-	selected.each((a)=>{
+	selected.forEach(a=>{
 		modelEntitiesForMigration.remove(a);
 		modelEntities.add(a);
 	});
@@ -84,7 +84,7 @@ Snippet->>butToRight.click(()=>{
 	var selected = leftSelectedEntity.get();
 	leftSelectedEntity.reset();
 
-	selected.each((a)=>{
+	selected.forEach(a=>{
 		modelEntities.remove(a);
 		modelEntitiesForMigration.add(a);
 	});
