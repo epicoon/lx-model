@@ -7,7 +7,7 @@
 #lx:require Model;
 #lx:require ModelField;
 
-Plugin.EventSupervisor = new lx.LocalEventSupervisor();
+Plugin.EventSupervisor = new lx.EventSupervisor();
 
 const modelsList = new lx.Collection();
 const modelSchema = new lx.Collection();

@@ -101,7 +101,7 @@ Plugin.classes.Core = Core;
  **********************************************************************************************************************/
 
 function __initEventManager(self, eventHandlers) {
-	self.plugin.eventManager = new lx.LocalEventSupervisor();
+	self.plugin.eventManager = new lx.EventSupervisor();
 
 	var handlers = defaultHandlers.lxMerge(eventHandlers, true);
 	for (var i in handlers)
