@@ -2,6 +2,7 @@
 
 namespace lx\model\repository\db;
 
+use lx;
 use lx\ArrayHelper;
 use lx\DbConnection;
 use lx\DbConnector;
@@ -474,7 +475,6 @@ class Repository implements RepositoryInterface
 
     protected function getConnector(): ?DbConnector
     {
-        return $this->context->getService()->dbConnector
-            ?? $this->context->getService()->app->dbConnector;
+        return $this->context->getService()->dbConnector ?? lx::$app->dbConnector;
     }
 }

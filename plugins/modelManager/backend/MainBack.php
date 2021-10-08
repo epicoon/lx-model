@@ -2,6 +2,7 @@
 
 namespace lx\model\plugins\modelManager\backend;
 
+use lx;
 use lx\Respondent;
 use lx\File;
 
@@ -96,7 +97,7 @@ class MainBack extends Respondent {
         }
 
 
-		$service = $this->app->getService($serviceName);
+		$service = lx::$app->getService($serviceName);
 		if ( ! $service) {
 			return [];
 		}
@@ -167,7 +168,7 @@ class MainBack extends Respondent {
 
 		try {
 			$migrationManager = new ModelMigrationManager([
-				'service' => $this->app->getService($service),
+				'service' => lx::$app->getService($service),
 				'modelName' => $modelName,
 			]);
 			$migrationManager->runCorrectActions($actions);
@@ -204,7 +205,7 @@ class MainBack extends Respondent {
 			$file = new File($path);
 			$file->put($code);
 			$migrationManager = new ModelMigrationManager([
-				'service' => $this->app->getService($service),
+				'service' => lx::$app->getService($service),
 				'modelName' => $modelName,
 				'path' => $path,
 				'code' => $code,
@@ -237,7 +238,7 @@ class MainBack extends Respondent {
             return false;
         }
 
-		$service = $this->app->getService($serviceName);
+		$service = lx::$app->getService($serviceName);
 		$manager = $service->modelProvider->getManager($modelName);
 		$model = $manager->newModel();
 		$model->setFields($data);
@@ -254,7 +255,7 @@ class MainBack extends Respondent {
             return false;
         }
 
-		$service = $this->app->getService($serviceName);
+		$service = lx::$app->getService($serviceName);
 		$manager = $service->modelProvider->getManager($modelName);
 		$models = $manager->loadModels($ids);
 		$manager->deleteModels($models);
@@ -270,7 +271,7 @@ class MainBack extends Respondent {
             return false;
         }
 
-		$service = $this->app->getService($serviceName);
+		$service = lx::$app->getService($serviceName);
 		$manager = $service->modelProvider->getManager($modelName);
 		$model = $manager->loadModel($entityFields['id']);
 		$model->setFields($entityFields);

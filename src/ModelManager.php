@@ -50,14 +50,14 @@ class ModelManager implements ModelManagerInterface, FusionComponentInterface
         }
     }
 
-    public static function getConfigProtocol(): array
+    public static function getDependenciesConfig(): array
     {
         return [
             'repository' => RepositoryInterface::class,
         ];
     }
 
-    public static function diMap(): array
+    public static function getDependenciesDefaultMap(): array
     {
         return [
             RepositoryInterface::class => Repository::class,

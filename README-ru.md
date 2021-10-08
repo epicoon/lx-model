@@ -27,7 +27,7 @@ service:
 В респонденте можно создать метод:
 ```php
 	public function getRelationManager() {
-		$plugin = $this->app->getPlugin('lx/model:relationManager');
+		$plugin = \lx::$app->getPlugin('lx/model:relationManager');
 		$plugin->addAttribute('model', 'some/service-name.ModelName');
 		$plugin->addAttribute('relation', 'relationName');
 		$builder = new \lx\PluginBuildContext($plugin);

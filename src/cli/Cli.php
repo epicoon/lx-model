@@ -14,7 +14,7 @@ class Cli implements FusionComponentInterface, ServiceCliInterface
 {
 	use FusionComponentTrait;
 
-	public function getExtensionData(): array
+	public function getCliCommandsConfig(): array
 	{
 		return [
 			[

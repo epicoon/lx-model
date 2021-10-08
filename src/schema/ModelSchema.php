@@ -51,7 +51,7 @@ class ModelSchema implements ModelSchemaInterface
         return $schema;
     }
 
-    public function toArray(): array
+    public function toArray(): iterable
     {
         if ($this->modelClassName) {
             return $this->modelClassName::getSchemaArray();

@@ -2,13 +2,15 @@
 
 namespace lx\model\plugins\modelManager;
 
+use lx;
+
 class Plugin extends \lx\Plugin {
 	public function getSupportedServiceName() {
 		return $this->attributes->service;
 	}
 
 	public function getSupportedService() {
-		return $this->app->getService($this->getSupportedServiceName());
+		return lx::$app->getService($this->getSupportedServiceName());
 	}
 
 }
