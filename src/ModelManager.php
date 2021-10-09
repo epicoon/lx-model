@@ -13,8 +13,10 @@ use lx\model\managerTools\ModelsContext;
 use lx\model\managerTools\refresher\ModelsRefresher;
 use lx\model\managerTools\refresher\RefreshReport;
 use lx\model\schema\ModelSchema;
-use lx\ObjectTrait;
 
+/**
+ * @property-read RepositoryInterface $repository
+ */
 class ModelManager implements ModelManagerInterface, FusionComponentInterface
 {
     use FusionComponentTrait;
@@ -24,11 +26,10 @@ class ModelManager implements ModelManagerInterface, FusionComponentInterface
     const DEFAULT_MODEL_SCHEMAS_EXTENSION = 'yaml';
     const DEFAULT_MIGRATION_EXTENSION = 'yaml';
 
-    private ?RepositoryInterface $repository;
     private ModelsContext $context;
     private ?array $modelClassesMap;
 
-    public function __construct(array $config = [])
+    public function __construct(iterable $config = [])
     {
         $this->__objectConstruct($config);
 
@@ -43,7 +44,6 @@ class ModelManager implements ModelManagerInterface, FusionComponentInterface
 
         $this->modelClassesMap = null;
 
-        $this->repository = $config['repository'] ?? null;
         if ($this->repository) {
             $this->repository->setContext($this->context);
             $this->repository->setConfig($config['repositoryConfig'] ?? []);
@@ -53,7 +53,10 @@ class ModelManager implements ModelManagerInterface, FusionComponentInterface
     public static function getDependenciesConfig(): array
     {
         return [
-            'repository' => RepositoryInterface::class,
+            'repository' => [
+                'instance' => RepositoryInterface::class,
+                'readable' => true,
+            ],
         ];
     }
 

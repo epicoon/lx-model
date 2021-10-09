@@ -4,7 +4,6 @@ namespace lx\model\schema\field\type;
 
 use lx\FusionComponentInterface;
 use lx\FusionComponentTrait;
-use lx\ObjectTrait;
 
 abstract class TypesRegistry implements FusionComponentInterface
 {
@@ -13,7 +12,7 @@ abstract class TypesRegistry implements FusionComponentInterface
     /** @var array<Type> */
     private array $typesMap = [];
 
-    public function __construct(array $config = [])
+    public function __construct(iterable $config = [])
     {
         $this->__objectConstruct($config);
         $this->init();

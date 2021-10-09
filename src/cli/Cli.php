@@ -6,7 +6,6 @@ use lx\CliProcessor;
 use lx\CliArgument;
 use lx\FusionComponentInterface;
 use lx\FusionComponentTrait;
-use lx\ObjectTrait;
 use lx\ServiceCliInterface;
 use lx\ServiceCliExecutor;
 
