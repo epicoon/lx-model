@@ -54,7 +54,7 @@ class ModelManager implements ModelManagerInterface, FusionComponentInterface
     {
         return [
             'repository' => [
-                'instance' => RepositoryInterface::class,
+                'class' => RepositoryInterface::class,
                 'readable' => true,
             ],
         ];
