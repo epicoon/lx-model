@@ -2,6 +2,7 @@
 
 namespace lx\model\repository\db\tools;
 
+use lx\DbException;
 use lx\DbTable;
 use lx\DbTableEditor;
 use lx\DbTableField;
@@ -23,12 +24,18 @@ class SysTablesProvider
     public function isTableExist(string $name): bool
     {
         $db = $this->context->getRepository()->getMainDb();
+        if (!$db) {
+            throw new DbException('DB connection does not configured');
+        }
         return $db->tableExists($name);
     }
 
     public function getTable(string $name): DbTable
     {
         $db = $this->context->getRepository()->getMainDb();
+        if (!$db) {
+            throw new DbException('DB connection does not configured');
+        }
         if (!$db->tableExists($name)) {
             $this->createTable($name);
 
