@@ -30,8 +30,8 @@ class NameConverter
 
         //TODO
 
-        $modelName = str_replace('\\', '_', $modelName);
-        $modelName = str_replace('/', '_', $modelName);
+        $modelName = str_replace('\\', '__', $modelName);
+        $modelName = str_replace('/', '__', $modelName);
         $modelName = StringHelper::camelToSnake($modelName);
         // avoid reserved words like "user"
         if ($modelName == 'user') {

@@ -11,6 +11,7 @@ use lx\model\schema\ModelSchema;
 use lx\model\schema\ModelSchemaProvider;
 use lx\Service;
 use lx\model\schema\field\value\ValueAsObject;
+use lx\model\modelTools\ModelsCollection;
 
 abstract class Model implements ModelInterface
 {
@@ -26,7 +27,7 @@ abstract class Model implements ModelInterface
 
     private ?DataObject $_metaData;
 
-    public function __construct(array $fields = [])
+    public function __construct(iterable $fields = [])
     {
         $this->_id = null;
         $this->_fields = [];
@@ -235,9 +236,19 @@ abstract class Model implements ModelInterface
         return $this->null();
     }
 
-    public function getFields(): array
+    public function getFields(?array $names = null): array
     {
-        return $this->_fields;
+        if ($names === null) {
+            return $this->_fields;
+        }
+        
+        $result = [];
+        foreach ($this->_fields as $name => $field) {
+            if (in_array($name, $names)) {
+                $result[$name] = $field;
+            }
+        }
+        return $result;
     }
 
     public function getId(): ?int
@@ -283,11 +294,10 @@ abstract class Model implements ModelInterface
     /**
      * @return array<Model>
      */
-    public static function find(?array $condition = null): array
+    public static function find(?array $condition = null): ModelsCollection
     {
-        return self::getModelRepository()->findModels(
-            self::getStaticModelName(),
-            $condition
+        return new ModelsCollection(
+            self::getModelRepository()->findModels(self::getStaticModelName(), $condition)
         );
     }
 
@@ -503,7 +513,7 @@ abstract class Model implements ModelInterface
         return new class($service, $schema, $fields) extends Model {
             private Service $_service;
             private ModelSchema $_schema;
-            public function __construct(Service $service, ModelSchema $schema, array $fields)
+            public function __construct(Service $service, ModelSchema $schema, iterable $fields)
             {
                 $this->_service = $service;
                 $this->_schema = $schema;

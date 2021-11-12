@@ -88,7 +88,7 @@ class ModelNamesProvider
             $mediatorNamespace = $mediatorNamespace . $relModelsNamespace;
         } else {
             $modelName = array_pop($modelNameArray);
-            $namespaceTail = implode('\\', $modelNameArray);
+            $namespaceTail = '\\' . implode('\\', $modelNameArray);
             $modelNamespace = $namespaceForModels . $relModelsNamespace . $namespaceTail;
             $mediatorName = $modelName . 'Mediator';
             $mediatorNamespace = $mediatorNamespace . $relModelsNamespace . $namespaceTail;

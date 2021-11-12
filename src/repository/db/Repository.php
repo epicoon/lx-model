@@ -330,7 +330,20 @@ class Repository implements RepositoryInterface
         $table = $this->getReplicaDb()->getTable($tableName);
         $data = $table->select('id', $condition);
         $ids = ArrayHelper::getColumn($data, 'id');
-        return $this->findModelsByIds($modelName, $ids);
+
+        //TODO make it more nice
+        if (array_key_exists('ORDER BY', $condition)) {
+            $models = $this->findModelsByIds($modelName, $ids);
+            $map = array_flip($ids);
+            $result = array_fill(0, count($ids), 0);
+            /** @var lx\ModelInterface $model */
+            foreach ($models as $model) {
+                $result[$map[$model->getId()]] = $model;
+            }
+            return $result;
+        } else {
+            return $this->findModelsByIds($modelName, $ids);
+        }
     }
 
     /**
