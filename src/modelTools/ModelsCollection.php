@@ -15,7 +15,7 @@ class ModelsCollection implements ArrayInterface
         $this->__constructArray($collection);
     }
     
-    public function toArray(): array
+    public function getModelsAsArray(): array
     {
         $result = [];
         /** @var ModelInterface $model */

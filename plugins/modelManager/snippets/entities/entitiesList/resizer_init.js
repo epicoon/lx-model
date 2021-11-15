@@ -8,8 +8,6 @@
  * @const {lx.Box} resizer
  */
 
-#lx:private;
-
 var resizerW = 10,
 	w = Snippet.widget.width('px'),
 	boxesW = w - resizerW,

@@ -1,5 +1,3 @@
-#lx:private;
-
 class Core {
 	constructor(plugin) {
 		this.plugin = plugin;

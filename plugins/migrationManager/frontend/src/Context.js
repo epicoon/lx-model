@@ -1,5 +1,3 @@
-#lx:private;
-
 class Context #lx:namespace lx.models {
 	constructor(plugin) {
 		plugin.context = this;

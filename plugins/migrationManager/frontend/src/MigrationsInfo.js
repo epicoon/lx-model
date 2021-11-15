@@ -1,5 +1,3 @@
-#lx:private;
-
 class Migration extends lx.BindableModel {
 	#lx:schema
 		name,
