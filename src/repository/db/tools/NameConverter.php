@@ -17,9 +17,14 @@ class NameConverter
 
     public function getServiceSchemaName(): string
     {
-        return $this->context->getRepository()->isSingle()
-            ? ''
-            : str_replace('/', '_', StringHelper::camelToSnake($this->context->getService()->name)) . '.';
+        if ($this->context->getRepository()->isSingle()) {
+            return '';
+        }
+
+        $name = StringHelper::camelToSnake($this->context->getService()->name);
+        $name = str_replace('/', '__', $name);
+        $name = str_replace('-', '_', $name);
+        return $name . '.';
     }
 
     public function getTableName(string $modelName, bool $withServiceSchema = true): ?string
@@ -118,5 +123,24 @@ class NameConverter
             . $this->getTableName($modelName2, false)
             . '__'
             . $this->getFieldName($modelName2, $attributeName2);
+    }
+    
+    public function getRelationDataByFk(string $fkName): array
+    {
+        $sysTablesProvider = new SysTablesProvider($this->context);
+        $table = $sysTablesProvider->getTable(SysTablesProvider::RELATIONS_TABLE);
+        $list = $table->select('*', [
+            'fk_name' => $fkName,
+        ]);
+        
+        if (empty($list)) {
+            throw new \Exception('System table "relations" has to contain data for FK "'
+            . $fkName . '", but it does\'n');
+        } elseif (count($list) > 1) {
+            throw new \Exception('System table "relations" contains several records for FK "'
+                . $fkName . '"');
+        }
+        
+        return $list[0];
     }
 }

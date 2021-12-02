@@ -26,7 +26,7 @@ class ServiceCategoryData extends lx.BindableModel #lx:namespace lx.models {
 	removeServiceNeedUpdate(serviceData) {
 		var title = serviceData.getTitle();
 		if (!this.servicesNeedUpdate.includes(title)) return;
-		this.servicesNeedUpdate.remove(title);
+		this.servicesNeedUpdate.lxRemove(title);
 		this.count = this.servicesNeedUpdate.len;
 	}
 }

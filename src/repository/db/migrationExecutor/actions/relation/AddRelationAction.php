@@ -8,6 +8,8 @@ use lx\DbTableSchema;
 use lx\model\repository\db\migrationExecutor\actions\BaseMigrationAction;
 use lx\model\repository\db\migrationExecutor\actions\MigrationActionTypeEnum;
 use lx\model\repository\db\tools\SyncSchema;
+use lx\model\repository\db\tools\SysTablesProvider;
+use lx\model\schema\relation\RelationTypeEnum;
 
 class AddRelationAction extends LifeCycleRelationAction
 {
@@ -26,25 +28,17 @@ class AddRelationAction extends LifeCycleRelationAction
 
         $editor = new DbTableEditor();
         $editor->setTableSchema($dbSchema);
-        $tableKey = str_replace('.', '_', $nameConverter->getTableName($this->modelName));
-        $fieldName = $nameConverter->getFieldName($this->modelName, $this->attributeName);
+
+        $fkName = $this->noteFk($this->modelName, $this->attributeName, $this->relModelName, $this->relAttributeName);
         $relationName = $nameConverter->getRelationName($this->modelName, $this->attributeName);
-        $relTableKey = str_replace(
-            '.', '_', $nameConverter->getTableName($this->relModelName, false)
-        );
-        $relFieldName = $this->relAttributeName
-            ? $nameConverter->getFieldName($this->relModelName, $this->relAttributeName)
-            : null;
         $result = $editor->addField([
             'name' => $relationName,
             'type' => DbTableField::TYPE_INTEGER,
             'fk' => [
                 'table' => $nameConverter->getTableName($this->relModelName),
                 'field' => 'id',
-                'name' => $relFieldName
-                    ? "{$this->getFkPrefix()}__{$tableKey}__{$fieldName}__{$relTableKey}__{$relFieldName}"
-                    : "{$this->getFkPrefix()}__{$tableKey}__{$fieldName}__{$relTableKey}",
-            ]
+                'name' => $fkName,
+            ],
         ]);
         if (!$result) {
             $this->addError('Can not add the relation');
@@ -60,7 +54,10 @@ class AddRelationAction extends LifeCycleRelationAction
             $this->relModelName,
             $this->relAttributeName
         );
-        
+
+        $fkName = $this->noteFk($this->modelName, $this->attributeName, $this->relModelName, $this->relAttributeName);
+        $relFkName = $this->noteFk($this->relModelName, $this->relAttributeName, $this->modelName, $this->attributeName);
+
         DbTableEditor::createTableFromConfig($this->context->getRepository()->getMainDb(), [
             'name' => $tableName,
             'fields' => [
@@ -68,6 +65,7 @@ class AddRelationAction extends LifeCycleRelationAction
                     'type' => DbTableField::TYPE_INTEGER,
                     'nullable' => false,
                     'fk' => [
+                        'name' => $relFkName,
                         'table' => $nameConverter->getTableName($this->modelName),
                         'field' => 'id',
                     ]
@@ -76,11 +74,31 @@ class AddRelationAction extends LifeCycleRelationAction
                     'type' => DbTableField::TYPE_INTEGER,
                     'nullable' => false,
                     'fk' => [
+                        'name' => $fkName,
                         'table' => $nameConverter->getTableName($this->relModelName),
                         'field' => 'id',
                     ]
                 ],
             ]
         ]);
+    }
+
+    private function noteFk(string $model, string $field, string $relModel, string $relField): string
+    {
+        $nameConverter = $this->context->getNameConverter();
+        $table = str_replace('.', '_', $nameConverter->getTableName($model));
+        $fieldKey = $nameConverter->getFieldName($model, $field);
+        $fkName = "fk__{$table}__{$fieldKey}";
+        $sysTablesProvider = new SysTablesProvider($this->context);
+        $sysTablesProvider->getTable(SysTablesProvider::RELATIONS_TABLE)->insert([
+            'fk_name' => $fkName,
+            'type' => $this->relationType,
+            'service' => $this->context->getService()->name,
+            'home_model' => $model,
+            'home_field' => $field,
+            'rel_model' => $relModel,
+            'rel_field' => $relField,
+        ]);
+        return $fkName;
     }
 }

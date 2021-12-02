@@ -11,8 +11,9 @@ use lx\DbTableSchema;
 class SysTablesProvider
 {
     const MIGRATIONS_TABLE = 'lx.migrations';
-    const SCHEMA_CUSTOM_TYPES_TABLE = 'lx.schema_custom_types';
     const MIGRATIONS_META_DATA = 'lx.migrations_meta_data';
+    const SCHEMA_CUSTOM_TYPES_TABLE = 'lx.schema_custom_types';
+    const RELATIONS_TABLE = 'lx.relations';
 
     private RepositoryContext $context;
 
@@ -55,6 +56,9 @@ class SysTablesProvider
                 break;
             case self::MIGRATIONS_META_DATA:
                 $this->createMigrationsMetaDataTable();
+                break;
+            case self::RELATIONS_TABLE:
+                $this->createRelationsTable();
                 break;
         }
     }
@@ -117,6 +121,43 @@ class SysTablesProvider
                 'model_id' => [
                     'type' => DbTableField::TYPE_INTEGER,
                     'nullable' => false,
+                ],
+            ],
+        ]);
+    }
+    
+    private function createRelationsTable(): void
+    {
+        DbTableEditor::createTableFromConfig($this->context->getRepository()->getMainDb(), [
+            'name' => self::RELATIONS_TABLE,
+            'fields' => [
+                'fk_name' => [
+                    'type' => DbTableField::TYPE_STRING,
+                    'nullable' => false,
+                ],
+                'type' => [
+                    'type' => DbTableField::TYPE_STRING,
+                    'nullable' => false,
+                ],
+                'service' => [
+                    'type' => DbTableField::TYPE_STRING,
+                    'nullable' => false,
+                ],
+                'home_model' => [
+                    'type' => DbTableField::TYPE_STRING,
+                    'nullable' => false,
+                ],
+                'home_field' => [
+                    'type' => DbTableField::TYPE_STRING,
+                    'nullable' => false,
+                ],
+                'rel_model' => [
+                    'type' => DbTableField::TYPE_STRING,
+                    'nullable' => false,
+                ],
+                'rel_field' => [
+                    'type' => DbTableField::TYPE_STRING,
+                    'nullable' => true,
                 ],
             ],
         ]);

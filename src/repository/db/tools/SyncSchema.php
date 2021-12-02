@@ -5,7 +5,7 @@ namespace lx\model\repository\db\tools;
 use lx\DbTableField;
 use lx\DbTableSchema;
 use lx\model\Model;
-use lx\model\repository\db\migrationExecutor\actions\relation\LifeCycleRelationAction;
+use lx\model\repository\db\migrationExecutor\actions\relation\AddRelationAction;
 use lx\model\schema\field\type\TypeBoolean;
 use lx\model\schema\field\type\TypeDateTime;
 use lx\model\schema\field\type\TypeInteger;
@@ -238,36 +238,25 @@ class SyncSchema
             }
 
             if ($field->isFk()) {
-                $fkName = $nameConverter->restoreRelationName($this->modelName, $field->getName());
-
-                //TODO In PostgreSQL, identifiers — table names, column names, constraint names, etc. — are limited to a maximum length of 63 bytes
-                // нужно отвязаться от парсинга имени ключа, и предусмотреть возможность длинных названий ключей и таблиц
-                //@see-all todo-stop-parse-fk-name
-                $fkConstraintName = $field->getDefinition()['fk']['name'];
-                $fkConstraintArr = explode('__', $fkConstraintName);
-                $relModel = $nameConverter->restoreModelName($fkConstraintArr[3]);
-                $relAttribute = (count($fkConstraintArr) == 5)
-                    ? $nameConverter->restoreFieldName($relModel, $fkConstraintArr[4])
-                    : null;
-
+                $fk = $field->getForeignKeyInfo();
+                $relationData = $nameConverter->getRelationDataByFk($fk->getName());
                 $definition = [
-                    'type' => ($fkConstraintArr[0] == LifeCycleRelationAction::CONSTRAINT_PREFIX_ONE_TO_ONE)
-                        ? RelationTypeEnum::ONE_TO_ONE
-                        : RelationTypeEnum::MANY_TO_ONE,
-                    'relatedEntityName' => $relModel,
-                    'relatedAttributeName' => $relAttribute,
+                    'type' => $relationData['type'],
+                    'relatedEntityName' => $relationData['rel_model'],
+                    'relatedAttributeName' => $relationData['rel_field'],
                 ];
+
                 if ($definition['type'] == RelationTypeEnum::ONE_TO_ONE) {
                     $definition['fkHost'] = true;
                 }
 
-                $schemaArray['relations'][$fkName] = $definition;
+                $attribute = $relationData['home_field'];
+                $schemaArray['relations'][$attribute] = $definition;
                 continue;
             }
 
             $codeFieldName = $nameConverter->restoreFieldName($this->modelName, $fieldName);
             $codeField = $currentSchema->getField($codeFieldName);
-
 
             $type = null;
             if (array_key_exists($fieldName, $customTypesMap)) {
@@ -300,52 +289,20 @@ class SyncSchema
 
             $schemaArray['fields'][$codeFieldName] = $definition;
         }
-
+        
         // Relations from another tables
-        $contrForeignKeys = $this->dbSchema->getContrForeignKeysInfo('id');
-        foreach ($contrForeignKeys as $keyData) {
-            $mmReg = '/^' . $nameConverter->getServiceSchemaName() . '_rel__/';
-            // MANY_TO_MANY
-            if (preg_match($mmReg, $keyData['relatedTable'])
-            ) {
-                $proxyTableName = preg_replace($mmReg, '', $keyData['relatedTable']);
-                $namesArr = explode('__', $proxyTableName);
-                $relModel = $nameConverter->restoreModelName($namesArr[0]);
-                if ($relModel == $this->modelName) {
-                    $relModel = $nameConverter->restoreModelName($namesArr[2]);
-                    $relAttribute = $nameConverter->restoreFieldName($relModel, $namesArr[3]);
-                    $attribute = $nameConverter->restoreFieldName($this->modelName, $namesArr[1]);
-                } else {
-                    $relAttribute = $nameConverter->restoreFieldName($relModel, $namesArr[1]);
-                    $attribute = $nameConverter->restoreFieldName($this->modelName, $namesArr[3]);
-                }
-                $schemaArray['relations'][$attribute] = [
-                    'type' => RelationTypeEnum::MANY_TO_MANY,
-                    'relatedEntityName' => $relModel,
-                    'relatedAttributeName' => $relAttribute,
-                ];
-            // ONE_TO_(ONE|MANY)
-            } else {
-                //TODO In PostgreSQL, identifiers — table names, column names, constraint names, etc. — are limited to a maximum length of 63 bytes
-                // нужно отвязаться от парсинга имени ключа, и предусмотреть возможность длинных названий ключей и таблиц
-                //@see-all todo-stop-parse-fk-name
-                $fkConstraintArr = explode('__', $keyData['name']);
-                if (count($fkConstraintArr) == 4) {
-                    continue;
-                }
-                
-                $attribute = $nameConverter->restoreFieldName($this->modelName, $fkConstraintArr[4]);
-                $relModel = $nameConverter->restoreModelName($fkConstraintArr[1]);
-                $relAttribute = $nameConverter->restoreFieldName($relModel, $fkConstraintArr[2]);
-                $type = ($fkConstraintArr[0] == LifeCycleRelationAction::CONSTRAINT_PREFIX_ONE_TO_ONE)
-                    ? RelationTypeEnum::ONE_TO_ONE
-                    : RelationTypeEnum::ONE_TO_MANY;
-                $schemaArray['relations'][$attribute] = [
-                    'type' => $type,
-                    'relatedEntityName' => $relModel,
-                    'relatedAttributeName' => $relAttribute,
-                ];
+        $contrForeignKeys = $this->dbSchema->getContrForeignKeysInfo(['id']);
+        foreach ($contrForeignKeys as $fk) {
+            $relationData = $nameConverter->getRelationDataByFk($fk->getName());
+            $attribute = $relationData['rel_field'];
+            if ($relationData['type'] == RelationTypeEnum::MANY_TO_ONE) {
+                $relationData['type'] = RelationTypeEnum::ONE_TO_MANY;
             }
+            $schemaArray['relations'][$attribute] = [
+                'type' => $relationData['type'],
+                'relatedEntityName' => $relationData['home_model'],
+                'relatedAttributeName' => $relationData['home_field'],
+            ];
         }
 
         $schemaArray['className'] = $this->context->getModelManager()->getModelClassName($this->modelName);

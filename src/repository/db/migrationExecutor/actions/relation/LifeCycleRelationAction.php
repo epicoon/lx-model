@@ -7,9 +7,6 @@ use lx\model\schema\relation\RelationTypeEnum;
 
 abstract class LifeCycleRelationAction extends BaseMigrationAction
 {
-    const CONSTRAINT_PREFIX_ONE_TO_ONE = 'fh';
-    const CONSTRAINT_PREFIX_MANY_TO_ONE = 'fk';
-
     protected string $relationType;
     protected string $modelName;
     protected string $attributeName;
@@ -25,7 +22,7 @@ abstract class LifeCycleRelationAction extends BaseMigrationAction
         $this->modelName = $this->data['modelName'];
         $this->attributeName = $this->data['relationName'];
         $this->relModelName = $this->data['definition']['relModel'];
-        $this->relAttributeName = $this->data['definition']['relAttribute'];
+        $this->relAttributeName = $this->data['definition']['relAttribute'] ?? null;
 
         $relationType = $this->data['definition']['type'];
         switch ($relationType) {
@@ -37,12 +34,5 @@ abstract class LifeCycleRelationAction extends BaseMigrationAction
                 $this->executeManyToMany();
                 break;
         }
-    }
-
-    protected function getFkPrefix(): string
-    {
-        return $this->relationType == RelationTypeEnum::ONE_TO_ONE
-            ? self::CONSTRAINT_PREFIX_ONE_TO_ONE
-            : self::CONSTRAINT_PREFIX_MANY_TO_ONE;
     }
 }

@@ -4,7 +4,6 @@ rootSnippet: snippets/_root.js
 css: assets/css
 
 jsMain: frontend/_main.js
-jsBootstrap: frontend/_bootstrap.js
 
 cacheType: smart
 
