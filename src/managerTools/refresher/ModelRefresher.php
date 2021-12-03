@@ -2,7 +2,7 @@
 
 namespace lx\model\managerTools\refresher;
 
-use lx\ArrayHelper;
+use lx\CodeConverterHelper;
 use lx\model\modelTools\RelatedModelsCollection;
 use lx\model\repository\db\tools\SchemaBuffer;
 use lx\model\managerTools\ModelsContext;
@@ -186,7 +186,7 @@ class ModelRefresher
 
     private function getSchemaString(): string
     {
-        return ArrayHelper::arrayToPhpCode($this->schemaArray, 2);
+        return CodeConverterHelper::arrayToPhpCode($this->schemaArray, 2);
     }
 
     private function getPropertiesString(): string
