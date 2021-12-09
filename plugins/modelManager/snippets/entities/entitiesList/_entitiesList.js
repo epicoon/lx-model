@@ -82,4 +82,4 @@ right.begin();
 	new lx.Box({key:'list', top:height*2+10+'px'});
 right.end();
 
-Snippet.widget.findAll('text').call('ellipsis');
+Snippet.widget.findAll('text').forEach(child=>child.ellipsis());

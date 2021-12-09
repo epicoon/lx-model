@@ -11,17 +11,18 @@ Plugin.EventSupervisor = new lx.EventSupervisor();
 
 const modelsList = new lx.Collection();
 const modelSchema = new lx.Collection();
-
-#lx:model-collection modelsListBackup = {
-	modelName,
-	service,
-	path,
-	code,
-	schema,
-	needTable,
-	changed,
-	needMigrate
-};
+const modelsListBackup = lx.ModelCollection.create({
+	schema: [
+		'modelName',
+		'service',
+		'path',
+		'code',
+		'schema',
+		'needTable',
+		'changed',
+		'needMigrate'
+	]
+});
 
 const selectedModel = new SelectedModel();
 

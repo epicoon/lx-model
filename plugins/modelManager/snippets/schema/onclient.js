@@ -70,7 +70,7 @@ schemaMatrix.matrix(modelSchema, (form)=>{
 		default: [lx.Input, {width:4}]
 	});
 	form.click(()=>selectSchemaItem(form));
-	form.getChildren().call('on', 'focus', ()=>selectSchemaItem(form));
+	form.getChildren().forEach(child=>child.on('focus', ()=>selectSchemaItem(form)));
 }, (form, field)=>{
 	form.getChildren().forEach(a=>field.checkBackupDiffrent(a._field));	
 });

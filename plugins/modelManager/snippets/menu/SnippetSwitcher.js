@@ -21,7 +21,7 @@ class SnippetSwitcher extends lx.BindableModel {
 					this.fill(val ? 'lightgreen' : 'orange');
 					var target = this.getTarget();
 					target.visibility(val);
-					if (val) lx.WidgetHelper.bringToFront(target);
+					if (val) target.emerge();
 				});
 				this.__snippetSwitchers.add(vis);
 				vis.switcher = this;

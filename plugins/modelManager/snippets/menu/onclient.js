@@ -44,7 +44,10 @@ ModelsListBox.matrix(modelsList, (form)=>{
 	form.fields({
 		modelName: [ lx.Box, {width:12} ]
 	});
-	form.getChildren().call('border').call('align', lx.CENTER, lx.MIDDLE);
+	form.getChildren().forEach(child=>{
+		child.border();
+		child.align(lx.CENTER, lx.MIDDLE);
+	});
 
 	form.setField('editStatus', function(val) {
 		if (val == Model.EDIT_STATUS_NOT_CHANGED) {

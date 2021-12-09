@@ -20,15 +20,16 @@ var header = new lx.Box({key:'header', geom:true, height:height+'px'});
 header.streamProportional({direction:lx.HORIZONTAL});
 header.begin();
 	new lx.Box({key:'modelNameFon'});
-	var c = new lx.Collection(
+	(new lx.Collection(
 		new lx.Box({key:'head_schema',    text:#lx:i18n(schema)   }),
 		new lx.Box({key:'head_relations', text:#lx:i18n(relations)}),
 		new lx.Box({key:'head_code',      text:#lx:i18n(code)     }),
 		new lx.Box({key:'head_manage',    text:#lx:i18n(manage)   })
-	);
-	c.call('align', lx.CENTER, lx.MIDDLE);
-	c.call('fill', 'lightgray');
-	c.call('style', 'cursor', 'pointer');
+	)).forEach(child=>{
+		child.align(lx.CENTER, lx.MIDDLE);
+		child.fill('lightgray');
+		child.style('cursor', 'pointer');
+	});
 header.end();
 
 var body = new lx.Box({key:'body', top:height+'px'});
@@ -62,7 +63,7 @@ schema.begin();
 		new lx.Box({text:#lx:i18n(Type)   });
 		new lx.Box({text:#lx:i18n(Default)});
 	header.end();
-	header.getChildren().call('align', lx.CENTER, lx.MIDDLE);
+	header.getChildren().forEach(child=>child.align(lx.CENTER, lx.MIDDLE));
 
 	var schemaMatrixBox = new lx.Box({top:height*2+'px'});
 	schemaMatrix = schemaMatrixBox.add(lx.Box, {key:'schemaMatrix', geom:true});

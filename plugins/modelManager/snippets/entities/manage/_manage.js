@@ -17,4 +17,4 @@ menu.begin();
 	new lx.Button({key:'butManageColsReset', text:#lx:i18n(reset), width:2});
 menu.end();
 
-Snippet.widget.findAll('text').call('ellipsis');
+Snippet.widget.findAll('text').forEach(child=>child.ellipsis());

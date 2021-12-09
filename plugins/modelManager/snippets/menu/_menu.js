@@ -50,4 +50,4 @@ modelsScreen.border();
 var list = new lx.Box({key:'modelsList', parent:modelsScreen});
 list.stream({direction:lx.VERTICAL});
 
-Snippet.widget.findAll('text').call('ellipsis');
+Snippet.widget.findAll('text').forEach(child=>child.ellipsis());

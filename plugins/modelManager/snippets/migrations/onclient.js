@@ -1,11 +1,13 @@
 
-#lx:model-collection migrations = {
-	name,
-	model,
-	type,
-	createdAt,
-	applied
-};
+const migrations = lx.ModelCollection.create({
+	schema: [
+		'name',
+		'model',
+		'type',
+		'createdAt',
+		'applied'
+	]
+});
 
 Snippet->>matrix.matrix(migrations, (form)=>{
 	form.fields({
