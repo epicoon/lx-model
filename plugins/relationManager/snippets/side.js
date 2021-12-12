@@ -60,10 +60,10 @@ Snippet.onLoad(()=>{
 			if (!lx.isArray(values)) values = [values];
 			for (var i in values) fields[fieldNames[i]] = values[i];
 
-			Plugin.eventManager.trigger('createModel', [
+			Plugin.eventDispatcher.trigger('createModel', [
 				modelData,
 				fields,
-				()=>Plugin.eventManager.trigger('refresh', getRefreshArguments())
+				()=>Plugin.eventDispatcher.trigger('refresh', getRefreshArguments())
 			]);
 		});
 	});
@@ -76,18 +76,18 @@ Snippet.onLoad(()=>{
 			return;
 		}
 
-		Plugin.eventManager.trigger('deleteModel', [
+		Plugin.eventDispatcher.trigger('deleteModel', [
 			modelData,
 			modelData.selected,
 			()=>{
-				Plugin.eventManager.trigger('unselectModel', modelData);
-				Plugin.eventManager.trigger('refresh', getRefreshArguments());
+				Plugin.eventDispatcher.trigger('unselectModel', modelData);
+				Plugin.eventDispatcher.trigger('refresh', getRefreshArguments());
 			}
 		]);
 	});
 
-	Snippet->>pager.on('change', ()=>Plugin.eventManager.trigger('refresh', getRefreshArguments()));
-	Snippet->>butApplyFilter.click(()=>Plugin.eventManager.trigger('refresh', getRefreshArguments()));
+	Snippet->>pager.on('change', ()=>Plugin.eventDispatcher.trigger('refresh', getRefreshArguments()));
+	Snippet->>butApplyFilter.click(()=>Plugin.eventDispatcher.trigger('refresh', getRefreshArguments()));
 
 	function getRefreshArguments() {
 		return Snippet.attributes.num

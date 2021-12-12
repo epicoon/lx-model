@@ -23,8 +23,8 @@ class Core {
 
 		var eventHandlers = this.plugin.attributes.eventHandlers || {};
 		delete this.plugin.attributes.eventHandlers;
-		__initEventManager(this, eventHandlers);
-		plugin.eventManager.trigger('start');
+		__initEventDispatcher(this, eventHandlers);
+		plugin.eventDispatcher.trigger('start');
 	}
 
 	getRespondentPlugin() {
@@ -41,13 +41,13 @@ class Core {
 		this.modelName = modelName;
 		this.models[0].serviceName = serviceName;
 		this.models[0].modelName = modelName;
-		this.plugin.eventManager.trigger('modelChanged');
+		this.plugin.eventDispatcher.trigger('modelChanged');
 	}
 
 	setRelation(relationName) {
 		this.relation = relationName;
 		if (this.relation) {
-			this.plugin.eventManager.trigger('refresh');
+			this.plugin.eventDispatcher.trigger('refresh');
 		}
 		//TODO else  clear data
 	}
@@ -98,15 +98,13 @@ Plugin.classes.Core = Core;
  * PRIVATE
  **********************************************************************************************************************/
 
-function __initEventManager(self, eventHandlers) {
-	self.plugin.eventManager = new lx.EventSupervisor();
-
+function __initEventDispatcher(self, eventHandlers) {
 	var handlers = defaultHandlers.lxMerge(eventHandlers, true);
 	for (var i in handlers)
 		if (lx.isString(handlers[i])) handlers[i] = lx._f.stringToFunction(handlers[i]);
 
 	for (let i in defaultHandlers)
-		self.plugin.eventManager.subscribe(i, (...args)=>{
+		self.plugin.eventDispatcher.subscribe(i, (...args)=>{
 			var newArgs = [self];
 			for (var j in args) newArgs.push(args[j]);
 			handlers[i].apply(null, newArgs);
@@ -169,8 +167,8 @@ const defaultHandlers = {
 
 			core.relations = data.relations;
 
-			core.plugin.eventManager.trigger('afterRefresh');
-			core.plugin.eventManager.trigger('fillBody');
+			core.plugin.eventDispatcher.trigger('afterRefresh');
+			core.plugin.eventDispatcher.trigger('fillBody');
 		});
 	},
 
@@ -216,7 +214,7 @@ const defaultHandlers = {
 									modelData.list.at(this.parent.parent.index).getPk()
 								],
 								event = this.value() ? 'createRelation' : 'deleteRelation';
-							core.plugin.eventManager.trigger(event, ids);
+							core.plugin.eventDispatcher.trigger(event, ids);
 						});
 					}
 				});

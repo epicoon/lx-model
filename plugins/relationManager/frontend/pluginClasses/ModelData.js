@@ -35,11 +35,11 @@ class ModelData {
 	}
 
 	unselect() {
-		Plugin.eventManager.trigger('unselectModel', this);
+		Plugin.eventDispatcher.trigger('unselectModel', this);
 	}
 
 	select(index) {
-		Plugin.eventManager.trigger('selectModel', [this, index]);
+		Plugin.eventDispatcher.trigger('selectModel', [this, index]);
 		this.selected = index;
 
 		var pk = this.list.at(this.selected).getPk();
@@ -52,7 +52,7 @@ class ModelData {
 			if (pare[this.num] == pk) matches.push(pare[contrNum]);
 		}
 
-		Plugin.eventManager.trigger('setCheckboxes', [this.contrData, matches]);
+		Plugin.eventDispatcher.trigger('setCheckboxes', [this.contrData, matches]);
 	}
 }
 

@@ -1,3 +1,5 @@
+#lx:use lx.CssContext;
+
 var cssList = new lx.CssContext();
 
 cssList.addClass('rm-side', {
