@@ -23,7 +23,8 @@ box.begin();
 	});
 box.end();
 
-Snippet.addSnippet({plugin:'lx/tools:snippets',snippet:'inputPopup'});
+#lx:use lx.InputPopup;
+new lx.InputPopup();
 
 Snippet.onLoad(()=>{
 	Snippet.widget.getSide = function(num) {
