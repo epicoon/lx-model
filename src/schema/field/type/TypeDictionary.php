@@ -60,6 +60,19 @@ class TypeDictionary extends Type
         return json_decode($value, true);
     }
 
+    /**
+     * @param array $value1
+     * @param array $value2
+     */
+    public function valuesAreEqual($value1, $value2): bool
+    {
+        if (!is_array($value1) || !is_array($value2)) {
+            return false;
+        }
+
+        return $value1 == $value2;
+    }
+
     public function getMethodNames(ModelField $field): array
     {
         return [
