@@ -32,8 +32,8 @@ class Core {
 	}
 
 	onStart() {
-		this.plugin.root.getSide(0)->>pager.elementsPerPage = this.modelData0.perPage;
-		this.plugin.root.getSide(1)->>pager.elementsPerPage = this.modelData1.perPage;
+		this.plugin.root.getSide(0)->>modelsGrid->paginator.elementsPerPage = this.modelData0.perPage;
+		this.plugin.root.getSide(1)->>modelsGrid->paginator.elementsPerPage = this.modelData1.perPage;
 	}
 
 	setModel(serviceName, modelName) {
@@ -70,8 +70,8 @@ class Core {
 
 	getDisplayPares() {
 		return [
-			{box: this.plugin->>model0->boxBody, modelData: this.modelData0},
-			{box: this.plugin->>model1->boxBody, modelData: this.modelData1}
+			{box: this.plugin->>model0->modelsGrid, modelData: this.modelData0},
+			{box: this.plugin->>model1->modelsGrid, modelData: this.modelData1}
 		];
 	}
 
@@ -184,20 +184,27 @@ const defaultHandlers = {
 		fill(pares[0].modelData, pares[0].box);
 		fill(pares[1].modelData, pares[1].box);
 		function fill(modelData, widget) {
-
-			if (modelData.displayer) {
+			const schema = modelData.list.modelClass.schema;
+			if (modelData.grid) {
 				modelData.selected = null;
-				modelData.displayer.dropData();
+				modelData.grid.dropCollection();
 			} else {
-				modelData.displayer = new lx.ModelListDisplayer();
-				modelData.displayer.addColumn({
-					lock: true,
-					position: lx.LEFT,
-					width: '20px',
-					widget: lx.Box,
-					render: function(widget) {
-						var checkbox = widget.add(lx.Checkbox, {key:'match'});
-						widget.align(lx.CENTER, lx.MIDDLE);
+				modelData.grid = widget;
+				modelData.grid.setCollection(modelData.list);
+
+				let sequence = schema.getFieldNames();
+				sequence.lxRemove(schema.getPkName());
+				sequence = [schema.getPkName(), ...sequence];
+				modelData.grid.setColumnSequence(sequence);
+
+				modelData.grid.addColumn({
+					name: '_rel',
+					title: '',
+					before: schema.getPkName(),
+					widget: { width: '20px' },
+					render: function(box, model) {
+						var checkbox = box.add(lx.Checkbox, {key:'match'});
+						box.align(lx.CENTER, lx.MIDDLE);
 						checkbox.on('change', function() {
 							if (this.value() && modelData.contrData.selected === null) {
 								this.value(false);
@@ -205,14 +212,14 @@ const defaultHandlers = {
 							}
 
 							var ids = modelData.isMain()
-								? [
-									modelData.list.at(this.parent.parent.index).getPk(),
-									modelData.contrData.list.at(modelData.contrData.selected).getPk()
-								]
-								: [
-									modelData.contrData.list.at(modelData.contrData.selected).getPk(),
-									modelData.list.at(this.parent.parent.index).getPk()
-								],
+									? [
+										model.getPk(),
+										modelData.contrData.list.at(modelData.contrData.selected).getPk()
+									]
+									: [
+										modelData.contrData.list.at(modelData.contrData.selected).getPk(),
+										model.getPk(),
+									],
 								event = this.value() ? 'createRelation' : 'deleteRelation';
 							core.plugin.eventDispatcher.trigger(event, ids);
 						});
@@ -220,21 +227,13 @@ const defaultHandlers = {
 				});
 			}
 
-			modelData.displayer.init({
-				lock: [ modelData.list.modelClass.schema.getPkName() ],
-				box: widget,
-				modelClass: modelData.list.modelClass,
-				data: modelData.list,
-				formModifier: function(form) {
-					form.click(function(e) {
-						var target = e.target.__lx;
-						if (lx.isInstance(target, lx.Checkbox)) return;
-						modelData.select(this.index);
-					});
-				}
+			modelData.grid.setLockedColumn(schema.getPkName());
+			modelData.grid.render();
+			modelData.grid.on('rowClick', function (e, rowIndex) {
+				var target = e.target.__lx;
+				if (lx.isInstance(target, lx.Checkbox)) return;
+				modelData.select(rowIndex);
 			});
-			
-			modelData.displayer.apply();
 		}
 	},
 
@@ -243,26 +242,24 @@ const defaultHandlers = {
 		core.handlers.unselectModel(core, modelData.contrData);
 		core.handlers.dropCheckboxes(core, modelData);
 		core.handlers.dropCheckboxes(core, modelData.contrData);
-		modelData.displayer.getRow(index).side.fill('lightgreen');
-		modelData.displayer.getRow(index).body.fill('lightgreen');
+		modelData.grid.rowAddClass(index, 'rm-selected');
 	},
 
 	unselectModel: function(core, modelData) {
 		if (modelData.selected === null) return;
-		modelData.displayer.getRow(modelData.selected).side.fill('');
-		modelData.displayer.getRow(modelData.selected).body.fill('');
+		modelData.grid.rowRemoveClass(modelData.selected, 'rm-selected');
 		modelData.selected = null;
 	},
 
 	dropCheckboxes: function(core, modelData) {
 		for (var i=0, l=modelData.list.len; i<l; i++)
-			modelData.displayer.getRow(i).side->>match.value(false);
+			modelData.grid.getCell('_rel', i)->match.value(false);
 	},
 
 	setCheckboxes: function(core, modelData, pks) {
 		modelData.list.forEach((model, i)=>{
 			if ( ! pks.includes(model.getPk())) return;
-			modelData.displayer.getRow(i).side->>match.value(true);
+			modelData.grid.getCell('_rel', i)->match.value(true);
 		});
 	},
 

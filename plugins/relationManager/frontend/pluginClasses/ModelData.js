@@ -15,7 +15,7 @@ class ModelData {
 
 	setList(data) {
 		this.list = lx.ModelCollection.create(data.list);
-		this.core.plugin.root.getSide(this.num)->>pager.setElementsCount(data.total);
+		this.core.plugin.root.getSide(this.num)->>modelsGrid->paginator.setElementsCount(data.total);
 	}
 
 	get mainData() {

@@ -6,7 +6,7 @@
 
 #lx:use lx.Button;
 #lx:use lx.Input;
-#lx:use lx.Paginator;
+#lx:use lx.ModelCollectionGrid;
 
 Snippet.widget.addClass('rm-side');
 Snippet.widget.streamProportional({indent: '10px'});
@@ -35,8 +35,7 @@ filter.begin();
 filter.end();
 
 // Основной бокс и пагинатор
-var body = new lx.Box({key: 'boxBody'});
-var pageBox = new lx.Paginator({key: 'pager', height});
+var body = new lx.ModelCollectionGrid({key: 'modelsGrid'});
 
 name.align(lx.CENTER, lx.MIDDLE);
 
@@ -86,7 +85,7 @@ Snippet.onLoad(()=>{
 		]);
 	});
 
-	Snippet->>pager.on('change', ()=>Plugin.eventDispatcher.trigger('refresh', getRefreshArguments()));
+	Snippet->>modelsGrid->paginator.on('change', ()=>Plugin.eventDispatcher.trigger('refresh', getRefreshArguments()));
 	Snippet->>butApplyFilter.click(()=>Plugin.eventDispatcher.trigger('refresh', getRefreshArguments()));
 
 	function getRefreshArguments() {
@@ -94,14 +93,14 @@ Snippet.onLoad(()=>{
 			? [
 				Plugin.root.getContrSide(Snippet)->>inpFilter.value(),
 				Snippet->>inpFilter.value(),
-				Plugin.root.getContrSide(Snippet)->>pager.activePage,
-				Snippet->>pager.activePage
+				Plugin.root.getContrSide(Snippet)->>modelsGrid->paginator.activePage,
+				Snippet->>modelsGrid->paginator.activePage
 			]
 			: [
 				Snippet->>inpFilter.value(),
 				Plugin.root.getContrSide(Snippet)->>inpFilter.value(),
-				Snippet->>pager.activePage,
-				Plugin.root.getContrSide(Snippet)->>pager.activePage
+				Snippet->>modelsGrid->paginator.activePage,
+				Plugin.root.getContrSide(Snippet)->>modelsGrid->paginator.activePage
 			]
 		;
 	}
