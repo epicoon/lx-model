@@ -2,6 +2,7 @@
 
 namespace lx\model\schema\field\type;
 
+use lx\model\schema\field\definition\AbstractDefinition;
 use lx\model\schema\field\value\DateTimeValue;
 
 class TypeDateTime extends Type
@@ -21,9 +22,9 @@ class TypeDateTime extends Type
     /**
      * @return DateTimeValue
      */
-    public function getValueIfRequired()
+    public function getValueIfRequired(AbstractDefinition $definition)
     {
-        $value = new DateTimeValue();
+        $value = new DateTimeValue($definition);
         $value->setIfRequired();
         return $value;
     }
@@ -31,15 +32,15 @@ class TypeDateTime extends Type
     /**
      * @return DateTimeValue
      */
-    public function getPrearrangedValue()
+    public function getPrearrangedValue(AbstractDefinition $definition)
     {
-        return new DateTimeValue();
+        return new DateTimeValue($definition);
     }
 
     /**
      * @param \DateTime|DateTimeValue|string $value
      */
-    public function validateValue($value): bool
+    public function validateValue(AbstractDefinition $definition, $value): bool
     {
         if (is_string($value)) {
             try {
@@ -57,10 +58,10 @@ class TypeDateTime extends Type
      * @param \DateTime|DateTimeValue|string $value
      * @return DateTimeValue
      */
-    public function normalizeValue($value)
+    public function normalizeValue(AbstractDefinition $definition, $value)
     {
         if (is_string($value) || $value instanceof \DateTime) {
-            return new DateTimeValue($value);
+            return new DateTimeValue($definition, $value);
         }
         return $value;
     }
@@ -100,7 +101,7 @@ class TypeDateTime extends Type
      * @param DateTimeValue $value
      * @return string
      */
-    public function valueToRepository($value)
+    public function valueToRepository(AbstractDefinition $definition, $value)
     {
         //TODO кастомизировать форматирование
         return $value->format('Y-m-d h:i:s');
@@ -110,8 +111,8 @@ class TypeDateTime extends Type
      * @param string $value
      * @return DateTimeValue
      */
-    public function valueFromRepository($value)
+    public function valueFromRepository(AbstractDefinition $definition, $value)
     {
-        return new DateTimeValue($value);
+        return new DateTimeValue($definition, $value);
     }
 }

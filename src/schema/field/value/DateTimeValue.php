@@ -3,6 +3,7 @@
 namespace lx\model\schema\field\value;
 
 use DateTime;
+use lx\model\schema\field\definition\AbstractDefinition;
 
 /**
  * @method static|null modify(string $modifier)
@@ -25,7 +26,7 @@ class DateTimeValue extends ValueAsObject
     /**
      * @param DateTime|string $value
      */
-    public function init($value): void
+    protected function initValue($value): void
     {
         if ($value instanceof DateTime) {
             $this->dateTime = $value;
@@ -39,8 +40,13 @@ class DateTimeValue extends ValueAsObject
             $this->setIfRequired();
         }
     }
+    
+    protected function initDefinition(AbstractDefinition $definition): void
+    {
+        // pass
+    }
 
-    public function prepareIfRequired(): void
+    protected function prepareIfRequired(): void
     {
         $this->dateTime = new DateTime('1985-10-01 23:05');
     }

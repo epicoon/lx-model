@@ -2,14 +2,16 @@
 
 namespace lx\model\schema\field\parser;
 
+use lx\model\schema\field\definition\StringDefinition;
+
 class StringParser extends CommonParser
 {
-    protected function getArrayParseProtocol(): array
+    protected function getDefinitionProtocol(): array
     {
         return array_merge(
-            parent::getArrayParseProtocol(),
+            parent::getDefinitionProtocol(),
             [
-                ['size'],
+                ['size', StringDefinition::DEFAULT_LENGTH, null, 'details'],
             ]
         );
     }
@@ -24,7 +26,7 @@ class StringParser extends CommonParser
         }
         $size = $matches[2] ?? null;
         if ($size) {
-            $this->definition['size'] = trim($size, '()');
+            $this->definition['details']['size'] = trim($size, '()');
         }
     }
 }

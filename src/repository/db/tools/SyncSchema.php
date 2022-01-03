@@ -8,17 +8,24 @@ use lx\model\Model;
 use lx\model\repository\db\migrationExecutor\actions\relation\AddRelationAction;
 use lx\model\schema\field\type\TypeBoolean;
 use lx\model\schema\field\type\TypeDateTime;
+use lx\model\schema\field\type\TypeDecimal;
 use lx\model\schema\field\type\TypeInteger;
+use lx\model\schema\field\type\TypesRegistryTrait;
 use lx\model\schema\field\type\TypeString;
+use lx\model\schema\field\type\TypeFloat;
 use lx\model\schema\field\value\DateTimeValue;
+use lx\model\schema\field\value\DecimalValue;
 use lx\model\schema\ModelSchema;
 use lx\model\schema\field\type\PhpTypeEnum;
 use lx\model\schema\field\ModelField;
 use lx\model\schema\relation\ModelRelation;
 use lx\model\schema\relation\RelationTypeEnum;
+use lx\Service;
 
 class SyncSchema
 {
+    use TypesRegistryTrait;
+
     private static array $anonymousSchemas = [];
 
     private RepositoryContext $context;
@@ -32,6 +39,11 @@ class SyncSchema
         $this->modelName = $modelName;
         $this->modelSchema = null;
         $this->dbSchema = null;
+    }
+    
+    public function getService(): Service
+    {
+        return $this->context->getService();
     }
 
     public static function createAnonymousModel(RepositoryContext $context, array $config): ?Model
@@ -222,12 +234,15 @@ class SyncSchema
 
         $sysTablesProvider = new SysTablesProvider($this->context);
         $typesTable = $sysTablesProvider->getTable(SysTablesProvider::SCHEMA_CUSTOM_TYPES_TABLE);
-        $customTypes = $typesTable->select(['column_name', 'type'], [
+        $customTypes = $typesTable->select(['column_name', 'type', 'definition'], [
             'table_name' => $this->dbSchema->getName(),
         ]);
         $customTypesMap = [];
         foreach ($customTypes as $row) {
-            $customTypesMap[$row['column_name']] = $row['type'];
+            $customTypesMap[$row['column_name']] = [
+                'type' => $row['type'],
+                'definition' => $row['definition'],
+            ];
         }
 
         $nameConverter = $this->context->getNameConverter();
@@ -258,21 +273,30 @@ class SyncSchema
             $codeFieldName = $nameConverter->restoreFieldName($this->modelName, $fieldName);
             $codeField = $currentSchema->getField($codeFieldName);
 
-            $type = null;
-            if (array_key_exists($fieldName, $customTypesMap)) {
-                $type = $customTypesMap[$fieldName];
-            }
-            if (!$type) {
-                $type = $this->restoreType($field->getType());
-            }
-
             $definition = [
-                'type' => $type,
                 'required' => !$field->isNullable(),
             ];
-            $size = $field->getSize();
-            if ($size !== null) {
-                $definition['size'] = $size;
+
+            if (array_key_exists($fieldName, $customTypesMap)) {
+                $type = $this->getTypeByName($customTypesMap[$fieldName]['type']);
+                $definition['type'] = $type->getTypeName();
+                $parser = $type->getParser();
+                $definitionDetails = $parser->parse($customTypesMap[$fieldName]['definition']);
+                if ($parser->hasFlightRecords()) {
+                    \lx::devLog(['_'=>[__FILE__,__CLASS__,__METHOD__,__LINE__],
+                        '__trace__' => debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT&DEBUG_BACKTRACE_IGNORE_ARGS),
+                        'msg' => $parser->getFirstFlightRecord(),
+                    ]);
+                } else {
+                    $definition['details'] = $definitionDetails;
+                }
+            } else {
+                $definition['type'] = $this->restoreType($field->getType());
+            }
+
+            $details = $field->getDetails();
+            if (!empty($details)) {
+                $definition['details'] = $details;
             }
             $default = $field->getDefault();
             if ($default !== null) {
@@ -377,7 +401,10 @@ class SyncSchema
 
             case DateTimeValue::class:
                 return DbTableField::TYPE_TIMESTAMP;
-                
+
+            case DecimalValue::class:
+                return DbTableField::TYPE_DECIMAL;
+
             //TODO можно object сериализовать
         }
 
@@ -391,8 +418,7 @@ class SyncSchema
                 return TypeInteger::TYPE;
 
             case DbTableField::TYPE_FLOAT:
-                return PhpTypeEnum::FLOAT;
-                //TODO return TypeFloat::TYPE;
+                return TypeFloat::TYPE;
 
             case DbTableField::TYPE_BOOLEAN:
                 return TypeBoolean::TYPE;
@@ -400,10 +426,12 @@ class SyncSchema
             case DbTableField::TYPE_STRING:
                 return TypeString::TYPE;
 
-            //TODO case DbTableField::TYPE_DECIMAL:
-
             case DbTableField::TYPE_TIMESTAMP:
                 return TypeDateTime::TYPE;
+
+            case DbTableField::TYPE_DECIMAL:
+            case DbTableField::TYPE_NUMERIC:
+                return TypeDecimal::TYPE;
         }
 
         return TypeString::TYPE;

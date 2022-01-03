@@ -2,6 +2,7 @@
 
 namespace lx\model\schema\field\type;
 
+use lx\model\schema\field\definition\AbstractDefinition;
 use lx\model\schema\ModelAttributeMethod;
 use lx\model\schema\field\ModelField;
 
@@ -20,7 +21,7 @@ class TypeDictionary extends Type
     /**
      * @param mixed $value
      */
-    public function validateValue($value): bool
+    public function validateValue(AbstractDefinition $definition, $value): bool
     {
         return is_array($value);
     }
@@ -29,7 +30,7 @@ class TypeDictionary extends Type
      * @param mixed $value
      * @return array
      */
-    public function normalizeValue($value)
+    public function normalizeValue(AbstractDefinition $definition, $value)
     {
         return (array)$value;
     }
@@ -37,7 +38,7 @@ class TypeDictionary extends Type
     /**
      * @return array
      */
-    public function getValueIfRequired()
+    public function getValueIfRequired(AbstractDefinition $definition)
     {
         return [];    
     }
@@ -46,7 +47,7 @@ class TypeDictionary extends Type
      * @param array $value
      * @return string
      */
-    public function valueToRepository($value)
+    public function valueToRepository(AbstractDefinition $definition, $value)
     {
         return json_encode($value);
     }
@@ -55,7 +56,7 @@ class TypeDictionary extends Type
      * @param string $value
      * @return array
      */
-    public function valueFromRepository($value)
+    public function valueFromRepository(AbstractDefinition $definition, $value)
     {
         return json_decode($value, true);
     }

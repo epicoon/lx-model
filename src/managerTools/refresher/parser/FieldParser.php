@@ -40,9 +40,7 @@ class FieldParser implements FlightRecorderHolderInterface
         }
 
         $type = $this->getTypeByName($typeName);
-        $parserClass = $type->getParserClass();
-        /** @var CommonParser $parser */
-        $parser = new $parserClass();
+        $parser = $type->getParser();
         $result = $parser->parse($fieldDefinition);
 
         $recorder = $parser->getFlightRecorder();

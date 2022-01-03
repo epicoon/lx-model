@@ -13,4 +13,9 @@ class CommonDefinition extends AbstractDefinition
     {
         return [];
     }
+    
+    public function toString(): string
+    {
+        return '';
+    }
 }

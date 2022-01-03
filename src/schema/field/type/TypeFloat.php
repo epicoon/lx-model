@@ -4,9 +4,9 @@ namespace lx\model\schema\field\type;
 
 use lx\model\schema\field\definition\AbstractDefinition;
 
-class TypeInteger extends Type
+class TypeFloat extends Type
 {
-    const TYPE = 'int';
+    const TYPE = 'float';
 
     public function isCustom(): bool
     {
@@ -18,23 +18,23 @@ class TypeInteger extends Type
      */
     public function validateValue(AbstractDefinition $definition, $value): bool
     {
-        return (filter_var($value, FILTER_VALIDATE_INT) !== false);
+        return (filter_var($value, FILTER_VALIDATE_FLOAT) !== false);
     }
 
     /**
      * @param mixed $value
-     * @return int
+     * @return float
      */
     public function normalizeValue(AbstractDefinition $definition, $value)
     {
-        return (int)$value;
+        return (float)$value;
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getValueIfRequired(AbstractDefinition $definition)
     {
-        return 0;
+        return 0.0;
     }
 }

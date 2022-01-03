@@ -2,6 +2,8 @@
 
 namespace lx\model\schema\field\type;
 
+use lx\model\schema\field\definition\AbstractDefinition;
+
 class TypeBoolean extends Type
 {
     const TYPE = 'bool';
@@ -14,7 +16,7 @@ class TypeBoolean extends Type
     /**
      * @param mixed $value
      */
-    public function validateValue($value): bool
+    public function validateValue(AbstractDefinition $definition, $value): bool
     {
         return ($value === true || $value === false);
     }
@@ -23,7 +25,7 @@ class TypeBoolean extends Type
      * @param mixed $value
      * @return bool
      */
-    public function normalizeValue($value)
+    public function normalizeValue(AbstractDefinition $definition, $value)
     {
         return (bool)$value;
     }
@@ -31,7 +33,7 @@ class TypeBoolean extends Type
     /**
      * @return bool
      */
-    public function getValueIfRequired()
+    public function getValueIfRequired(AbstractDefinition $definition)
     {
         return false;
     }

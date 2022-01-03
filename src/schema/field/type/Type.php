@@ -3,9 +3,11 @@
 namespace lx\model\schema\field\type;
 
 use lx\model\schema\field\definition\AbstractDefinition;
+use lx\model\schema\field\definition\DefinitionFactory;
 use lx\model\schema\field\ModelField;
 use lx\model\schema\field\definition\CommonDefinition;
 use lx\model\schema\field\parser\CommonParser;
+use lx\model\schema\field\parser\ParserFactory;
 use lx\model\schema\ModelAttributeMethod;
 
 abstract class Type
@@ -20,23 +22,23 @@ abstract class Type
     /**
      * @param mixed $value
      */
-    abstract public function validateValue($value): bool;
+    abstract public function validateValue(AbstractDefinition $definition, $value): bool;
 
     /**
      * @param mixed $value
      * @return mixed
      */
-    abstract public function normalizeValue($value);
+    abstract public function normalizeValue(AbstractDefinition $definition, $value);
 
     /**
      * @return mixed
      */
-    abstract public function getValueIfRequired();
+    abstract public function getValueIfRequired(AbstractDefinition $definition);
     
     /**
      * @return mixed
      */
-    public function getPrearrangedValue()
+    public function getPrearrangedValue(AbstractDefinition $definition)
     {
         return null;
     }
@@ -60,7 +62,7 @@ abstract class Type
      * @param mixed $value
      * @return mixed
      */
-    public function valueToRepository($value)
+    public function valueToRepository(AbstractDefinition $definition, $value)
     {
         return $value;
     }
@@ -69,7 +71,7 @@ abstract class Type
      * @param mixed $value
      * @return mixed
      */
-    public function valueFromRepository($value)
+    public function valueFromRepository(AbstractDefinition $definition, $value)
     {
         return $value;
     }
@@ -93,19 +95,13 @@ abstract class Type
         return $currentValue;
     }
 
-    public function getNewDefinition(): AbstractDefinition
+    public function getDefinition(): AbstractDefinition
     {
-        $class = $this->getDefinitionClass();
-        return new $class();
+        return DefinitionFactory::create($this->getTypeName());
     }
-
-    public function getDefinitionClass(): string
+    
+    public function getParser(): CommonParser
     {
-        return CommonDefinition::class;
-    }
-
-    public function getParserClass(): string
-    {
-        return CommonParser::class;
+        return ParserFactory::create($this->getTypeName());
     }
 }

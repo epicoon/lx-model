@@ -28,8 +28,8 @@ class ModelField extends ModelAttribute
         $this->readonly = $definition['readonly'] ?? false;
         $this->default = $definition['default'] ?? null;
         $this->type = $this->getTypeByName($definition['type']);
-        $this->definition = $this->type->getNewDefinition();
-        $this->definition->init($definition);
+        $this->definition = $this->type->getDefinition();
+        $this->definition->init($definition['details'] ?? []);
     }
 
     public function getService(): Service
@@ -40,6 +40,11 @@ class ModelField extends ModelAttribute
     public function getType(): Type
     {
         return $this->type;
+    }
+    
+    public function getDefinition(): AbstractDefinition
+    {
+        return $this->definition;
     }
 
     public function getTypeName(): string
@@ -75,7 +80,7 @@ class ModelField extends ModelAttribute
      */
     public function getValueIfRequired()
     {
-        return $this->type->getValueIfRequired();
+        return $this->type->getValueIfRequired($this->getDefinition());
     }
 
     /**
@@ -83,7 +88,7 @@ class ModelField extends ModelAttribute
      */
     public function getPrearrangedValue()
     {
-        return $this->type->getPrearrangedValue();
+        return $this->type->getPrearrangedValue($this->getDefinition());
     }
 
     public function isEqual(ModelAttribute $attribute): bool
@@ -108,7 +113,7 @@ class ModelField extends ModelAttribute
      */
     public function validateValue($value): bool
     {
-        return $this->type->validateValue($value);
+        return $this->type->validateValue($this->getDefinition(), $value);
     }
 
     /**
@@ -117,7 +122,7 @@ class ModelField extends ModelAttribute
      */
     public function normalizeValue($value)
     {
-        return $this->type->normalizeValue($value);
+        return $this->type->normalizeValue($this->getDefinition(), $value);
     }
     
     public function valuesAreEqual($value1, $value2): bool
@@ -151,12 +156,17 @@ class ModelField extends ModelAttribute
 
     public function toArray(): array
     {
-        return array_merge([
+        $result = [
             'name' => $this->name,
             'type' => $this->getTypeName(),
             'required' => $this->required,
             'readonly' => $this->readonly,
             'default' => $this->default,
-        ], $this->definition->toArray());
+        ];
+        $details = $this->definition->toArray();
+        if (!empty($details)) {
+            $result['details'] = $details;
+        }
+        return $result;
     }
 }

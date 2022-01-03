@@ -2,6 +2,8 @@
 
 namespace lx\model\schema\field\value;
 
+use lx\model\schema\field\definition\AbstractDefinition;
+
 abstract class ValueAsObject
 {
     private bool $isNull = false;
@@ -9,22 +11,24 @@ abstract class ValueAsObject
     /**
      * @param mixed $value
      */
-    public function __construct($value = null)
+    public function __construct(AbstractDefinition $definition, $value = null)
     {
+        $this->initDefinition($definition);
+
         if ($value === null) {
             $this->isNull = true;
             return;
         }
 
-        $this->init($value);
+        $this->initValue($value);
     }
 
-    abstract public function prepareIfRequired(): void;
-
+    abstract protected function prepareIfRequired(): void;
     /**
      * @param mixed $value
      */
-    abstract public function init($value): void;
+    abstract protected function initValue($value): void;
+    abstract protected function initDefinition(AbstractDefinition $definition): void;
 
     public function setIfRequired(): void
     {
@@ -38,7 +42,7 @@ abstract class ValueAsObject
     public function set($value): void
     {
         $this->isNull = false;
-        $this->init($value);
+        $this->initValue($value);
     }
 
     public function isNull(): bool

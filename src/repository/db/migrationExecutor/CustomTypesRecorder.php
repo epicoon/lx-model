@@ -54,13 +54,13 @@ class CustomTypesRecorder
                 'column_name' => $columnName,
             ]);
             if (empty($res)) {
-                $table->insert(['table_name', 'column_name', 'type'], [
+                $table->insert(['table_name', 'column_name', 'type', 'definition'], [
                     [
-                        $tableName, $columnName, $row['type']
+                        $tableName, $columnName, $row['type'], $row['definition']
                     ]
                 ], false);
             } else {
-                $table->update(['type' => $row['type']], [
+                $table->update(['type' => $row['type'], 'definition' => $row['definition']], [
                     'table_name' => $tableName,
                     'column_name' => $columnName,
                 ]);
@@ -83,6 +83,7 @@ class CustomTypesRecorder
             $list[] = [
                 'field' => $field->getName(),
                 'type' => $type->getTypeName(),
+                'definition' => $field->getDefinition()->toString(),
             ];
         }
 

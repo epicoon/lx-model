@@ -2,6 +2,8 @@
 
 namespace lx\model\schema\field\definition;
 
+use lx\model\schema\field\type\TypeString;
+
 class StringDefinition extends AbstractDefinition
 {
     const DEFAULT_LENGTH = 256;
@@ -27,5 +29,10 @@ class StringDefinition extends AbstractDefinition
         return [
             'size' => $this->size,
         ];
+    }
+    
+    public function toString(): string
+    {
+        return TypeString::TYPE . "({$this->size})";
     }
 }

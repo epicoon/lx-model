@@ -101,6 +101,10 @@ class SysTablesProvider
                     'type' => DbTableField::TYPE_STRING,
                     'nullable' => false,
                 ],
+                'definition' => [
+                    'type' => DbTableField::TYPE_STRING,
+                    'nullable' => false,
+                ]
             ],
         ]);
     }

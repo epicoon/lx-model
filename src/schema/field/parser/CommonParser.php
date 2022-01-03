@@ -33,9 +33,9 @@ class CommonParser implements FlightRecorderHolderInterface
         }
 
         if (is_array($this->definitionSource)) {
-            $protocol = $this->getArrayParseProtocol();
+            $protocol = $this->getDefinitionProtocol();
             foreach ($protocol as $row) {
-                $this->scanArraySource($row[0], $row[1] ?? null, $row[2] ?? null);
+                $this->scanArraySource($row[0], $row[1] ?? null, $row[2] ?? null, $row[3] ?? null);
             }
         } elseif (is_string($this->definitionSource)) {
             $this->parseStringProcess();
@@ -44,7 +44,7 @@ class CommonParser implements FlightRecorderHolderInterface
         return $this->definition;
     }
 
-    protected function getArrayParseProtocol(): array
+    protected function getDefinitionProtocol(): array
     {
         return [
             ['type'],
@@ -52,12 +52,6 @@ class CommonParser implements FlightRecorderHolderInterface
             ['required', false],
             ['readonly', false],
         ];
-
-//            $this->scanArraySource('example');
-//            $this->scanArraySource('constraints', null, function($value) {
-//                return (array)$value;
-//            });
-//            $this->scanArraySource('flags');
     }
 
     protected function parseType(): void
@@ -134,17 +128,27 @@ class CommonParser implements FlightRecorderHolderInterface
      * @param mixed $default
      * @param callable $callback
      */
-    private function scanArraySource(string $key, $default = null, $callback = null)
+    private function scanArraySource(string $key, $default = null, $callback = null, ?string $subKey = null)
     {
         if (!array_key_exists($key, $this->definitionSource)) {
             if ($default !== null) {
-                $this->definition[$key] = $default;
+                if ($subKey) {
+                    $this->definition[$subKey][$key] = $default;
+                } else {
+                    $this->definition[$key] = $default;
+                }
             }
             return;
         }
 
-        $this->definition[$key] = $callback
-            ? $callback($this->definitionSource[$key])
-            : $this->definitionSource[$key];
+        if ($subKey) {
+            $this->definition[$subKey][$key] = $callback
+                ? $callback($this->definitionSource[$key])
+                : $this->definitionSource[$key];
+        } else {
+            $this->definition[$key] = $callback
+                ? $callback($this->definitionSource[$key])
+                : $this->definitionSource[$key];
+        }
     }
 }
