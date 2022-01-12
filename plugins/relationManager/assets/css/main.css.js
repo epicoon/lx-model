@@ -8,7 +8,7 @@ cssList.addClass('rm-side', {
 });
 
 cssList.addClass('rm-selected', {
-	backgroundColor: checkedDeepColor
+	backgroundColor: lx.CssColorSchema.checkedDeepColor
 });
 
 return cssList.toString();
