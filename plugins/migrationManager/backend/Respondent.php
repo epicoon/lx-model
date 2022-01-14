@@ -104,8 +104,8 @@ class Respondent extends lxRespondent
         /** @var ModelManager $modelManager */
         $modelManager = $service->modelManager;
         $migration = $modelManager->getRepository()->getMigration($migrationName);
-        $file = $migration->getFile();
+        $text = $migration ? $migration->getFile()->getText() : '';
 
-        return $this->prepareResponse($file->getText());
+        return $this->prepareResponse($text);
     }
 }

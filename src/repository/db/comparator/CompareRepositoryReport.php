@@ -17,6 +17,7 @@ use lx\model\repository\ReportInterface;
  * @method addListToModelsNeedTable(array $names)
  * @method addToModelsChanged(string $name, array $changes)
  * @method addListToModelsChanged(array $changes)
+ * @method addToErrors(string $error)
  */
 class CompareRepositoryReport extends CascadeReport implements ReportInterface
 {
@@ -27,6 +28,7 @@ class CompareRepositoryReport extends CascadeReport implements ReportInterface
             'unappliedMigrations' => CascadeReport::COMPONENT_LIST,
             'modelsNeedTable' => CascadeReport::COMPONENT_LIST,
             'modelsChanged' => CascadeReport::COMPONENT_DICT,
+            'errors' => CascadeReport::COMPONENT_LIST,
         ];
     }
 }

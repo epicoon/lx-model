@@ -35,7 +35,7 @@ class MigrationBuilder
     public function createByReport(ReportInterface $report): ReportInterface
     {
         $reportArray = $report->toArray();
-        if (!empty($reportArray['unappliedMigrations'])) {
+        if (!empty($reportArray['unappliedMigrations']) || !empty($reportArray['errors'])) {
             return $report;
         }
 

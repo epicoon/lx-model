@@ -8,6 +8,7 @@ use lx\model\repository\db\tools\RepositoryContext;
 
 interface RepositoryInterface
 {
+    public function hasConnection(): bool;
     public function setContext(ModelsContext $context): void;
     public function setConfig(array $config): void;
     public function getContext(): RepositoryContext; //TODO interface
@@ -22,7 +23,7 @@ interface RepositoryInterface
      * @return array<MigrationInterface>
      */
     public function getMigrations(): array;
-    public function getMigration(string $name): MigrationInterface;
+    public function getMigration(string $name): ?MigrationInterface;
 
     public function isOnHold(): bool;
     public function hold(): void;

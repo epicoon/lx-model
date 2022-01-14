@@ -21,6 +21,8 @@ use lx\model\repository\ReportInterface;
 use lx\model\repository\db\comparator\ModelsComparator;
 use lx\model\repository\db\tools\RepositoryContext;
 use lx\model\managerTools\ModelsContext;
+use lx\model\repository\db\migrationExecutor\MigrationExecuteReport;
+use lx\model\repository\db\comparator\CompareRepositoryReport;
 
 class Repository implements RepositoryInterface
 {
@@ -34,6 +36,11 @@ class Repository implements RepositoryInterface
     private CrudProcessor $crudProcessor;
     private ?DbConnection $readDb = null;
     private ?DbConnection $writeDb = null;
+
+    public function hasConnection(): bool
+    {
+        return $this->getConnector() !== null;
+    }
 
     public function setContext(ModelsContext $context): void
     {
@@ -68,6 +75,12 @@ class Repository implements RepositoryInterface
 
     public function checkModelsStatus(?array $modelNames = null): ReportInterface
     {
+        if (!$this->hasConnection()) {
+            $report = new CompareRepositoryReport();
+            $report->addToErrors('Connection to repository does not exist');
+            return $report;
+        }
+
         $comparator = new ModelsComparator($this->context);
         return $comparator->run($modelNames);
     }
@@ -86,18 +99,40 @@ class Repository implements RepositoryInterface
 
     public function executeMigrations(?int $count = null): ReportInterface
     {
+        if (!$this->hasConnection()) {
+            $report = new MigrationExecuteReport();
+            $report->addToMigrationErrors([
+                'migration' => 'ALL',
+                'error' => 'Connection to repository does not exist',
+            ]);
+            return $report;
+        }
+
         $executor = new MigrationExecutor($this->context);
         return $executor->run($count);
     }
 
     public function rollbackMigrations(?int $count = null): ReportInterface
     {
+        if (!$this->hasConnection()) {
+            $report = new MigrationExecuteReport();
+            $report->addToMigrationErrors([
+                'migration' => 'ALL',
+                'error' => 'Connection to repository does not exist',
+            ]);
+            return $report;
+        }
+        
         $executor = new MigrationExecutor($this->context);
         return $executor->run($count, true);
     }
 
     public function hasUnappliedMigrations(): bool
     {
+        if (!$this->hasConnection()) {
+            return false;
+        }
+
         $conductor = new MigrationConductor($this->context);
         return $conductor->hasUnapplied();
     }
@@ -107,12 +142,20 @@ class Repository implements RepositoryInterface
      */
     public function getMigrations(): array
     {
+        if (!$this->hasConnection()) {
+            return [];
+        }
+
         $conductor = new MigrationConductor($this->context);
         return $conductor->getMigrations();
     }
 
-    public function getMigration(string $name): MigrationInterface
+    public function getMigration(string $name): ?MigrationInterface
     {
+        if (!$this->hasConnection()) {
+            return null;
+        }
+        
         $conductor = new MigrationConductor($this->context);
         return $conductor->getMigration($name);
     }
@@ -134,6 +177,10 @@ class Repository implements RepositoryInterface
 
     public function commit(bool $force = false): bool
     {
+        if (!$this->hasConnection()) {
+            return false;
+        }
+
         if (!$this->isOnHold()) {
             return false;
         }
@@ -198,6 +245,10 @@ class Repository implements RepositoryInterface
 
     public function getCount(string $modelName, ?array $condition = null): int
     {
+        if (!$this->hasConnection()) {
+            return 0;
+        }
+
         $nameConverter = $this->context->getNameConverter();
         $tableName = $nameConverter->getTableName($modelName);
         $db = $this->getReplicaDb();
@@ -221,6 +272,10 @@ class Repository implements RepositoryInterface
 
     public function saveModel(Model $model): bool
     {
+        if (!$this->hasConnection()) {
+            return false;
+        }
+
         if (!$this->holdStack->isActive()) {
             if (!$this->crudProcessor->saveModel($model)) {
                 return false;
@@ -246,6 +301,10 @@ class Repository implements RepositoryInterface
 
     public function deleteModel(Model $model): bool
     {
+        if (!$this->hasConnection()) {
+            return false;
+        }
+
         if (!$this->holdStack->isActive()) {
             $id = $model->getId();
             if (!$this->crudProcessor->deleteModel($model)) {
@@ -278,6 +337,10 @@ class Repository implements RepositoryInterface
      */
     public function findModel(string $modelName, $condition, bool $useUnitMap = true): ?Model
     {
+        if (!$this->hasConnection()) {
+            return null;
+        }
+
         if (is_integer($condition)) {
             $condition = ['id' => $condition];
         }
@@ -304,6 +367,10 @@ class Repository implements RepositoryInterface
      */
     public function findModelAsArray(string $modelName, int $id, bool $useUnitMap = true): ?iterable
     {
+        if (!$this->hasConnection()) {
+            return null;
+        }
+
         $model = $useUnitMap ? $this->unitMap->get($modelName, $id) : null;
         if ($model) {
             return $model->getFields();
@@ -317,6 +384,10 @@ class Repository implements RepositoryInterface
      */
     public function findModels(string $modelName, ?array $condition = null, bool $useUnitMap = true): iterable
     {
+        if (!$this->hasConnection()) {
+            return [];
+        }
+
         if ($condition) {
             $condition = ModelFieldsConverter::toRepositoryForCondition($this->context, $modelName, $condition);
         }
@@ -351,6 +422,10 @@ class Repository implements RepositoryInterface
      */
     public function findModelsByIds(string $modelName, array $ids): iterable
     {
+        if (!$this->hasConnection()) {
+            return [];
+        }
+
         $models = $this->unitMap->getList($modelName, $ids);
 
         $registeredIds = [];
@@ -372,6 +447,10 @@ class Repository implements RepositoryInterface
      */
     public function findRelatedModels(Model $model, string $relationName): iterable
     {
+        if (!$this->hasConnection()) {
+            return [];
+        }
+
         $loader = new RelatedLoader($this);
         return $loader->loadForModel($model, $relationName);
     }
@@ -381,6 +460,10 @@ class Repository implements RepositoryInterface
      */
     public function saveModels(iterable $models): bool
     {
+        if (!$this->hasConnection()) {
+            return false;
+        }
+
         if ($this->holdStack->isActive()) {
             foreach ($models as $model) {
                 $this->saveModel($model);
@@ -405,6 +488,10 @@ class Repository implements RepositoryInterface
      */
     public function deleteModels(iterable $models): bool
     {
+        if (!$this->hasConnection()) {
+            return false;
+        }
+
         if ($this->holdStack->isActive()) {
             foreach ($models as $model) {
                 $this->deleteModel($model);
@@ -435,6 +522,10 @@ class Repository implements RepositoryInterface
 
     public function deleteModelsByCondition(string $modelName, ?array $condition = null): void
     {
+        if (!$this->hasConnection()) {
+            return;
+        }
+        
         $nameConverter = $this->context->getNameConverter();
         $tableName = $nameConverter->getTableName($modelName);
         $table = $this->getMainDb()->getTable($tableName);
@@ -458,6 +549,10 @@ class Repository implements RepositoryInterface
 
     public function getMainDb(): ?DbConnection
     {
+        if (!$this->hasConnection()) {
+            return null;
+        }
+        
         if (!$this->writeDb) {
             $connector = $this->getConnector();
             $key = $this->getConfig(self::CONNECTION_KEY_MAIN);
@@ -466,13 +561,15 @@ class Repository implements RepositoryInterface
                 : $connector->getMainConnection() ?? null;
         }
 
-        //TODO if (!$this->writeDb)
-
         return $this->writeDb;
     }
 
     public function getReplicaDb(): ?DbConnection
     {
+        if (!$this->hasConnection()) {
+            return null;
+        }
+
         if (!$this->readDb) {
             $connector = $this->getConnector();
             $key = $this->getConfig(self::CONNECTION_KEY_REPLICA);
@@ -480,8 +577,6 @@ class Repository implements RepositoryInterface
                 ? $connector->getConnection($key) ?? null
                 : $connector->getReplicaConnection() ?? null;
         }
-
-        //TODO if (!$this->readDb)
 
         return $this->readDb;
     }
