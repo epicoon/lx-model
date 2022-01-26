@@ -1,3 +1,5 @@
+#lx:public;
+
 class ModelData {
 	constructor(core, num) {
 		this.core = core;
@@ -35,11 +37,11 @@ class ModelData {
 	}
 
 	unselect() {
-		Plugin.eventDispatcher.trigger('unselectModel', this);
+		this.core.plugin.eventDispatcher.trigger('unselectModel', this);
 	}
 
 	select(index) {
-		Plugin.eventDispatcher.trigger('selectModel', [this, index]);
+		this.core.plugin.eventDispatcher.trigger('selectModel', [this, index]);
 		this.selected = index;
 
 		var pk = this.list.at(this.selected).getPk();
@@ -52,8 +54,6 @@ class ModelData {
 			if (pare[this.num] == pk) matches.push(pare[contrNum]);
 		}
 
-		Plugin.eventDispatcher.trigger('setCheckboxes', [this.contrData, matches]);
+		this.core.plugin.eventDispatcher.trigger('setCheckboxes', [this.contrData, matches]);
 	}
 }
-
-Plugin.classes.ModelData = ModelData;

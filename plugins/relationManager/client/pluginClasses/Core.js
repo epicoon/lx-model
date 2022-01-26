@@ -1,3 +1,5 @@
+#lx:public;
+
 class Core {
 	constructor(plugin) {
 		this.plugin = plugin;
@@ -7,8 +9,8 @@ class Core {
 		this.relation = null;
 
 		this.models = [
-			new Plugin.classes.ModelData(this, 0),
-			new Plugin.classes.ModelData(this, 1)
+			new ModelData(this, 0),
+			new ModelData(this, 1)
 		];
 		this.relations = [];
 
@@ -91,7 +93,6 @@ class Core {
 		this.relations.splice(index, 1);
 	}
 }
-Plugin.classes.Core = Core;
 
 
 /***********************************************************************************************************************

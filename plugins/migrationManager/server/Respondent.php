@@ -1,6 +1,6 @@
 <?php
 
-namespace lx\model\plugins\migrationManager\backend;
+namespace lx\model\plugins\migrationManager\server;
 
 use lx;
 use lx\Respondent as lxRespondent;

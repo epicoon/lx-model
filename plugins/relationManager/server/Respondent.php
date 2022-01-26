@@ -1,6 +1,6 @@
 <?php
 
-namespace lx\model\plugins\relationManager\backend;
+namespace lx\model\plugins\relationManager\server;
 
 use lx;
 use lx\model\Model;
