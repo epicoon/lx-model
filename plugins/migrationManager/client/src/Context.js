@@ -78,7 +78,7 @@ function __initWidgets(self) {
 			leaf.createChild({
 				field: 'count',
 				width: 'auto',
-				style: {fill:'white'} //TODO css
+				css: 'lx-model-count'
 			});
 			leaf.bind(leaf.node.data);
 		}
@@ -148,14 +148,20 @@ function __initWidgets(self) {
 			intention.end();
 
 			box.setField('selected', function(val) {
-				this.fill(val ? 'green' : '');
+				this.toggleClassOnCondition(val, 'lx-model-iselected');
 			});
 			box.click(function() {
 				self.migrationsInfo.selectMigration(model);
 			});
 		}
 	});
-	self.widgets.serviceInfoBox->>migrationText.bind(self.migrationsInfo.migrationText);
+
+	const migrationTextBox = self.widgets.serviceInfoBox->>migrationText;
+	#lx:use lx.Scroll;
+	migrationTextBox.addContainer();
+	migrationTextBox.addStructure(lx.Scroll, {type: lx.VERTICAL});
+	migrationTextBox.addStructure(lx.Scroll, {type: lx.HORIZONTAL});
+	migrationTextBox.bind(self.migrationsInfo.migrationText);
 }
 
 function __initTreeButtons(leaf) {
