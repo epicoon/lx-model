@@ -230,10 +230,10 @@ const defaultHandlers = {
 
 			modelData.grid.setLockedColumn(schema.getPkName());
 			modelData.grid.render();
-			modelData.grid.on('rowClick', function (e, rowIndex) {
+			modelData.grid.on('rowClick', function (e) {
 				var target = e.target.__lx;
 				if (lx.isInstance(target, lx.Checkbox)) return;
-				modelData.select(rowIndex);
+				modelData.select(e.rowIndex);
 			});
 		}
 	},
