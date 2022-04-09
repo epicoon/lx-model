@@ -1,4 +1,5 @@
-class ActionReport #lx:namespace lx.models {
+#lx:namespace lx.models;
+class ActionReport {
 	constructor(serviceName) {
 		this.service = serviceName;
 		this.actions = [];

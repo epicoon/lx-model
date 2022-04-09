@@ -1,4 +1,5 @@
-class ServiceCategoryData extends lx.BindableModel #lx:namespace lx.models {
+#lx:namespace lx.models;
+class ServiceCategoryData extends lx.BindableModel {
 	#lx:schema
 		count;
 

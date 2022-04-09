@@ -24,7 +24,8 @@ class MigrationText extends lx.BindableModel {
 	}
 }
 
-class MigrationsInfo #lx:namespace lx.models {
+#lx:namespace lx.models;
+class MigrationsInfo {
 	#lx:const
 		INTENTION_NO = 'no',
 		INTENTION_UP = 'up',

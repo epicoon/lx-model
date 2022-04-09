@@ -1,4 +1,5 @@
-class Context #lx:namespace lx.models {
+#lx:namespace lx.models;
+class Context {
 	constructor(plugin) {
 		plugin.context = this;
 	

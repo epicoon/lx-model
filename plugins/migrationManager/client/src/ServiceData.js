@@ -1,4 +1,5 @@
-class ServiceData extends lx.BindableModel #lx:namespace lx.models {
+#lx:namespace lx.models;
+class ServiceData extends lx.BindableModel {
 	#lx:const
 		STATUS_NEED_MIGRATIONS = 1,
 		STATUS_NEED_UPDATE = 2,
