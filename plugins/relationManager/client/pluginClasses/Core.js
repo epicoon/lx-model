@@ -204,7 +204,7 @@ const defaultHandlers = {
 					before: schema.getPkName(),
 					widget: { width: '20px' },
 					render: function(box, model) {
-						var checkbox = box.add(lx.Checkbox, {key:'match'});
+						var checkbox = box.add(lx.Checkbox, {key:'match', geom:[0,0,100,100]});
 						box.align(lx.CENTER, lx.MIDDLE);
 						checkbox.on('change', function() {
 							if (this.value() && modelData.contrData.selected === null) {
