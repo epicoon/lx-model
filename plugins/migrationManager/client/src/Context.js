@@ -64,7 +64,7 @@ class Context {
  **********************************************************************************************************************/
 
 function __initWidgets(self) {
-	self.widgets.treeBox.setLeafConstructor(function(leaf) {
+	self.widgets.treeBox.setLeafRenderer(function(leaf) {
 		var model = leaf.node.data;
 
 		leaf->label.text(model.getTitle());
