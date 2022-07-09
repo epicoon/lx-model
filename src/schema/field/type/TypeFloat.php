@@ -3,6 +3,7 @@
 namespace lx\model\schema\field\type;
 
 use lx\model\schema\field\definition\AbstractDefinition;
+use lx\model\schema\field\RawValue;
 
 class TypeFloat extends Type
 {
@@ -13,21 +14,17 @@ class TypeFloat extends Type
         return false;
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function validateValue(AbstractDefinition $definition, $value): bool
+    public function validateValue(RawValue $value): bool
     {
-        return (filter_var($value, FILTER_VALIDATE_FLOAT) !== false);
+        return (filter_var($value->getValue(), FILTER_VALIDATE_FLOAT) !== false);
     }
 
     /**
-     * @param mixed $value
      * @return float
      */
-    public function normalizeValue(AbstractDefinition $definition, $value)
+    public function normalizeValue(RawValue $value)
     {
-        return (float)$value;
+        return (float)($value->getValue());
     }
 
     /**

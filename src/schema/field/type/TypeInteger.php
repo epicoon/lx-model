@@ -3,6 +3,7 @@
 namespace lx\model\schema\field\type;
 
 use lx\model\schema\field\definition\AbstractDefinition;
+use lx\model\schema\field\RawValue;
 
 class TypeInteger extends Type
 {
@@ -13,21 +14,17 @@ class TypeInteger extends Type
         return false;
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function validateValue(AbstractDefinition $definition, $value): bool
+    public function validateValue(RawValue $value): bool
     {
-        return (filter_var($value, FILTER_VALIDATE_INT) !== false);
+        return (filter_var($value->getValue(), FILTER_VALIDATE_INT) !== false);
     }
 
     /**
-     * @param mixed $value
      * @return int
      */
-    public function normalizeValue(AbstractDefinition $definition, $value)
+    public function normalizeValue(RawValue $value)
     {
-        return (int)$value;
+        return (int)($value->getValue());
     }
 
     /**

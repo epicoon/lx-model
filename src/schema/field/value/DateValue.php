@@ -2,24 +2,15 @@
 
 namespace lx\model\schema\field\value;
 
-use DateTime;
-use lx\model\schema\field\definition\AbstractDefinition;
-
 /**
  * @method static|null modify(string $modifier)
- * @method static|null setTime(int $hour, int $minute, int $second = 0, int $microsecond = 0)
  * @method static add(\DateInterval $interval)
  * @method static sub(\DateInterval $interval)
  * @method static setDate(int $year, int $month, int $day)
  * @method static setISODate(int $year, int $week, int $dayOfWeek = 1)
- * @method static setTimezone(\DateTimeZone $timezone)
- * @method static setTimestamp(int $timestamp)
- * @method \DateTimeZone|null getTimezone()
- * @method int|null getOffset()
- * @method int|null getTimestamp()
  * @method \DateInterval|null diff(\DateTimeInterface $targetObject, bool $absolute = false)
  */
-class DateTimeValue extends ValueAsObject
+class DateValue extends ValueAsObject
 {
     private DateTime $dateTime;
 
@@ -32,8 +23,8 @@ class DateTimeValue extends ValueAsObject
     {
         return [
             'goalName' => 'dateTime',
-            'getters' => ['getTimezone', 'getOffset', 'getTimestamp', 'diff'],
-            'setters' => ['modify', 'setTime', 'add', 'sub', 'setDate', 'setISODate', 'setTimezone', 'setTimestamp'],
+            'getters' => ['diff'],
+            'setters' => ['modify', 'add', 'sub', 'setDate', 'setISODate'],
         ];
     }
 
@@ -44,22 +35,24 @@ class DateTimeValue extends ValueAsObject
     {
         if ($value instanceof DateTime) {
             $this->dateTime = $value;
-            return;
+        } else {
+            try {
+                $this->dateTime = new DateTime($value);
+            } catch (\Exception $exception) {
+                //TODO on strict_mode(?) exception or warning?
+                $this->setIfRequired();
+                return;
+            }
         }
 
-        try {
-            $this->dateTime = new DateTime($value);
-        } catch (\Exception $exception) {
-            //TODO on strict_mode(?) exception or warning?
-            $this->setIfRequired();
-        }
+        $this->dateTime = new \DateTime($this->dateTime->format('Y-m-d'));
     }
 
     protected function prepareIfRequired(): void
     {
-        $this->dateTime = new DateTime('1985-10-01 23:05');
+        $this->dateTime = new DateTime('1985-10-01');
     }
-    
+
     public function format(string $format): ?string
     {
         return $this->dateTime ? $this->dateTime->format($format) : null;

@@ -3,6 +3,7 @@
 namespace lx\model\schema\field\type;
 
 use lx\model\schema\field\definition\AbstractDefinition;
+use lx\model\schema\field\RawValue;
 
 class TypeBoolean extends Type
 {
@@ -13,21 +14,18 @@ class TypeBoolean extends Type
         return false;
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function validateValue(AbstractDefinition $definition, $value): bool
+    public function validateValue(RawValue $value): bool
     {
-        return ($value === true || $value === false);
+        $val = $value->getValue();
+        return ($val === true || $val === false);
     }
 
     /**
-     * @param mixed $value
      * @return bool
      */
-    public function normalizeValue(AbstractDefinition $definition, $value)
+    public function normalizeValue(RawValue $value)
     {
-        return (bool)$value;
+        return (bool)($value->getValue());
     }
 
     /**

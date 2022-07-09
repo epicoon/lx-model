@@ -3,6 +3,7 @@
 namespace lx\model\schema\field\value;
 
 use lx\model\schema\field\definition\AbstractDefinition;
+use lx\model\schema\field\RawValue;
 
 abstract class ValueAsObject
 {
@@ -23,12 +24,22 @@ abstract class ValueAsObject
         $this->initValue($value);
     }
 
+    public static function createFromRaw(RawValue $value): ValueAsObject
+    {
+        return new static($value->getDefinition(), $value->getValue());
+    }
+
     abstract protected function prepareIfRequired(): void;
+
     /**
      * @param mixed $value
      */
     abstract protected function initValue($value): void;
-    abstract protected function initDefinition(AbstractDefinition $definition): void;
+
+    protected function initDefinition(AbstractDefinition $definition): void
+    {
+        // pass
+    }
 
     public function setIfRequired(): void
     {

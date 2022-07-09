@@ -83,7 +83,7 @@ class AddRelationAction extends LifeCycleRelationAction
         ]);
     }
 
-    private function noteFk(string $model, string $field, string $relModel, string $relField): string
+    private function noteFk(string $model, string $field, string $relModel, ?string $relField = null): string
     {
         $nameConverter = $this->context->getNameConverter();
         $table = str_replace('.', '_', $nameConverter->getTableName($model));

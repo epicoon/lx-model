@@ -3,10 +3,18 @@
 namespace lx\model\schema\field\type;
 
 use lx\model\schema\field\definition\AbstractDefinition;
+use lx\model\schema\field\RawValue;
+use lx\model\schema\field\type\traits\PrepareValuesByPhpTypeAsClass;
 use lx\model\schema\field\value\DecimalValue;
 
+/**
+ * @method DecimalValue getValueIfRequired(AbstractDefinition $definition)
+ * @method DecimalValue getPrearrangedValue(AbstractDefinition $definition)
+ */
 class TypeDecimal extends Type
 {
+    use PrepareValuesByPhpTypeAsClass;
+    
     const TYPE = 'decimal';
 
     public function getPhpType(): string
@@ -18,43 +26,33 @@ class TypeDecimal extends Type
     {
         return false;
     }
-
-    /**
-     * @return DecimalValue
-     */
-    public function getValueIfRequired(AbstractDefinition $definition)
+    
+    public function preprocessDefault($value)
     {
-        $value = new DecimalValue($definition);
-        $value->setIfRequired();
-        return $value;
+        if ($value === 0) {
+            return '0';
+        }
+        
+        return parent::preprocessDefault($value);
     }
 
-    /**
-     * @return DecimalValue
-     */
-    public function getPrearrangedValue(AbstractDefinition $definition)
+    public function validateValue(RawValue $value): bool
     {
-        return new DecimalValue($definition);
-    }
-
-    /**
-     * @param DecimalValue|string $value
-     */
-    public function validateValue(AbstractDefinition $definition, $value): bool
-    {
-        if ($value instanceof DecimalValue) {
+        $val = $value->getValue();
+        if ($val instanceof DecimalValue) {
             return true;
         }
 
-        if (!is_string($value)) {
+        if (!is_string($val)) {
             return false;
         }
 
-        $arr = explode('.', $value);
+        $arr = explode('.', $val);
         if (count($arr) !== 2) {
             return false;
         }
 
+        $definition = $value->getDefinition();
         $scale = $definition->toArray()['scale'];
         if (strlen($arr[1]) !== $scale) {
             return false;
@@ -64,16 +62,21 @@ class TypeDecimal extends Type
     }
 
     /**
-     * @param DecimalValue|string $value
      * @return DecimalValue
      */
-    public function normalizeValue(AbstractDefinition $definition, $value)
+    public function normalizeValue(RawValue $value)
     {
-        if (is_string($value)) {
-            return new DecimalValue($definition, $value);
+        $val = $value->getValue();
+        
+        if ($val instanceof DecimalValue) {
+            return $val;
+        }
+        
+        if (is_string($val)) {
+            return DecimalValue::createFromRaw($value);
         }
 
-        return $value;
+        return $this->getPrearrangedValue($value->getDefinition());
     }
 
     /**
@@ -100,20 +103,20 @@ class TypeDecimal extends Type
     }
 
     /**
-     * @param DecimalValue $value
      * @return string
      */
-    public function valueToRepository(AbstractDefinition $definition, $value)
+    public function valueToRepository(RawValue $value)
     {
-        return $value->toString();
+        /** @var DecimalValue $val */
+        $val = $value->getValue();
+        return $val->toString();
     }
 
     /**
-     * @param string $value
      * @return DecimalValue
      */
-    public function valueFromRepository(AbstractDefinition $definition, $value)
+    public function valueFromRepository(RawValue $value)
     {
-        return new DecimalValue($definition, $value);
+        return DecimalValue::createFromRaw($value);
     }
 }

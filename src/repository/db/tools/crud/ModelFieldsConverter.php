@@ -68,8 +68,7 @@ class ModelFieldsConverter
 
             $field = $schema->getField($fieldName);
             $type = $field->getType();
-            $definition = $field->getDefinition();
-            $fields[$fieldName] = $type->valueFromRepository($definition, $column);
+            $fields[$fieldName] = $type->valueFromRepository($field->getRawValue($column));
         }
 
         return $fields;
@@ -108,8 +107,7 @@ class ModelFieldsConverter
             $key = $nameConverter->getFieldName($modelName, $fieldName);
             $field = $schema->getField($fieldName);
             $type = $field->getType();
-            $definition = $field->getDefinition();
-            $columns[$key] = $type->valueToRepository($definition, $value);
+            $columns[$key] = $type->valueToRepository($field->getRawValue($value));
         }
         foreach ($schema->getRelations() as $relationName => $relation) {
             if ($relation->isFkHolder()) {

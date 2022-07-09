@@ -5,21 +5,21 @@ namespace lx\model\schema\field\type;
 use lx\model\schema\field\definition\AbstractDefinition;
 use lx\model\schema\field\RawValue;
 use lx\model\schema\field\type\traits\PrepareValuesByPhpTypeAsClass;
-use lx\model\schema\field\value\DateTimeValue;
+use lx\model\schema\field\value\DateIntervalValue;
 
 /**
- * @method DateTimeValue getValueIfRequired(AbstractDefinition $definition)
- * @method DateTimeValue getPrearrangedValue(AbstractDefinition $definition)
+ * @method DateIntervalValue getValueIfRequired(AbstractDefinition $definition)
+ * @method DateIntervalValue getPrearrangedValue(AbstractDefinition $definition)
  */
-class TypeDateTime extends Type
+class TypeDateInterval extends Type
 {
     use PrepareValuesByPhpTypeAsClass;
 
-    const TYPE = 'datetime';
+    const TYPE = 'interval';
 
     public function getPhpType(): string
     {
-        return DateTimeValue::class;
+        return DateIntervalValue::class;
     }
 
     public function isCustom(): bool
@@ -32,63 +32,63 @@ class TypeDateTime extends Type
         $val = $value->getValue();
         if (is_string($val)) {
             try {
-                new \DateTime($val);
+                new \DateInterval($val);
                 return true;
             } catch (\Exception $exception) {
                 return false;
             }
         }
-        
-        return $val instanceof \DateTime || $val instanceof DateTimeValue;
+
+        return $val instanceof \DateInterval || $val instanceof DateIntervalValue;
     }
 
     /**
-     * @return DateTimeValue
+     * @return DateIntervalValue
      */
     public function normalizeValue(RawValue $value)
     {
         $val = $value->getValue();
 
-        if ($val instanceof DateTimeValue) {
+        if ($val instanceof DateIntervalValue) {
             return $val;
         }
 
-        if (is_string($val) || $val instanceof \DateTime) {
-            return DateTimeValue::createFromRaw($value);
+        if (is_string($val) || $val instanceof \DateInterval) {
+            return DateIntervalValue::createFromRaw($value);
         }
 
         return $this->getPrearrangedValue($value->getDefinition());
     }
 
     /**
-     * @param \DateTime|DateTimeValue|string $value1
-     * @param \DateTime|DateTimeValue|string $value2
+     * @param \DateInterval|DateIntervalValue|string $value1
+     * @param \DateInterval|DateIntervalValue|string $value2
      */
     public function valuesAreEqual($value1, $value2): bool
     {
         if (is_string($value1)) {
             try {
-                $value1 = new \DateTime($value1);
+                $value1 = new \DateInterval($value1);
             } catch (\Exception $exception) {
                 return false;
             }
         }
         if (is_string($value2)) {
             try {
-                $value2 = new \DateTime($value2);
+                $value2 = new \DateInterval($value2);
             } catch (\Exception $exception) {
                 return false;
             }
         }
 
-        if (!($value1 instanceof \DateTime) && !($value1 instanceof DateTimeValue)) {
+        if (!($value1 instanceof \DateInterval) && !($value1 instanceof DateIntervalValue)) {
             return false;
         }
-        if (!($value2 instanceof \DateTime) && !($value2 instanceof DateTimeValue)) {
+        if (!($value2 instanceof \DateInterval) && !($value2 instanceof DateIntervalValue)) {
             return false;
         }
 
-        return $value1->format('Y-m-d h:i:s') === $value2->format('Y-m-d h:i:s');
+        return $value1->format('%Y %M %D %H %I %S %F %R') === $value2->format('%Y %M %D %H %I %S %F %R');
     }
 
     /**
@@ -96,17 +96,16 @@ class TypeDateTime extends Type
      */
     public function valueToRepository(RawValue $value)
     {
-        /** @var DateTimeValue $val */
+        /** @var DateIntervalValue $val */
         $val = $value->getValue();
-        //TODO кастомизировать форматирование
-        return $val->format('Y-m-d h:i:s');
+        return $val->format('P%YY%MM%DD%HH%II%SS%FF%RR');
     }
 
     /**
-     * @return DateTimeValue
+     * @return DateIntervalValue
      */
     public function valueFromRepository(RawValue $value)
     {
-        return DateTimeValue::createFromRaw($value);
+        return DateIntervalValue::createFromRaw($value);
     }
 }

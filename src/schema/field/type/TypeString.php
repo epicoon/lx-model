@@ -3,8 +3,8 @@
 namespace lx\model\schema\field\type;
 
 use lx\model\schema\field\definition\AbstractDefinition;
-use lx\model\schema\field\definition\StringDefinition;
 use lx\model\schema\field\parser\StringParser;
+use lx\model\schema\field\RawValue;
 
 class TypeString extends Type
 {
@@ -15,22 +15,20 @@ class TypeString extends Type
         return false;
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function validateValue(AbstractDefinition $definition, $value): bool
+    public function validateValue(RawValue $value): bool
     {
-        return (is_numeric($value) || is_string($value));
+        $val = $value->getValue();
+        return (is_numeric($val) || is_string($val));
     }
 
     /**
-     * @param mixed $value
      * @return string
      */
-    public function normalizeValue(AbstractDefinition $definition, $value)
+    public function normalizeValue(RawValue $value)
     {
-        if (is_numeric($value)) $value = ''.$value;
-        return $value;
+        $val = $value->getValue();
+        if (is_numeric($val)) $val = '' . $val;
+        return $val;
     }
 
     /**

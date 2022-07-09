@@ -9,7 +9,7 @@ class ModelRelation extends ModelAttribute
 {
     private string $type;
     private string $relModel;
-    private string $relAttribute;
+    private ?string $relAttribute;
     private bool $fkHolder;
 
     public function __construct(ModelSchema $schema, string $name, array $definition)
@@ -18,7 +18,7 @@ class ModelRelation extends ModelAttribute
 
         $this->type = $definition['type'];
         $this->relModel = $definition['relatedEntityName'];
-        $this->relAttribute = $definition['relatedAttributeName'];
+        $this->relAttribute = $definition['relatedAttributeName'] ?? null;
         $this->fkHolder = $definition['fkHost'] ?? false;
     }
 
@@ -72,7 +72,7 @@ class ModelRelation extends ModelAttribute
         return $this->schema->getService()->modelManager->getModelClassName($this->relModel);
     }
 
-    public function getRelatedAttributeName(): string
+    public function getRelatedAttributeName(): ?string
     {
         return  $this->relAttribute;
     }

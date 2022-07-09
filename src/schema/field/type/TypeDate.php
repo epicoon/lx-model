@@ -2,24 +2,23 @@
 
 namespace lx\model\schema\field\type;
 
-use lx\model\schema\field\definition\AbstractDefinition;
 use lx\model\schema\field\RawValue;
 use lx\model\schema\field\type\traits\PrepareValuesByPhpTypeAsClass;
-use lx\model\schema\field\value\DateTimeValue;
+use lx\model\schema\field\value\DateValue;
 
 /**
- * @method DateTimeValue getValueIfRequired(AbstractDefinition $definition)
- * @method DateTimeValue getPrearrangedValue(AbstractDefinition $definition)
+ * @method DateValue getValueIfRequired(AbstractDefinition $definition)
+ * @method DateValue getPrearrangedValue(AbstractDefinition $definition)
  */
-class TypeDateTime extends Type
+class TypeDate extends Type
 {
     use PrepareValuesByPhpTypeAsClass;
 
-    const TYPE = 'datetime';
+    const TYPE = 'date';
 
     public function getPhpType(): string
     {
-        return DateTimeValue::class;
+        return DateValue::class;
     }
 
     public function isCustom(): bool
@@ -38,31 +37,31 @@ class TypeDateTime extends Type
                 return false;
             }
         }
-        
-        return $val instanceof \DateTime || $val instanceof DateTimeValue;
+
+        return $val instanceof \DateTime || $val instanceof DateValue;
     }
 
     /**
-     * @return DateTimeValue
+     * @return DateValue
      */
     public function normalizeValue(RawValue $value)
     {
         $val = $value->getValue();
 
-        if ($val instanceof DateTimeValue) {
+        if ($val instanceof DateValue) {
             return $val;
         }
 
         if (is_string($val) || $val instanceof \DateTime) {
-            return DateTimeValue::createFromRaw($value);
+            return DateValue::createFromRaw($value);
         }
 
         return $this->getPrearrangedValue($value->getDefinition());
     }
 
     /**
-     * @param \DateTime|DateTimeValue|string $value1
-     * @param \DateTime|DateTimeValue|string $value2
+     * @param \DateTime|DateValue|string $value1
+     * @param \DateTime|DateValue|string $value2
      */
     public function valuesAreEqual($value1, $value2): bool
     {
@@ -81,14 +80,14 @@ class TypeDateTime extends Type
             }
         }
 
-        if (!($value1 instanceof \DateTime) && !($value1 instanceof DateTimeValue)) {
+        if (!($value1 instanceof \DateTime) && !($value1 instanceof DateValue)) {
             return false;
         }
-        if (!($value2 instanceof \DateTime) && !($value2 instanceof DateTimeValue)) {
+        if (!($value2 instanceof \DateTime) && !($value2 instanceof DateValue)) {
             return false;
         }
 
-        return $value1->format('Y-m-d h:i:s') === $value2->format('Y-m-d h:i:s');
+        return $value1->format('Y-m-d') === $value2->format('Y-m-d');
     }
 
     /**
@@ -96,17 +95,17 @@ class TypeDateTime extends Type
      */
     public function valueToRepository(RawValue $value)
     {
-        /** @var DateTimeValue $val */
+        /** @var DateValue $val */
         $val = $value->getValue();
         //TODO кастомизировать форматирование
-        return $val->format('Y-m-d h:i:s');
+        return $val->format('Y-m-d');
     }
 
     /**
-     * @return DateTimeValue
+     * @return DateValue
      */
     public function valueFromRepository(RawValue $value)
     {
-        return DateTimeValue::createFromRaw($value);
+        return DateValue::createFromRaw($value);
     }
 }

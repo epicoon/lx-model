@@ -3,6 +3,7 @@
 namespace lx\model\schema\field\type;
 
 use lx\model\schema\field\definition\AbstractDefinition;
+use lx\model\schema\field\RawValue;
 use lx\model\schema\ModelAttributeMethod;
 use lx\model\schema\field\ModelField;
 
@@ -18,21 +19,17 @@ class TypeDictionary extends Type
         return PhpTypeEnum::ARRAY;
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function validateValue(AbstractDefinition $definition, $value): bool
+    public function validateValue(RawValue $value): bool
     {
-        return is_array($value);
+        return is_array($value->getValue());
     }
 
     /**
-     * @param mixed $value
      * @return array
      */
-    public function normalizeValue(AbstractDefinition $definition, $value)
+    public function normalizeValue(RawValue $value)
     {
-        return (array)$value;
+        return (array)($value->getValue());
     }
 
     /**
@@ -44,21 +41,21 @@ class TypeDictionary extends Type
     }
     
     /**
-     * @param array $value
      * @return string
      */
-    public function valueToRepository(AbstractDefinition $definition, $value)
+    public function valueToRepository(RawValue $value)
     {
-        return json_encode($value);
+        /** @var array $val */
+        $val = $value->getValue();
+        return json_encode($val);
     }
 
     /**
-     * @param string $value
      * @return array
      */
-    public function valueFromRepository(AbstractDefinition $definition, $value)
+    public function valueFromRepository(RawValue $value)
     {
-        return json_decode($value, true);
+        return json_decode($value->getValue(), true);
     }
 
     /**

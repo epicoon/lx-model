@@ -152,31 +152,26 @@ class ModelRefresher
     
     private function addUsed(string $name): void
     {
-        if (!in_array($name, $this->uses)) {
-            $this->uses[] = "use $name;";
+        $use = "use {$name};";
+        if (!in_array($use, $this->uses)) {
+            $this->uses[] = $use;
         }
     }
 
     private function getUseString(): string
     {
-        $uses = $this->uses;
         foreach ($this->schema->getRelations() as $relation) {
             if ($relation->isToMany()) {
-                $class = RelatedModelsCollection::class;
-                $class = "use {$class};";
-                if (!in_array($class, $uses)) {
-                    $uses[] = $class;
-                }
+                $this->addUsed(RelatedModelsCollection::class);
            }
 
             $relModelName = $relation->getRelatedModelName();
             $relModelClass = $this->modelNamesProvider->getModelNamespace($relModelName)
                 . '\\' . $this->modelNamesProvider->getShortModelName($relModelName);
-            if (!in_array($relModelClass, $uses)) {
-                $uses[] = "use {$relModelClass};";
-            }
+            $this->addUsed($relModelClass);
         }
 
+        $uses = $this->uses;
         if (empty($uses)) {
             return '';
         }

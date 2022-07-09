@@ -13,5 +13,8 @@ class CommonTypesRegistry extends TypesRegistry
         $this->register(TypeBoolean::class);
         $this->register(TypeDictionary::class);
         $this->register(TypeDateTime::class);
+        $this->register(TypeDateInterval::class);
+        $this->register(TypeDate::class);
+        $this->register(TypeTime::class);
     }
 }

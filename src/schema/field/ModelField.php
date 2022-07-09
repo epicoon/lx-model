@@ -2,6 +2,7 @@
 
 namespace lx\model\schema\field;
 
+use lx\model\schema\field\definition\DefinitionFactory;
 use lx\model\schema\ModelAttribute;
 use lx\model\schema\ModelSchema;
 use lx\model\schema\field\definition\AbstractDefinition;
@@ -24,11 +25,13 @@ class ModelField extends ModelAttribute
     {
         parent::__construct($schema, $name);
 
+        $this->type = $this->getTypeByName($definition['type']);
+
         $this->required = $definition['required'] ?? false;
         $this->readonly = $definition['readonly'] ?? false;
-        $this->default = $definition['default'] ?? null;
-        $this->type = $this->getTypeByName($definition['type']);
-        $this->definition = $this->type->getDefinition();
+        $this->default = $this->type->preprocessDefault($definition['default'] ?? null);
+        
+        $this->definition = DefinitionFactory::create($this->type->getTypeName());
         $this->definition->init($definition['details'] ?? []);
     }
 
@@ -74,6 +77,11 @@ class ModelField extends ModelAttribute
     {
         return $this->default;
     }
+    
+    public function getRawValue($value): RawValue
+    {
+        return new RawValue($value, $this->getDefinition());
+    }
 
     /**
      * @return mixed
@@ -113,7 +121,7 @@ class ModelField extends ModelAttribute
      */
     public function validateValue($value): bool
     {
-        return $this->type->validateValue($this->getDefinition(), $value);
+        return $this->type->validateValue($this->getRawValue($value));
     }
 
     /**
@@ -122,7 +130,7 @@ class ModelField extends ModelAttribute
      */
     public function normalizeValue($value)
     {
-        return $this->type->normalizeValue($this->getDefinition(), $value);
+        return $this->type->normalizeValue($this->getRawValue($value));
     }
     
     public function valuesAreEqual($value1, $value2): bool

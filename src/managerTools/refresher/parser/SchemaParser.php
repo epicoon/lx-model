@@ -178,6 +178,10 @@ class SchemaParser implements FlightRecorderHolderInterface
         }
 
         $definition = $this->parseRelationDefinition($relation);
+        if ($this->hasFlightRecords()) {
+            return false;
+        }
+        
         if ($definition['type'] != $relType) {
             $this->addFlightRecord(
                 $errString
@@ -232,9 +236,9 @@ class SchemaParser implements FlightRecorderHolderInterface
 
         $type = $definitionArray[0] ?? '';
         $fkHost = false;
-        if (preg_match('/fk\)?$/', $type)) {
+        if (preg_match('/(^\(fk|fk\)$)/', $type)) {
             $fkHost = true;
-            $type = preg_replace('/fk\)?$/', '', $type);
+            $type = preg_replace('/(^\(fk|fk\)$)/', '', $type);
         }
         $type = trim($type, ')(');
         switch ($type) {

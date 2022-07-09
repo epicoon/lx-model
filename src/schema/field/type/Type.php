@@ -8,6 +8,7 @@ use lx\model\schema\field\ModelField;
 use lx\model\schema\field\definition\CommonDefinition;
 use lx\model\schema\field\parser\CommonParser;
 use lx\model\schema\field\parser\ParserFactory;
+use lx\model\schema\field\RawValue;
 use lx\model\schema\ModelAttributeMethod;
 
 abstract class Type
@@ -22,13 +23,13 @@ abstract class Type
     /**
      * @param mixed $value
      */
-    abstract public function validateValue(AbstractDefinition $definition, $value): bool;
+    abstract public function validateValue(RawValue $value): bool;
 
     /**
      * @param mixed $value
      * @return mixed
      */
-    abstract public function normalizeValue(AbstractDefinition $definition, $value);
+    abstract public function normalizeValue(RawValue $value);
 
     /**
      * @return mixed
@@ -62,18 +63,25 @@ abstract class Type
      * @param mixed $value
      * @return mixed
      */
-    public function valueToRepository(AbstractDefinition $definition, $value)
+    public function preprocessDefault($value)
     {
         return $value;
     }
 
     /**
-     * @param mixed $value
      * @return mixed
      */
-    public function valueFromRepository(AbstractDefinition $definition, $value)
+    public function valueToRepository(RawValue $value)
     {
-        return $value;
+        return $value->getValue();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function valueFromRepository(RawValue $value)
+    {
+        return $value->getValue();
     }
 
     public function getMethodNames(ModelField $field): array
@@ -93,11 +101,6 @@ abstract class Type
     public function processMethod(ModelField $field, string $methodName, $currentValue, array $arguments)
     {
         return $currentValue;
-    }
-
-    public function getDefinition(): AbstractDefinition
-    {
-        return DefinitionFactory::create($this->getTypeName());
     }
     
     public function getParser(): CommonParser

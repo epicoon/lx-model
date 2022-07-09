@@ -7,14 +7,20 @@ use lx\DbTableSchema;
 use lx\model\Model;
 use lx\model\repository\db\migrationExecutor\actions\relation\AddRelationAction;
 use lx\model\schema\field\type\TypeBoolean;
+use lx\model\schema\field\type\TypeDate;
+use lx\model\schema\field\type\TypeDateInterval;
 use lx\model\schema\field\type\TypeDateTime;
 use lx\model\schema\field\type\TypeDecimal;
 use lx\model\schema\field\type\TypeInteger;
 use lx\model\schema\field\type\TypesRegistryTrait;
 use lx\model\schema\field\type\TypeString;
 use lx\model\schema\field\type\TypeFloat;
+use lx\model\schema\field\type\TypeTime;
+use lx\model\schema\field\value\DateIntervalValue;
 use lx\model\schema\field\value\DateTimeValue;
+use lx\model\schema\field\value\DateValue;
 use lx\model\schema\field\value\DecimalValue;
+use lx\model\schema\field\value\TimeValue;
 use lx\model\schema\ModelSchema;
 use lx\model\schema\field\type\PhpTypeEnum;
 use lx\model\schema\field\ModelField;
@@ -402,6 +408,15 @@ class SyncSchema
             case DateTimeValue::class:
                 return DbTableField::TYPE_TIMESTAMP;
 
+            case DateIntervalValue::class:
+                return DbTableField::TYPE_TIME_INTERVAL;
+            
+            case DateValue::class:
+                return DbTableField::TYPE_DATE;
+                
+            case TimeValue::class:
+                return DbTableField::TYPE_TIME;
+
             case DecimalValue::class:
                 return DbTableField::TYPE_DECIMAL;
 
@@ -429,6 +444,15 @@ class SyncSchema
             case DbTableField::TYPE_TIMESTAMP:
                 return TypeDateTime::TYPE;
 
+            case DbTableField::TYPE_TIME_INTERVAL:
+                return TypeDateInterval::TYPE;
+
+            case DbTableField::TYPE_DATE:
+                return TypeDate::TYPE;
+            
+            case DbTableField::TYPE_TIME:
+                return TypeTime::TYPE;
+                
             case DbTableField::TYPE_DECIMAL:
             case DbTableField::TYPE_NUMERIC:
                 return TypeDecimal::TYPE;
