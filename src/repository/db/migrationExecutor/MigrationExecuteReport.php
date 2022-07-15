@@ -6,9 +6,6 @@ use lx\CascadeReport;
 use lx\model\repository\ReportInterface;
 
 /**
- * Class MigrationExecuteReport
- * @package lx\model\repository\db\migrationExecutor
- *
  * @method addToAppliedMigrations(string $name)
  * @method addToMigrationsWrongSequence(string $name)
  * @method addToMigrationErrors(array $data)

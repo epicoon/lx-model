@@ -95,9 +95,9 @@ class Core {
 }
 
 
-/***********************************************************************************************************************
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * PRIVATE
- **********************************************************************************************************************/
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 function __initEventDispatcher(self, eventHandlers) {
 	var handlers = defaultHandlers.lxMerge(eventHandlers, true);
@@ -186,53 +186,51 @@ const defaultHandlers = {
 		fill(pares[1].modelData, pares[1].box);
 		function fill(modelData, widget) {
 			const schema = modelData.list.modelClass.schema;
-			if (modelData.grid) {
-				modelData.selected = null;
-				modelData.grid.dropCollection();
-			} else {
-				modelData.grid = widget;
-				modelData.grid.setCollection(modelData.list);
+			if (!modelData.grid) modelData.grid = widget;
 
-				let sequence = schema.getFieldNames();
-				sequence.lxRemove(schema.getPkName());
-				sequence = [schema.getPkName(), ...sequence];
-				modelData.grid.setColumnSequence(sequence);
+			modelData.grid.dropCollection();
+			modelData.grid.setCollection(modelData.list);
 
-				modelData.grid.addColumn({
-					name: '_rel',
-					title: '',
-					before: schema.getPkName(),
-					widget: { width: '20px' },
-					render: function(box, model) {
-						var checkbox = box.add(lx.Checkbox, {key:'match', geom:[0,0,100,100]});
-						box.align(lx.CENTER, lx.MIDDLE);
-						checkbox.on('change', function() {
-							if (this.value() && modelData.contrData.selected === null) {
-								this.value(false);
-								return;
-							}
+			let sequence = schema.getFieldNames();
+			sequence.lxRemove(schema.getPkName());
+			sequence = [schema.getPkName(), ...sequence];
+			modelData.grid.setColumnSequence(sequence);
 
-							var ids = modelData.isMain()
-									? [
-										model.getPk(),
-										modelData.contrData.list.at(modelData.contrData.selected).getPk()
-									]
-									: [
-										modelData.contrData.list.at(modelData.contrData.selected).getPk(),
-										model.getPk(),
-									],
-								event = this.value() ? 'createRelation' : 'deleteRelation';
-							core.plugin.eventDispatcher.trigger(event, ids);
-						});
-					}
-				});
-			}
+			modelData.grid.addColumn({
+				name: '_rel',
+				title: '',
+				before: schema.getPkName(),
+				widget: { width: '20px' },
+				render: function(box, model) {
+					var checkbox = box.add(lx.Checkbox, {key:'match', geom:[0,0,100,100]});
+					box.align(lx.CENTER, lx.MIDDLE);
+					checkbox.on('change', function() {
+						if (this.value() && modelData.contrData.selected === null) {
+							this.value(false);
+							return;
+						}
+
+						var ids = modelData.isMain()
+								? [
+									model.getPk(),
+									modelData.contrData.list.at(modelData.contrData.selected).getPk()
+								]
+								: [
+									modelData.contrData.list.at(modelData.contrData.selected).getPk(),
+									model.getPk(),
+								],
+							event = this.value() ? 'createRelation' : 'deleteRelation';
+						core.plugin.eventDispatcher.trigger(event, ids);
+					});
+				}
+			});
 
 			modelData.grid.setLockedColumn(schema.getPkName());
 			modelData.grid.render();
 			modelData.grid.on('rowClick', function (e) {
 				var target = e.target.__lx;
-				if (lx.isInstance(target, lx.Checkbox)) return;
+				if (lx.isInstance(target, lx.Checkbox) || target.ancestor(p=>lx.isInstance(p, lx.Checkbox)))
+					return;
 				modelData.select(e.rowIndex);
 			});
 		}

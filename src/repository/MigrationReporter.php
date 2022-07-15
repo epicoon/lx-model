@@ -4,13 +4,13 @@ namespace lx\model\repository;
 
 use lx;
 use lx\model\ModelManager;
-use lx\PackageBrowser;
+use lx\ServiceBrowser;
 
 class MigrationReporter
 {
     public static function getServicesData(): array
     {
-        $services = PackageBrowser::getServicesList();
+        $services = ServiceBrowser::getServicesList();
 
         $servicesData = [];
         foreach ($services as $serviceName => $service) {

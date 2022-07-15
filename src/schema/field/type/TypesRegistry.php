@@ -12,14 +12,13 @@ abstract class TypesRegistry implements FusionComponentInterface
     /** @var array<Type> */
     private array $typesMap = [];
 
-    public function __construct(iterable $config = [])
+    protected function afterObjectConstruct(iterable $config): void
     {
-        $this->__objectConstruct($config);
-        $this->init();
+        $this->mount();
         $this->initProviders($config['providers'] ?? []);
     }
 
-    abstract protected function init(): void;
+    abstract protected function mount(): void;
 
     public function getTypeNames(): array
     {

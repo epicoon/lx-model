@@ -5,9 +5,6 @@ namespace lx\model\managerTools\refresher;
 use lx\CascadeReport;
 
 /**
- * Class RefreshReport
- * @package lx\model\managerTools\refresher
- *
  * @method addToWrongModelNames(string $modelName)
  * @method addListToWrongModelNames(array $modelNames)
  * @method addToErrors(string $modelName)

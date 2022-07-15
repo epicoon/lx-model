@@ -29,10 +29,8 @@ class ModelManager implements ModelManagerInterface, FusionComponentInterface
     private ModelsContext $context;
     private ?array $modelClassesMap;
 
-    public function __construct(iterable $config = [])
+    protected function afterObjectConstruct(iterable $config): void
     {
-        $this->__objectConstruct($config);
-
         $this->context = new ModelsContext(
             $this->getService(),
             $this,

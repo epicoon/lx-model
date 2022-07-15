@@ -4,7 +4,7 @@ namespace lx\model\schema\field\type;
 
 class CommonTypesRegistry extends TypesRegistry
 {
-    protected function init(): void
+    protected function mount(): void
     {
         $this->register(TypeString::class);
         $this->register(TypeDecimal::class);

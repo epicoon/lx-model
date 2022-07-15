@@ -6,9 +6,6 @@ use lx\CascadeReport;
 use lx\model\repository\ReportInterface;
 
 /**
- * Class CompareRepositoryReport
- * @package lx\model\repository\db\comparator
- *
  * @method addToWrongModelNames(string $name)
  * @method addListToWrongModelNames(array $names)
  * @method addToUnappliedMigrations(string $name)

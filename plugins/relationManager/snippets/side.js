@@ -50,11 +50,10 @@ Snippet.onLoad(()=>{
 			if (properties.type == 'pk') continue;
 			fieldNames.push(key);
 			if (properties['default'] !== undefined)
-				// TODO надо засинхронить, было так - defaults[properties.name] = properties['default'];
 				defaults[key] = properties['default'];
 		}
 
-		Plugin.root->inputPopup.open(fieldNames, defaults).confirm((values)=>{
+		Plugin.root->inputPopup.open(fieldNames, defaults).confirm(values=>{
 			var fields = {};
 			if (!lx.isArray(values)) values = [values];
 			for (var i in values) fields[fieldNames[i]] = values[i];
