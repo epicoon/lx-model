@@ -3,11 +3,10 @@
 namespace lx\model\cli;
 
 use lx\CliProcessor;
-use lx\CliArgument;
+use lx\CommandArgument;
 use lx\FusionComponentInterface;
 use lx\FusionComponentTrait;
 use lx\ServiceCliInterface;
-use lx\ServiceCliExecutor;
 
 class Cli implements FusionComponentInterface, ServiceCliInterface
 {
@@ -20,8 +19,8 @@ class Cli implements FusionComponentInterface, ServiceCliInterface
 				'command' => 'model-status',
                 'description' => 'Show models status',
                 'arguments' => [
-                    ServiceCliExecutor::getServiceArgument(),
-                    (new CliArgument())->setKeys(['model', 'm'])
+                    CommandArgument::getServiceArgument(),
+                    (new CommandArgument())->setKeys(['model', 'm'])
                         ->setDescription('Model name or array of names'),
                 ],
 				'handler' => ModelStatus::class,
@@ -31,10 +30,10 @@ class Cli implements FusionComponentInterface, ServiceCliInterface
                 'command' => 'model-update',
                 'description' => 'Update models: synchronizing with mediators, generating migrations, applying migrations',
                 'arguments' => [
-                    ServiceCliExecutor::getServiceArgument(),
-                    (new CliArgument())->setKeys(['model', 'm'])
+                    CommandArgument::getServiceArgument(),
+                    (new CommandArgument())->setKeys(['model', 'm'])
                         ->setDescription('Model name or array of names'),
-                    (new CliArgument())->setKeys(['level', 'l'])
+                    (new CommandArgument())->setKeys(['level', 'l'])
                         ->setEnum([
                             ModelUpdate::LEVEL_FULL,
                             ModelUpdate::LEVEL_MEDIATOR,
@@ -50,7 +49,7 @@ class Cli implements FusionComponentInterface, ServiceCliInterface
                 'command' => 'model-create-migration',
                 'description' => 'Create new migration. You have to choose a service',
                 'arguments' => [
-                    ServiceCliExecutor::getServiceArgument(),
+                    CommandArgument::getServiceArgument(),
                 ],
                 'handler' => CreateMigration::class,
             ],
