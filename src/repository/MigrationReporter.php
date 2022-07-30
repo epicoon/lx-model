@@ -32,6 +32,16 @@ class MigrationReporter
 
         /** @var ModelManager $modelManager */
         $modelManager = $service->modelManager;
+        if (!$modelManager) {
+            return [
+                'serviceName' => $serviceName,
+                'serviceCategory' => $service->getCategory(),
+                'report' => [
+                    'errors' => 'ModelManager does not implemented',
+                ],
+            ];
+        }
+        
         $models = $modelManager->getModelNames();
         if (empty($models)) {
             return null;

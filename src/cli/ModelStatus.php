@@ -34,7 +34,8 @@ class ModelStatus extends ServiceCliExecutor
 
         foreach ($fullReport as $item) {
             $report = $item['report'];
-            if (empty($report['unappliedMigrations'])
+            if (empty($report['errors'])
+                && empty($report['unappliedMigrations'])
                 && empty($report['modelsNeedTable'])
                 && empty($report['modelsChanged'])
                 && empty($report['modelsNeedUpdate'])
@@ -61,6 +62,15 @@ class ModelStatus extends ServiceCliExecutor
     {
         if (empty($report)) {
             $this->processor->outln('No changes');
+            return;
+        }
+        
+        if (!empty($report['errors'])) {
+            $errors = (array)$report['errors'];
+            $this->processor->outln('* Errors:', ['decor' => 'b', 'color' => 'red']);
+            foreach ($errors as $error) {
+                $this->processor->outln('>>> ' . $error);
+            }
             return;
         }
 

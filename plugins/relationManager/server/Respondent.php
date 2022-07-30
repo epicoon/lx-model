@@ -6,7 +6,7 @@ use lx;
 use lx\model\Model;
 use lx\model\modelTools\ModelsSerializer;
 use lx\model\schema\relation\ModelRelation;
-use lx\ResponseInterface;
+use lx\HttpResponseInterface;
 use lx\FlightRecorderHolderInterface;
 use lx\FlightRecorderHolderTrait;
 
@@ -16,7 +16,7 @@ class Respondent extends \lx\Respondent implements FlightRecorderHolderInterface
     
     const PER_PAGE_DEFAULT = 10;
 
-    public function getCoreData(array $attributes): ResponseInterface
+    public function getCoreData(array $attributes): HttpResponseInterface
     {
         $serviceName = null;
         $modelName = null;
@@ -45,7 +45,7 @@ class Respondent extends \lx\Respondent implements FlightRecorderHolderInterface
         string $modelName,
         string $relationName,
         array $filters
-    ): ResponseInterface
+    ): HttpResponseInterface
     {
         $modelClass = $this->defineModelClass($serviceName, $modelName);
         $relation = $this->defineRelation($modelClass, $relationName);
@@ -152,7 +152,7 @@ class Respondent extends \lx\Respondent implements FlightRecorderHolderInterface
         int $pk0,
         string $relationName,
         int $pk1
-    ): ?ResponseInterface
+    ): ?HttpResponseInterface
 	{
         $modelClass = $this->defineModelClass($serviceName, $modelName);
         $relation = $this->defineRelation($modelClass, $relationName);
@@ -174,7 +174,7 @@ class Respondent extends \lx\Respondent implements FlightRecorderHolderInterface
         int $pk0,
         string $relationName,
         int $pk1
-    ): ?ResponseInterface
+    ): ?HttpResponseInterface
 	{
         $modelClass = $this->defineModelClass($serviceName, $modelName);
         $relation = $this->defineRelation($modelClass, $relationName);
@@ -190,7 +190,7 @@ class Respondent extends \lx\Respondent implements FlightRecorderHolderInterface
         return null;
 	}
 
-	public function createModel(string $serviceName, string $modelName, array $fields): ?ResponseInterface
+	public function createModel(string $serviceName, string $modelName, array $fields): ?HttpResponseInterface
 	{
         $modelClass = $this->defineModelClass($serviceName, $modelName);
         if ($this->hasFlightRecords()) {
@@ -203,7 +203,7 @@ class Respondent extends \lx\Respondent implements FlightRecorderHolderInterface
         return null;
 	}
 
-	public function deleteModel(string $serviceName, string $modelName, int $pk): ?ResponseInterface
+	public function deleteModel(string $serviceName, string $modelName, int $pk): ?HttpResponseInterface
 	{
         $modelClass = $this->defineModelClass($serviceName, $modelName);
         if ($this->hasFlightRecords()) {
