@@ -1,7 +1,7 @@
 #lx:require pluginClasses/;
 
 class Plugin extends lx.Plugin {
-    initCssAsset(css) {
+    initCss(css) {
         css.addClass('rm-side', {
             borderRadius: '5px',
             boxShadow: '0 0 6px rgba(0,0,0,0.5)'

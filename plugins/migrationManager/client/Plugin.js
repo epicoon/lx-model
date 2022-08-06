@@ -1,7 +1,7 @@
 #lx:require -R src/;
 
 class Plugin extends lx.Plugin {
-    initCssAsset(css) {
+    initCss(css) {
         function icon(code) {
             return [code, {fontSize: 10}];
         }
