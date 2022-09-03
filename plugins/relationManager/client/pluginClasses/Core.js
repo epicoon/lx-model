@@ -20,7 +20,7 @@ class Core {
 		this.respondentPlugin = this.plugin.attributes.getRespondentPlugin
 			|| function(core) {return core.plugin;};
 		if (lx.isString(this.respondentPlugin))
-			this.respondentPlugin = lx._f.stringToFunction(this.respondentPlugin);
+			this.respondentPlugin = lx.app.functionHelper.stringToFunction(this.respondentPlugin);
 		delete this.plugin.attributes.getRespondentPlugin;
 
 		var eventHandlers = this.plugin.attributes.eventHandlers || {};
@@ -56,7 +56,7 @@ class Core {
 
 	processError(response) {
 		if (response.success === false) {
-			lx.Tost.error(response.message);
+			lx.tostError(response.message);
 			return true;
 		}
 
@@ -102,7 +102,7 @@ class Core {
 function __initEventDispatcher(self, eventHandlers) {
 	var handlers = defaultHandlers.lxMerge(eventHandlers, true);
 	for (var i in handlers)
-		if (lx.isString(handlers[i])) handlers[i] = lx._f.stringToFunction(handlers[i]);
+		if (lx.isString(handlers[i])) handlers[i] = lx.app.functionHelper.stringToFunction(handlers[i]);
 
 	for (let i in defaultHandlers)
 		self.plugin.eventDispatcher.subscribe(i, (...args)=>{

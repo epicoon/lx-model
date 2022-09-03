@@ -70,7 +70,7 @@ Snippet.onLoad(()=>{
 		const modelData = Plugin.core.modelData(Snippet.attributes.num);
 
 		if (modelData.selected === null) {
-			lx.Tost.warning('Model is not selected');
+			lx.tostWarning('Model is not selected');
 			return;
 		}
 
