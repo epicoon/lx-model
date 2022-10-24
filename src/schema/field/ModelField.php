@@ -2,6 +2,7 @@
 
 namespace lx\model\schema\field;
 
+use lx\model\exception\SchemaException;
 use lx\model\schema\field\definition\DefinitionFactory;
 use lx\model\schema\ModelAttribute;
 use lx\model\schema\ModelSchema;
@@ -26,6 +27,9 @@ class ModelField extends ModelAttribute
         parent::__construct($schema, $name);
 
         $this->type = $this->getTypeByName($definition['type']);
+        if (!$this->type) {
+            throw new SchemaException("Type {$definition['type']} not found. Field: {$this->name}.");
+        }
 
         $this->required = $definition['required'] ?? false;
         $this->readonly = $definition['readonly'] ?? false;
