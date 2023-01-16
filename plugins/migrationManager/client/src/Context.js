@@ -32,7 +32,7 @@ class Context {
 				serviceNode.data = new lx.models.ServiceData(categoryNode.data, item);
 			});
 
-			treeBox.setData(tree);
+			treeBox.setTree(tree);
 		});
 	}
 
