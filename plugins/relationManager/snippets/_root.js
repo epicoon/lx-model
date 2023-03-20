@@ -24,7 +24,6 @@ box.begin();
 box.end();
 
 #lx:use lx.InputPopup;
-new lx.InputPopup();
 
 Snippet.onLoad(()=>{
 	Snippet.widget.getSide = function(num) {

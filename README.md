@@ -36,7 +36,7 @@ Creare the following method in a respondent:
 		return $builder->build();
 	}
 ```
-On the client side you can receive the builded plugin and render it in an element:
+On the client side you can receive the built plugin and render it in an element:
 ```js
 ^Respondent.getRelationManager().then((result)=>{
 	someBox.setPlugin(result);	

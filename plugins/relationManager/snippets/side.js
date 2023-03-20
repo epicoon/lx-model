@@ -53,7 +53,7 @@ Snippet.onLoad(()=>{
 				defaults[key] = properties['default'];
 		}
 
-		Plugin.root->inputPopup.open(fieldNames, defaults).confirm(values=>{
+		lx.InputPopup.open(fieldNames, defaults).confirm(values=>{
 			var fields = {};
 			if (!lx.isArray(values)) values = [values];
 			for (var i in values) fields[fieldNames[i]] = values[i];
