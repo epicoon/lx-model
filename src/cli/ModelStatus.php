@@ -32,6 +32,7 @@ class ModelStatus extends ServiceCliExecutor
     {
         $fullReport = MigrationReporter::getServicesData();
 
+        $printed = 0;
         foreach ($fullReport as $item) {
             $report = $item['report'];
             if (empty($report['errors'])
@@ -49,6 +50,11 @@ class ModelStatus extends ServiceCliExecutor
             );
             $this->printServiceReport($report);
             $this->processor->outln('***', ['decor' => 'b']);
+            $printed++;
+        }
+
+        if ($printed === 0) {
+            $this->processor->outln('All models are up to date', ['decor' => 'b']);
         }
     }
 

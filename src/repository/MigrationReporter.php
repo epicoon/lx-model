@@ -41,9 +41,9 @@ class MigrationReporter
                 ],
             ];
         }
-        
-        $models = $modelManager->getModelNames();
-        if (empty($models)) {
+
+        $modelNames = $modelManager->getModelNames();
+        if (empty($modelNames)) {
             return null;
         }
         
