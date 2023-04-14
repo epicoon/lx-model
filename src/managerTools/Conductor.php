@@ -192,10 +192,7 @@ class Conductor
             return;
         }
 
-        $files = $modelSchemasDir->getContent([
-            'findType' => Directory::FIND_OBJECT,
-            'files' => true,
-            'all' => true,
+        $files = $modelSchemasDir->getAllFiles([
             'fileClass' => DataFileInterface::class,
         ]);
 

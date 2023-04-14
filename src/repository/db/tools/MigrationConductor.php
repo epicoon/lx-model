@@ -26,7 +26,7 @@ class MigrationConductor
         $appliedList = $this->getAppliedList();
 
         $migrationsDir = $this->context->getConductor()->getMigrationsDirectory();
-        $migrationsList = $migrationsDir->getContent([
+        $migrationsList = $migrationsDir->getFiles([
             'fileClass' => DataFileInterface::class,
             'sort' => SCANDIR_SORT_ASCENDING
         ]);
