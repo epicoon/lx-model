@@ -22,8 +22,8 @@ abstract class AttributesComparator
         $changed = $this->defineChangedAttributes($schemaByCode, $schemaByRepo, $namesCommon);
         $renamed = $this->defineRenamedAttributes($schemaByCode, $schemaByRepo, $namesCodeOnly, $namesRepoOnly);
         foreach ($renamed as $pare) {
-            unset($namesCodeOnly[array_search($pare['new'], $namesCodeOnly)]);
-            unset($namesRepoOnly[array_search($pare['old'], $namesRepoOnly)]);
+            unset($namesCodeOnly[array_search($pare['new'], $namesCodeOnly, true)]);
+            unset($namesRepoOnly[array_search($pare['old'], $namesRepoOnly, true)]);
         }
 
         return $this->processResult($schemaByCode, [

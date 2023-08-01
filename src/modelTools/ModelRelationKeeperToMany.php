@@ -100,7 +100,7 @@ class ModelRelationKeeperToMany extends ModelRelationKeeper
     {
         $unpackedModel = $this->unpackModel($model);
         if (in_array($unpackedModel, $this->newRelated)) {
-            $key = array_search($unpackedModel, $this->newRelated);
+            $key = array_search($unpackedModel, $this->newRelated, true);
             unset($this->newRelated[$key]);
         } else {
             $this->oldRelated[] = $unpackedModel;
