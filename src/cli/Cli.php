@@ -19,7 +19,7 @@ class Cli implements FusionComponentInterface, ServiceCliInterface
 				'command' => 'model-status',
                 'description' => 'Show models status',
                 'arguments' => [
-                    CommandArgument::getServiceArgument(),
+                    CommandArgument::service(),
                     (new CommandArgument())->setKeys(['model', 'm'])
                         ->setDescription('Model name or array of names'),
                 ],
@@ -30,7 +30,7 @@ class Cli implements FusionComponentInterface, ServiceCliInterface
                 'command' => 'model-update',
                 'description' => 'Update models: synchronizing with mediators, generating migrations, applying migrations',
                 'arguments' => [
-                    CommandArgument::getServiceArgument(),
+                    CommandArgument::service(),
                     (new CommandArgument())->setKeys(['model', 'm'])
                         ->setDescription('Model name or array of names'),
                     (new CommandArgument())->setKeys(['level', 'l'])
@@ -49,7 +49,7 @@ class Cli implements FusionComponentInterface, ServiceCliInterface
                 'command' => 'model-create-migration',
                 'description' => 'Create new migration. You have to choose a service',
                 'arguments' => [
-                    CommandArgument::getServiceArgument(),
+                    CommandArgument::service(),
                 ],
                 'handler' => CreateMigration::class,
             ],
